@@ -15,8 +15,13 @@ type StockInfo struct {
 	Link string
 }
 
+type Sellector struct {
+	Nodes []*html.Node
+}
+
 type HTMLDoc struct {
-	Doc *html.Node
+	Root *html.Node
+	*Sellector
 	//stockList []StockInfo
 }
 
@@ -70,7 +75,7 @@ func (tree *HTMLDoc) GetAllStocks() []StockInfo {
 		}
 	}
 
-	loopnode(tree.Doc)
+	loopnode(tree.Root)
 
 	return stockList
 }
@@ -81,23 +86,51 @@ func ParseFromFile(file string) (*HTMLDoc, error) {
 	tree := &HTMLDoc{}
 	contents,err := ioutil.ReadFile(file)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Read file %v failed", file)
+		fmt.Fprintf(os.Stderr, "Read file %v failed\n", file)
 		return tree, err
 	}
 
 	doc,err := html.Parse(strings.NewReader(string(contents)))
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Parse file %v failed", file)
+		fmt.Fprintf(os.Stderr, "Parse file %v failed\n", file)
 		return tree, err
 	}
-	tree.Doc = doc
-
+	tree.Root = doc
+	tree.Sellector = &Sellector{[]*html.Node{doc}}
 	return tree, nil
 }
 
 func ParseFromNode(root *html.Node) (*HTMLDoc, error) {
 	tree := &HTMLDoc{}
-	tree.Doc = root
+	tree.Root = root
 
 	return tree, nil
+}
+
+func findByTag(node *html.Node, tag string) []*html.Node {
+	var result []*html.Node
+
+	for child := node.FirstChild; child != nil; child = child.NextSibling {
+		if child.Type == html.ElementNode && child.Data == tag {
+			result = append(result, child)
+		}
+
+		result = append(result, loopNode(child, tag)...)
+	}
+
+	return result
+}
+
+func (sel *Sellector)Find(node *html.Node, tag string) *Sellector {
+	return &Sellector{findByTag(node, tag)}
+}
+
+func (sel *Sellector)Each(tag string, f func(int, *Sellector)) *Sellector {
+	for i, node := range sel.Nodes {
+		fmt.Println(node.Attr)
+		nodes := findByTag(node, tag)
+		f(i, &Sellector{nodes})
+	}
+
+	return sel
 }

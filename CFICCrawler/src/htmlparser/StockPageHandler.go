@@ -71,7 +71,7 @@ func (doc *HTMLDoc)GetModuleURL(filter string) []string {
 			loopnode(child)
 		}
 	}
-	loopnode(doc.Doc)
+	loopnode(doc.Root)
 
 	return urls
 }

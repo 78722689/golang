@@ -10,7 +10,7 @@ import (
 // The file to handle the data of "gdtj" module
 
 const (
-	GDTJ_LOCATION = "E:/Programing/GO/CFICCrawler/resource/"
+	GDTJ_LOCATION = "D:/Work/MyDemo/go/golang/CFICCrawler/resource/" // E:/Programing/GO/CFICCrawler/resource/
 	GDTJ_HTML = "gdtj.html"
 )
 
