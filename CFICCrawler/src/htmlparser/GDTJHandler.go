@@ -1,9 +1,9 @@
 package htmlparser
 
 import (
-	"golang.org/x/net/html"
-	"fmt"
+//	"golang.org/x/net/html"
 
+	"fmt"
 )
 
 type ShareHolerInfo struct {
@@ -14,16 +14,20 @@ type ShareHolerInfo struct {
 
 
 // Top 10 major shareholders
-/*func (tree *HTMLDoc) GetMajorShareholder() {
-	tree.Find(TagName, "table").Each(func(i int, s *Selection) {
-		if i != 5 && GetAttrByName(s.Doc.Root, "id") != "tabh" {return }
-		sel := s.Find(TagName,"td")
-		for _, n := range sel.Nodes {
-			fmt.Println(n.Data)
-		}
+func (tree *HTMLDoc) GetMajorShareholder() {
+	tree.Find(TagNode, "table").Each(func(i int, table *Selection) {
+		if len(table.GetNodeByAttr("id", "tabh")) == 0 {return}
+		if i != 5 {return }  // The major shareholder is in the 5th table.
+
+		table.Find(TagNode,"tr").Each(func(i int, tr *Selection) {
+			tr.Find(TagNode, "td").Each(func(i int, td *Selection) {
+				fmt.Println(td.Nodes[0].Root.Attr)
+			})
+		})
+
 	})
 }
-*/
+
 // Top 10 shareholders
 func (tree *HTMLDoc) GetShareholder() {
 
@@ -32,24 +36,16 @@ func (tree *HTMLDoc) GetShareholder() {
 func (tree *HTMLDoc) GetDateList() []string{
 	var result []string
 
-	s := tree.Find(TagName,"table").Each(func(i int, s *Selection) {
-		if GetAttrByName(s.Doc.Root, "id") != "tabh" {return }
+	tree.Find(TagNode,"table").Each(func(i int, table *Selection) {
+		if len(table.GetNodeByAttr("id", "tabh")) == 0 {return}
 
-		//fmt.Fprintf(os.Stdout, "table:%d  attr:%v  element-len:%d\n", i, s.Doc.Root.Attr, len(s.Nodes))
-		s.Find(TagName,"td").Each("option", func(i int, s *Selection){
-			/*fmt.Fprintf(os.Stdout, "td:%d  attr:%v  element-len:%d\n",
-				i, :=
-				s.Doc.Root.Attr,
-				len(s.Nodes))
-			*/
+		table.Find(TagNode,"td").Each(func(i int, td *Selection){
 
-			if len(s.Nodes) > 0 {
-				for _, n := range s.Nodes {
+			td.Find(TagNode, "option").Each(func(i int, option *Selection){
+				//fmt.Println(option.Nodes[0].GetAttrByName("value"))
 
-					result= append(result, GetAttrByName(n, "value"))
-					//fmt.Println(n.Attr)
-				}
-			}
+				result = append(result, option.Nodes[0].GetAttrByName("value"))
+			})
 		})
 	})
 

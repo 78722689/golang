@@ -12,8 +12,8 @@ import (
 
 type FindType uint32
 const (
-	TagName FindType = iota
-	Text
+	TagNode FindType = iota
+	TextNode
 	Attr
 )
 
@@ -35,10 +35,10 @@ type HTMLDoc struct {
 	//stockList []StockInfo
 }
 
-func GetAttrByName(node *html.Node, name string) string{
-	if len(node.Attr) == 0 {return ""}
+func (doc *HTMLDoc)GetAttrByName(name string) string{
+	if len(doc.Root.Attr) == 0 {return ""}
 
-	for _, value := range node.Attr {
+	for _, value := range doc.Root.Attr {
 		if value.Key == name {return  value.Val}
 	}
 
@@ -129,10 +129,6 @@ func ParseFromNode(root *html.Node) (*HTMLDoc, error) {
 	return tree, nil
 }
 
-func findByText(node *html.Node, text string) {
-
-}
-
 
 func loopNode(node *HTMLDoc, tag string) []*HTMLDoc {
 	var result []*HTMLDoc
@@ -164,28 +160,30 @@ func findByTag(node *HTMLDoc, tag string) []*HTMLDoc {
 	return result
 }
 
+func findByText(node *HTMLDoc, filter string) []*HTMLDoc {
+
+	return nil
+}
+
 func (sel *Selection)Find(mode FindType, filter string) *Selection {
 	var nodes []*HTMLDoc
 
 	for _, doc := range sel.Nodes {
-		nodes = append(nodes, findByTag(doc, filter)...)
+		switch mode {
+		case TagNode:
+			nodes = append(nodes, findByTag(doc, filter)...)
+		case TextNode:
+			nodes = append(nodes, findByText(doc, filter)...)
+		}
 	}
 
-	switch mode {
-	case TagName:
-		return &Selection{nodes, sel}
-	case Text:
-		return &Selection{nodes, sel}
-	}
+
+	return &Selection{nodes, sel}
 }
 
 func (sel *Selection)Each(f func(int, *Selection)) *Selection {
 	for i, node := range sel.Nodes {
-		//fmt.Println(node.Attr)
-		//doc := &HTMLDoc{node, nil}
-		//nodes := findByTag(node, tag)
 		s := &Selection{[]*HTMLDoc{node}, sel}
-		//doc.Selection = s
 		f(i, s)
 	}
 
