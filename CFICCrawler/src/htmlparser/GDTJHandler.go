@@ -3,32 +3,55 @@ package htmlparser
 import (
 	"golang.org/x/net/html"
 	"fmt"
-	//"os"
-	"os"
+
 )
 
-func loopNode(node *html.Node, tag string) []*html.Node {
-	var result []*html.Node
-
-	for child := node.FirstChild; child != nil; child = child.NextSibling {
-		if child.Type == html.ElementNode && child.Data == tag {
-			result = append(result, child)
-		}
-
-		result = append(result, loopNode(child, tag)...)
-	}
-
-	return result
+type ShareHolerInfo struct {
+	name string
+	count int
+	ratio int
 }
 
-func (tree *HTMLDoc) Get() {
-	tree.Find(tree.Root, "table").Each("tr", func(i int, sellector *Sellector) {
-		fmt.Fprintf(os.Stdout, "table:%d  element-len:%d\n", i, len(sellector.Nodes))
+
+// Top 10 major shareholders
+/*func (tree *HTMLDoc) GetMajorShareholder() {
+	tree.Find(TagName, "table").Each(func(i int, s *Selection) {
+		if i != 5 && GetAttrByName(s.Doc.Root, "id") != "tabh" {return }
+		sel := s.Find(TagName,"td")
+		for _, n := range sel.Nodes {
+			fmt.Println(n.Data)
+		}
+	})
+}
+*/
+// Top 10 shareholders
+func (tree *HTMLDoc) GetShareholder() {
+
+}
+
+func (tree *HTMLDoc) GetDateList() []string{
+	var result []string
+
+	s := tree.Find(TagName,"table").Each(func(i int, s *Selection) {
+		if GetAttrByName(s.Doc.Root, "id") != "tabh" {return }
+
+		//fmt.Fprintf(os.Stdout, "table:%d  attr:%v  element-len:%d\n", i, s.Doc.Root.Attr, len(s.Nodes))
+		s.Find(TagName,"td").Each("option", func(i int, s *Selection){
+			/*fmt.Fprintf(os.Stdout, "td:%d  attr:%v  element-len:%d\n",
+				i, :=
+				s.Doc.Root.Attr,
+				len(s.Nodes))
+			*/
+
+			if len(s.Nodes) > 0 {
+				for _, n := range s.Nodes {
+
+					result= append(result, GetAttrByName(n, "value"))
+					//fmt.Println(n.Attr)
+				}
+			}
+		})
 	})
 
-/*
-	for _, table := range result.Nodes {
-		fmt.Fprintf(os.Stdout, "%v\n", table)
-	}
-*/
+	return result
 }

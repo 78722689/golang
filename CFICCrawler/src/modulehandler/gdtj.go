@@ -10,7 +10,7 @@ import (
 // The file to handle the data of "gdtj" module
 
 const (
-	GDTJ_LOCATION = "D:/Work/MyDemo/go/golang/CFICCrawler/resource/" // E:/Programing/GO/CFICCrawler/resource/
+	GDTJ_LOCATION = "E:/Programing/GO/CFICCrawler/resource/" //"D:/Work/MyDemo/go/golang/CFICCrawler/resource/"
 	GDTJ_HTML = "gdtj.html"
 )
 
@@ -25,7 +25,11 @@ func Parse(code string) error {
 		return err
 	}
 
-	doc.Get()
-
+	/*
+	for _, d := range doc.GetDateList() {
+		fmt.Println(d)
+	}
+*/
+	doc.GetMajorShareholder()
 	return nil
 }
