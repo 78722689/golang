@@ -21,7 +21,9 @@ func (tree *HTMLDoc) GetMajorShareholder() {
 
 		table.Find(TagNode,"tr").Each(func(i int, tr *Selection) {
 			tr.Find(TagNode, "td").Each(func(i int, td *Selection) {
-				fmt.Println(td.Nodes[0].Root.Attr)
+				td.Find(TextNode, "").Each(func(i int, tn *Selection) {
+					fmt.Println(tn.Nodes[0].Root.Data)
+				})
 			})
 		})
 

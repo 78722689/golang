@@ -130,16 +130,16 @@ func ParseFromNode(root *html.Node) (*HTMLDoc, error) {
 }
 
 
-func loopNode(node *HTMLDoc, tag string) []*HTMLDoc {
+func loopNodeByTag(node *HTMLDoc, nodeType html.NodeType,filter string) []*HTMLDoc {
 	var result []*HTMLDoc
 
 	for child := node.Root.FirstChild; child != nil; child = child.NextSibling {
 		doc := &HTMLDoc{child, nil}
-		if child.Type == html.ElementNode && child.Data == tag {
+		if child.Type == nodeType && child.Data == filter {
 			result = append(result, doc)
 		}
 
-		result = append(result, loopNode(doc, tag)...)
+		result = append(result, loopNodeByTag(doc, nodeType, filter)...)
 	}
 
 	return result
@@ -154,15 +154,40 @@ func findByTag(node *HTMLDoc, tag string) []*HTMLDoc {
 			result = append(result, doc)
 		}
 
-		result = append(result, loopNode(doc, tag)...)
+		result = append(result, loopNodeByTag(doc, html.ElementNode, tag)...)
 	}
 
 	return result
 }
 
 func findByText(node *HTMLDoc, filter string) []*HTMLDoc {
+	var result []*HTMLDoc
 
-	return nil
+	var loopNode func(*HTMLDoc, html.NodeType, string) []*HTMLDoc
+
+	loopNode = func(node *HTMLDoc, nodeType html.NodeType, filter string) []*HTMLDoc {
+		var r []*HTMLDoc
+
+		for child := node.Root.FirstChild; child != nil; child = child.NextSibling {
+			doc := &HTMLDoc{child, nil}
+			if child.Type == nodeType {
+				if filter != "" && strings.Contains(child.Data, filter) {
+					r = append(r, doc)
+				} else {
+					r = append(r, doc)
+				}
+			}
+
+			r = append(r, loopNode(doc, nodeType, filter)...)
+		}
+
+		return r
+	}
+
+	result = append(result, loopNode(node, html.TextNode, filter)...)
+
+
+	return result
 }
 
 func (sel *Selection)Find(mode FindType, filter string) *Selection {
