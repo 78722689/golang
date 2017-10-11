@@ -4,6 +4,7 @@ import (
 	"golang.org/x/net/html"
 	//"fmt"
 	"strings"
+	"regexp"
 )
 
 // Return the modules in the stock home page
@@ -52,6 +53,28 @@ func GetStockModules() map[string]int{
 		"cwzbLrgc": 40,
 		"cwzbDbfx": 41,
 	}
+}
+
+func (doc *HTMLDoc)GetStockId() string {
+	var loopnode func(node *html.Node) string
+	loopnode = func(node *html.Node) string {
+		for child := node.FirstChild; child != nil; child = child.NextSibling {
+			if child.Data == "a"{
+				for _, attr := range child.Attr {
+					if attr.Key == "href"{
+						if strings.Contains(attr.Val, "stockid=") {
+							reg, _ := regexp.Compile(`[\d]{1,6}`)
+							return string(reg.Find([]byte(attr.Val)))
+						}
+					}
+				}
+			}
+		}
+
+		return ""
+	}
+
+	return loopnode(doc.Root)
 }
 
 // Get all modules URL

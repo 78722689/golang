@@ -10,10 +10,15 @@ import (
 // The file to handle the data of "gdtj" module
 
 const (
-	GDTJ_LOCATION = "D:/Work/MyDemo/go/golang/CFICCrawler/resource/" //"E:/Programing/GO/CFICCrawler/resource/"
+	GDTJ_LOCATION = "E:/Programing/GO/CFICCrawler/resource/" //"D:/Work/MyDemo/go/golang/CFICCrawler/resource/"
 	GDTJ_HTML = "gdtj.html"
+	GDTJ_QUARTER_LINK = "http://quote.cfi.cn/quote.aspx?stockid=%s&contenttype=gdtj&jzrq=%s"
 )
 
+type GDTJ_INFO struct {
+	StockID string
+	fileLocation string
+}
 
 func Parse(code string) error {
 	file := GDTJ_LOCATION + code + ".html.modules/" + GDTJ_HTML
