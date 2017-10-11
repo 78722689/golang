@@ -2,38 +2,66 @@ package htmlparser
 
 import (
 //	"golang.org/x/net/html"
-
-	"fmt"
 )
 
 type ShareHolerInfo struct {
-	name string
-	count int
-	ratio int
+	Name string
+	Count string
+	Ratio string
 }
 
 
-// Top 10 major shareholders
-func (tree *HTMLDoc) GetMajorShareholder() {
+// Top 10  shareholders
+type ShareHolderType uint32
+const (
+	Major ShareHolderType = iota
+	Free
+)
+
+func (tree *HTMLDoc) GetShareholder(shType ShareHolderType) []*ShareHolerInfo{
+	var shiList []*ShareHolerInfo
+
+	// Default to read table 6 for common shareholders.
+	tableID := 6
+	if shType == Major {tableID = 5}
+
 	tree.Find(TagNode, "table").Each(func(i int, table *Selection) {
 		if len(table.GetNodeByAttr("id", "tabh")) == 0 {return}
-		if i != 5 {return }  // The major shareholder is in the 5th table.
+		if i != tableID {return }  // The major shareholder is in the 5th table.
 
 		table.Find(TagNode,"tr").Each(func(i int, tr *Selection) {
+			if i<=1 {return }
+			index := 0
+			shi := &ShareHolerInfo{}
+			found := false
 			tr.Find(TagNode, "td").Each(func(i int, td *Selection) {
-				td.Find(TextNode, "").Each(func(i int, tn *Selection) {
-					fmt.Println(tn.Nodes[0].Root.Data)
+				td.Find(TextNode, "").Each(func(_ int, tn *Selection) {
+					if tn.Nodes[0].GetParentNodeTagname() == "td"{
+						found = true
+						//fmt.Fprintf(os.Stdout, "i-%d, data-%s\n", i, tn.Nodes[0].Root.Data)
+						switch index {
+						case 0:
+							shi.Name = tn.Nodes[0].Root.Data
+						case 1:
+							shi.Count = tn.Nodes[0].Root.Data
+						case 2:
+							shi.Ratio = tn.Nodes[0].Root.Data
+						}
+
+						index ++
+					}
 				})
 			})
+			if found {
+				shiList = append(shiList, shi)
+			}
 		})
 
 	})
+
+	return shiList
 }
 
-// Top 10 shareholders
-func (tree *HTMLDoc) GetShareholder() {
-
-}
 
 func (tree *HTMLDoc) GetDateList() []string{
 	var result []string

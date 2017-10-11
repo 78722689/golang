@@ -15,6 +15,7 @@ const (
 	TagNode FindType = iota
 	TextNode
 	Attr
+	ErrNode
 )
 
 type StockInfo struct {
@@ -33,6 +34,34 @@ type HTMLDoc struct {
 	Root *html.Node
 	*Selection
 	//stockList []StockInfo
+}
+
+func (doc *HTMLDoc) HaveChildNode() bool {
+	if doc.Root.FirstChild == nil {
+		return false
+	}
+
+	return true
+}
+
+func (doc *HTMLDoc) getFirstChildNodeType() FindType {
+	switch doc.Root.FirstChild.Type {
+	case html.TextNode:
+		return TextNode
+	case html.ElementNode:
+		return TagNode
+	}
+
+	return ErrNode
+}
+
+func (doc *HTMLDoc)GetData() string {
+	return doc.Root.Data
+}
+
+
+func (doc *HTMLDoc)GetParentNodeTagname() string {
+	return doc.Root.Parent.Data
 }
 
 func (doc *HTMLDoc)GetAttrByName(name string) string{
@@ -170,7 +199,7 @@ func findByText(node *HTMLDoc, filter string) []*HTMLDoc {
 
 		for child := node.Root.FirstChild; child != nil; child = child.NextSibling {
 			doc := &HTMLDoc{child, nil}
-			if child.Type == nodeType {
+			if child.Type == nodeType && strings.TrimSpace(child.Data) != "" {
 				if filter != "" && strings.Contains(child.Data, filter) {
 					r = append(r, doc)
 				} else {

@@ -10,7 +10,7 @@ import (
 // The file to handle the data of "gdtj" module
 
 const (
-	GDTJ_LOCATION = "E:/Programing/GO/CFICCrawler/resource/" //"D:/Work/MyDemo/go/golang/CFICCrawler/resource/"
+	GDTJ_LOCATION = "D:/Work/MyDemo/go/golang/CFICCrawler/resource/" //"E:/Programing/GO/CFICCrawler/resource/"
 	GDTJ_HTML = "gdtj.html"
 )
 
@@ -27,6 +27,9 @@ func Parse(code string) error {
 		fmt.Println(d)
 	}
 
-	doc.GetMajorShareholder()
+	for _, shi := range doc.GetShareholder(htmlparser.Free) {
+		fmt.Fprintf(os.Stdout, "name: %s count:%s, ratio:%s\n", shi.Name, shi.Count, shi.Ratio)
+	}
+
 	return nil
 }
