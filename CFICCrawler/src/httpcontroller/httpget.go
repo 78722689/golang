@@ -11,9 +11,9 @@ import (
 )
 
 type Proxy struct {
-    protocol string
-    host string
-    port string
+    Protocol string
+    Host string
+    Port string
 }
 
 type Request struct {
@@ -42,7 +42,7 @@ func (r *Request)Get() (*html.Node, error){
 
         // If proxy gave, use proxy to do the request
         if r.Proxy != nil {
-            url_proxy, _ := url_i.Parse(r.Proxy.protocol + "//" + r.Proxy.host + ":" + r.Proxy.port)
+            url_proxy, _ := url_i.Parse(r.Proxy.Protocol + "://" + r.Proxy.Host + ":" + r.Proxy.Port)
 
             transport := &http.Transport{Proxy: http.ProxyURL(url_proxy)}
             client = &http.Client{Transport: transport}

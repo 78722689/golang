@@ -58,8 +58,9 @@ func GetStockModules() map[string]int{
 func (doc *HTMLDoc)GetStockId() string {
 	var loopnode func(node *html.Node) string
 	loopnode = func(node *html.Node) string {
+		var result string
 		for child := node.FirstChild; child != nil; child = child.NextSibling {
-			if child.Data == "a"{
+			if child.Type == html.ElementNode && child.Data == "a"{
 				for _, attr := range child.Attr {
 					if attr.Key == "href"{
 						if strings.Contains(attr.Val, "stockid=") {
@@ -69,6 +70,9 @@ func (doc *HTMLDoc)GetStockId() string {
 					}
 				}
 			}
+
+			result = loopnode(child)
+			if result != "" {return result}
 		}
 
 		return ""
