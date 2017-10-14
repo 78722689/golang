@@ -68,7 +68,7 @@ func (r *Request)Get() (*html.Node, error){
 
             file, err:= os.OpenFile(r.File, os.O_RDWR | os.O_CREATE, 0777)
             if err != nil {
-                fmt.Fprintf(os.Stderr, "WARN: Open file %s failed, %s\r\n", r.File, err)
+                fmt.Fprintf(os.Stderr, "WARN: Open file %s failed, %s\n", r.File, err)
                 return nil, err
             }
             defer file.Close()
@@ -77,7 +77,7 @@ func (r *Request)Get() (*html.Node, error){
         } else {
             root, err := html.Parse(resp.Body)
             if err != nil {
-                fmt.Fprintf(os.Stderr, "Error: parse response from url\r\n")
+                fmt.Fprintf(os.Stderr, "Error: parse response from url\n")
 
                 return nil, err
             }

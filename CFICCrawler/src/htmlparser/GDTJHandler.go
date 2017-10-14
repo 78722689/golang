@@ -2,6 +2,7 @@ package htmlparser
 
 import (
 //	"golang.org/x/net/html"
+	"httpcontroller"
 )
 
 type ShareHolerInfo struct {
@@ -17,6 +18,24 @@ const (
 	Major ShareHolderType = iota
 	Free
 )
+
+func (tree *HTMLDoc)Request(url string, file string) (*HTMLDoc, error){
+	request := httpcontroller.Request{
+		//Proxy:&httpcontroller.Proxy{"HTTP", "10.144.1.10", "8080"},
+		Url : url,
+		File : file,
+	}
+
+	if _, err := request.Get(); err != nil {
+		return nil, err
+	}
+
+	if doc, err := ParseFromFile(file); err != nil {
+		return nil, err
+	} else {
+		return doc, nil
+	}
+}
 
 func (tree *HTMLDoc) GetShareholder(shType ShareHolderType) []*ShareHolerInfo{
 	var shiList []*ShareHolerInfo
@@ -62,9 +81,29 @@ func (tree *HTMLDoc) GetShareholder(shType ShareHolderType) []*ShareHolerInfo{
 	return shiList
 }
 
+func (tree *HTMLDoc) GetCurrentDate() string{
+	var result string
 
-func (tree *HTMLDoc) GetDateList() []string{
-	var result []string
+	tree.Find(TagNode,"table").Each(func(i int, table *Selection) {
+		if len(table.GetNodeByAttr("id", "tabh")) == 0 {return}
+
+		table.Find(TagNode,"td").Each(func(i int, td *Selection){
+			td.Find(TagNode, "option").Each(func(i int, option *Selection){
+				value := option.Nodes[0].GetAttrByName("selected")
+				if value != "" {
+					// Format: <option selected='selected' value='2017-06-30'>2017-06-30</option>
+					result =  option.Nodes[0].GetAttrByName("value")
+				}
+			})
+		})
+	})
+
+	return result
+}
+
+
+func (tree *HTMLDoc) GetDateList() map[string]bool{
+	result := make(map[string]bool)
 
 	tree.Find(TagNode,"table").Each(func(i int, table *Selection) {
 		if len(table.GetNodeByAttr("id", "tabh")) == 0 {return}
@@ -73,8 +112,13 @@ func (tree *HTMLDoc) GetDateList() []string{
 
 			td.Find(TagNode, "option").Each(func(i int, option *Selection){
 				//fmt.Println(option.Nodes[0].GetAttrByName("value"))
+				//if option.Nodes[0].GetAttrByName("selected") == "selected" {
+					//result[option.Nodes[0].GetAttrByName("value")] = true
+				//} else {
+					result[option.Nodes[0].GetAttrByName("value")] = false
+				//}
 
-				result = append(result, option.Nodes[0].GetAttrByName("value"))
+				//result = append(result, option.Nodes[0].GetAttrByName("value"))
 			})
 		})
 	})

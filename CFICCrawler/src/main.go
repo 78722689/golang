@@ -13,6 +13,7 @@ import (
 
 	"modulehandler"
 	"fmt"
+	"os"
 )
 
 const (
@@ -131,8 +132,14 @@ func main() {
 
 		wg.Wait()
 	*/
-	modulehandler.Parse("601717")
 
+	gdtj := &modulehandler.GDTJ{Code:"601700"}
+	gdtj.Parse()
+	if sh, err := gdtj.GetShareHolder("2015-12-31"); err == nil {
+		for _, item:= range sh {
+			fmt.Fprintf(os.Stdout, "Name:%s, Count:%s, Ratio:%s\n", item.Name, item.Count, item.Ratio)
+		}
+	}
 
 	fmt.Println("main is end...........................")
 

@@ -5,46 +5,80 @@ import (
 	"os"
 	"htmlparser"
 
-	"httpcontroller"
+	//"httpcontroller"
+	"errors"
 )
 
 // The file to handle the data of "gdtj" module
 
+type GDTJ struct {
+	Code string
+	ID string
+	DateList map[string]bool  //date:isDownloaded
+	CurrentDate string
+	Doc *htmlparser.HTMLDoc
+}
+
 const (
-	GDTJ_LOCATION = "D:/Work/MyDemo/go/golang/CFICCrawler/resource/" //"E:/Programing/GO/CFICCrawler/resource/"
+	GDTJ_LOCATION = "E:/Programing/golang/CFICCrawler/resource/" //"D:/Work/MyDemo/go/golang/CFICCrawler/resource/"
 	GDTJ_HTML = "gdtj.html"
 	GDTJ_QUARTER_LINK = "http://quote.cfi.cn/quote.aspx?stockid=%s&contenttype=gdtj&jzrq=%s"
 )
 
-func ParseByDate(code string, id string, date string) {
-	link := fmt.Sprintf(GDTJ_QUARTER_LINK, id, date)
-	request := httpcontroller.Request{
-		Proxy:&httpcontroller.Proxy{"HTTP", "10.144.1.10", "8080"},
-		Url : link,
-		File : GDTJ_LOCATION + code + ".html.modules/" + GDTJ_HTML + "_" + date,
+func (gdtj *GDTJ)parseByDate(date string) error{
+	file := GDTJ_LOCATION + gdtj.Code + ".html.modules/" + GDTJ_HTML + "_" + date
+
+	val,ok := gdtj.DateList[date]
+	if !ok {
+		return errors.New("Date does not exist")
 	}
 
-	request.Get()
+	if val { // The page has been downloaded, parse it directly.
+		if doc, err := htmlparser.ParseFromFile(file); err != nil {
+			return err
+		} else {
+			gdtj.Doc = doc
+			gdtj.CurrentDate = date
+		}
+	} else {  // Download by url
+		link := fmt.Sprintf(GDTJ_QUARTER_LINK, gdtj.ID, date)
+		fmt.Println(link, file)
+
+		if doc, err := gdtj.Doc.Request(link, file); err != nil {
+			return err
+		} else {
+			gdtj.Doc = doc
+			gdtj.CurrentDate = date
+			gdtj.DateList[date] = true // Mark this page has been downloaded.
+		}
+	}
+
+	return nil
 }
 
-func Parse(code string) error {
-	file := GDTJ_LOCATION + code + ".html.modules/" + GDTJ_HTML
+// Get the shareholder in the specified perioid
+func (gdtj *GDTJ)GetShareHolder(date string) ([]*htmlparser.ShareHolerInfo, error) {
+	if gdtj.CurrentDate != date {
+		if err := gdtj.parseByDate(date); err != nil {
+			return []*htmlparser.ShareHolerInfo{}, err
+		}
+	}
+
+	return gdtj.Doc.GetShareholder(htmlparser.Free), nil
+}
+
+func (gdtj *GDTJ)Parse() error {
+	file := GDTJ_LOCATION + gdtj.Code + ".html.modules/" + GDTJ_HTML
 	doc, err := htmlparser.ParseFromFile(file)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Parse file %s faild, err:%s", file, err)
 		return err
 	}
 
+	gdtj.ID = doc.GetStockId()
+	gdtj.DateList = doc.GetDateList()
+	gdtj.Doc = doc
+	gdtj.CurrentDate = doc.GetCurrentDate()
 
-
-	for _, d := range doc.GetDateList() {
-		fmt.Println(d)
-		ParseByDate(code, doc.GetStockId(), d)
-	}
-/*
-	for _, shi := range doc.GetShareholder(htmlparser.Free) {
-		fmt.Fprintf(os.Stdout, "name: %s count:%s, ratio:%s\n", shi.Name, shi.Count, shi.Ratio)
-	}
-*/
 	return nil
 }
