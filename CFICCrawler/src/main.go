@@ -11,9 +11,10 @@ import (
 	//"httpcontroller"
 	//"strings"
 
-	"modulehandler"
+	//"modulehandler"
 	"fmt"
-	"os"
+	//"os"
+	"modulehandler"
 )
 
 const (
@@ -133,14 +134,17 @@ func main() {
 		wg.Wait()
 	*/
 
+	/*
 	gdtj := &modulehandler.GDTJ{Code:"601700"}
-	gdtj.Parse()
 	if sh, err := gdtj.GetShareHolder("2015-12-31"); err == nil {
 		for _, item:= range sh {
 			fmt.Fprintf(os.Stdout, "Name:%s, Count:%s, Ratio:%s\n", item.Name, item.Count, item.Ratio)
 		}
 	}
-
+*/
+	htd := modulehandler.HTD{Code : "601700",
+							Folder : "E:/Programing/golang/CFICCrawler/resource/"}
+	htd.Download()
 	fmt.Println("main is end...........................")
 
 }

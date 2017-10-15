@@ -1,7 +1,6 @@
 package htmlparser
 
 import (
-//	"golang.org/x/net/html"
 	"httpcontroller"
 )
 
@@ -19,7 +18,7 @@ const (
 	Free
 )
 
-func (tree *HTMLDoc)Request(url string, file string) (*HTMLDoc, error){
+func (tree *HTMLDoc)GDTJ_Request(url string, file string) (*HTMLDoc, error){
 	request := httpcontroller.Request{
 		//Proxy:&httpcontroller.Proxy{"HTTP", "10.144.1.10", "8080"},
 		Url : url,
@@ -37,7 +36,7 @@ func (tree *HTMLDoc)Request(url string, file string) (*HTMLDoc, error){
 	}
 }
 
-func (tree *HTMLDoc) GetShareholder(shType ShareHolderType) []*ShareHolerInfo{
+func (tree *HTMLDoc) GDTJ_GetShareholder(shType ShareHolderType) []*ShareHolerInfo{
 	var shiList []*ShareHolerInfo
 
 	// Default to read table 6 for common shareholders.
@@ -111,14 +110,7 @@ func (tree *HTMLDoc) GetDateList() map[string]bool{
 		table.Find(TagNode,"td").Each(func(i int, td *Selection){
 
 			td.Find(TagNode, "option").Each(func(i int, option *Selection){
-				//fmt.Println(option.Nodes[0].GetAttrByName("value"))
-				//if option.Nodes[0].GetAttrByName("selected") == "selected" {
-					//result[option.Nodes[0].GetAttrByName("value")] = true
-				//} else {
-					result[option.Nodes[0].GetAttrByName("value")] = false
-				//}
-
-				//result = append(result, option.Nodes[0].GetAttrByName("value"))
+				result[option.Nodes[0].GetAttrByName("value")] = false
 			})
 		})
 	})

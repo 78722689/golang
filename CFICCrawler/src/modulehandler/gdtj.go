@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"os"
 	"htmlparser"
-
-	//"httpcontroller"
 	"errors"
 )
 
@@ -26,7 +24,7 @@ const (
 )
 
 func (gdtj *GDTJ)parseByDate(date string) error{
-	file := GDTJ_LOCATION + gdtj.Code + ".html.modules/" + GDTJ_HTML + "_" + date
+	file := GDTJ_LOCATION + gdtj.Code + ".html.modules/gdtj/" + GDTJ_HTML + "_" + date
 
 	val,ok := gdtj.DateList[date]
 	if !ok {
@@ -44,7 +42,7 @@ func (gdtj *GDTJ)parseByDate(date string) error{
 		link := fmt.Sprintf(GDTJ_QUARTER_LINK, gdtj.ID, date)
 		fmt.Println(link, file)
 
-		if doc, err := gdtj.Doc.Request(link, file); err != nil {
+		if doc, err := gdtj.Doc.GDTJ_Request(link, file); err != nil {
 			return err
 		} else {
 			gdtj.Doc = doc
@@ -58,27 +56,33 @@ func (gdtj *GDTJ)parseByDate(date string) error{
 
 // Get the shareholder in the specified perioid
 func (gdtj *GDTJ)GetShareHolder(date string) ([]*htmlparser.ShareHolerInfo, error) {
+	if err := gdtj.getBasicData(); err != nil {
+		return []*htmlparser.ShareHolerInfo{}, err
+	}
+
 	if gdtj.CurrentDate != date {
 		if err := gdtj.parseByDate(date); err != nil {
 			return []*htmlparser.ShareHolerInfo{}, err
 		}
 	}
 
-	return gdtj.Doc.GetShareholder(htmlparser.Free), nil
+	return gdtj.Doc.GDTJ_GetShareholder(htmlparser.Free), nil
 }
 
-func (gdtj *GDTJ)Parse() error {
-	file := GDTJ_LOCATION + gdtj.Code + ".html.modules/" + GDTJ_HTML
-	doc, err := htmlparser.ParseFromFile(file)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Parse file %s faild, err:%s", file, err)
-		return err
-	}
+func (gdtj *GDTJ)getBasicData() error {
+	if gdtj.ID == "" || len(gdtj.DateList) == 0  || gdtj.Doc == nil {
+		file := GDTJ_LOCATION + gdtj.Code + ".html.modules/" + GDTJ_HTML
+		doc, err := htmlparser.ParseFromFile(file)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Parse file %s faild, err:%s", file, err)
+			return err
+		}
 
-	gdtj.ID = doc.GetStockId()
-	gdtj.DateList = doc.GetDateList()
-	gdtj.Doc = doc
-	gdtj.CurrentDate = doc.GetCurrentDate()
+		gdtj.ID = doc.GetStockId()
+		gdtj.DateList = doc.GetDateList()
+		gdtj.Doc = doc
+		gdtj.CurrentDate = doc.GetCurrentDate()
+	}
 
 	return nil
 }

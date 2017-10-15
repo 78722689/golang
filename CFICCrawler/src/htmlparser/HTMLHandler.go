@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"strings"
 	"regexp"
-	//"go/doc"
 )
 
 type FindType uint32
