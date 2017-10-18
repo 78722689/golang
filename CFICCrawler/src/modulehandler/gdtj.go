@@ -18,7 +18,7 @@ type GDTJ struct {
 }
 
 const (
-	GDTJ_LOCATION = "E:/Programing/golang/CFICCrawler/resource/" //"D:/Work/MyDemo/go/golang/CFICCrawler/resource/"
+	GDTJ_LOCATION = "D:/Work/MyDemo/go/golang/CFICCrawler/resource/" //"E:/Programing/golang/CFICCrawler/resource/"
 	GDTJ_HTML = "gdtj.html"
 	GDTJ_QUARTER_LINK = "http://quote.cfi.cn/quote.aspx?stockid=%s&contenttype=gdtj&jzrq=%s"
 )
@@ -54,6 +54,14 @@ func (gdtj *GDTJ)parseByDate(date string) error{
 	return nil
 }
 
+func (gdtj *GDTJ)GetDateList() map[string]bool {
+	if err := gdtj.getBasicData(); err != nil {
+		return nil
+	}
+
+	return gdtj.DateList
+}
+
 // Get the shareholder in the specified perioid
 func (gdtj *GDTJ)GetShareHolder(date string) ([]*htmlparser.ShareHolerInfo, error) {
 	if err := gdtj.getBasicData(); err != nil {
@@ -66,7 +74,13 @@ func (gdtj *GDTJ)GetShareHolder(date string) ([]*htmlparser.ShareHolerInfo, erro
 		}
 	}
 
-	return gdtj.Doc.GDTJ_GetShareholder(htmlparser.Free), nil
+	// Get the free shareholders firstly. If they are not exist, get the major shareholders.
+	sh := gdtj.Doc.GDTJ_GetShareholder(htmlparser.Free)
+	if len(sh) == 0 {
+		sh = gdtj.Doc.GDTJ_GetShareholder(htmlparser.Major)
+	}
+
+	return sh, nil
 }
 
 func (gdtj *GDTJ)getBasicData() error {

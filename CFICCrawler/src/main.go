@@ -15,12 +15,15 @@ import (
 	"fmt"
 	//"os"
 	"modulehandler"
+	"os"
 )
 
 const (
 	QUOTE_HOMEPAGE string = "http://quote.cfi.cn/"
 	FOLDER_TOWRITE string = "E:/programing/GO/CFICCrawler/resource/"
 )
+
+// proxy //http://203.17.66.133:8000   http://203.17.66.134:8000
 
 func main() {
 	// goroutines settings
@@ -134,17 +137,28 @@ func main() {
 		wg.Wait()
 	*/
 
-	/*
+
 	gdtj := &modulehandler.GDTJ{Code:"601700"}
+/*
 	if sh, err := gdtj.GetShareHolder("2015-12-31"); err == nil {
 		for _, item:= range sh {
 			fmt.Fprintf(os.Stdout, "Name:%s, Count:%s, Ratio:%s\n", item.Name, item.Count, item.Ratio)
 		}
 	}
-*/
+
 	htd := modulehandler.HTD{Code : "601700",
-							Folder : "E:/Programing/golang/CFICCrawler/resource/"}
+							Folder : "D:/Work/MyDemo/go/golang/CFICCrawler/resource/" } //"E:/Programing/golang/CFICCrawler/resource/"
 	htd.Download()
+*/
+	//target := "全国社保基金一零四组合"
+	for key, _ := range gdtj.GetDateList() {
+		if sh, err := gdtj.GetShareHolder(key); err == nil {
+			for _, item:= range sh {
+				fmt.Fprintf(os.Stdout, "Name:%s, Count:%s, Ratio:%s\n", item.Name, item.Count, item.Ratio)
+			}
+		}
+	}
+
 	fmt.Println("main is end...........................")
 
 }
