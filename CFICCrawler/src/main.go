@@ -16,6 +16,7 @@ import (
 	//"os"
 	"modulehandler"
 	"os"
+	"htmlparser"
 )
 
 const (
@@ -139,25 +140,38 @@ func main() {
 
 
 	gdtj := &modulehandler.GDTJ{Code:"601700"}
-/*
-	if sh, err := gdtj.GetShareHolder("2015-12-31"); err == nil {
-		for _, item:= range sh {
-			fmt.Fprintf(os.Stdout, "Name:%s, Count:%s, Ratio:%s\n", item.Name, item.Count, item.Ratio)
-		}
-	}
-
-	htd := modulehandler.HTD{Code : "601700",
-							Folder : "D:/Work/MyDemo/go/golang/CFICCrawler/resource/" } //"E:/Programing/golang/CFICCrawler/resource/"
-	htd.Download()
-*/
-	//target := "全国社保基金一零四组合"
-	for key, _ := range gdtj.GetDateList() {
-		if sh, err := gdtj.GetShareHolder(key); err == nil {
+	/*
+		if sh, err := gdtj.GetShareHolder("2015-12-31"); err == nil {
 			for _, item:= range sh {
 				fmt.Fprintf(os.Stdout, "Name:%s, Count:%s, Ratio:%s\n", item.Name, item.Count, item.Ratio)
 			}
 		}
+*/
+		htd := modulehandler.HTD{Code : "601700",
+								Folder : "E:/Programing/golang/CFICCrawler/resource/"} //"D:/Work/MyDemo/go/golang/CFICCrawler/resource/"
+
+	/*
+		htd.Download()
+	*/
+	example := "中国工商银行-嘉实策略增长混合型证券投资基金"
+	result := make(map[string]*htmlparser.ShareHolerInfo)
+
+	// Find out the fund when it happened any trade
+	for key, _ := range gdtj.GetDateList() {
+		if shList, err := gdtj.GetShareHolder(key); err == nil {
+			for _, item:= range shList {
+				//fmt.Fprintf(os.Stdout, "Name:%s, Count:%s, Ratio:%s\n", item.Name, item.Count, item.Ratio)
+				if item.Name == example {
+					fmt.Fprintf(os.Stdout, "Found %s in %s\n",
+						example, key)
+					result[key] = item
+					break
+				}
+			}
+		}
 	}
+
+	htd.Analyse(result)
 
 	fmt.Println("main is end...........................")
 

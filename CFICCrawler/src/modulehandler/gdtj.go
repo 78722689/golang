@@ -18,7 +18,7 @@ type GDTJ struct {
 }
 
 const (
-	GDTJ_LOCATION = "D:/Work/MyDemo/go/golang/CFICCrawler/resource/" //"E:/Programing/golang/CFICCrawler/resource/"
+	GDTJ_LOCATION = "E:/Programing/golang/CFICCrawler/resource/" //"D:/Work/MyDemo/go/golang/CFICCrawler/resource/"
 	GDTJ_HTML = "gdtj.html"
 	GDTJ_QUARTER_LINK = "http://quote.cfi.cn/quote.aspx?stockid=%s&contenttype=gdtj&jzrq=%s"
 )
@@ -40,7 +40,7 @@ func (gdtj *GDTJ)parseByDate(date string) error{
 		}
 	} else {  // Download by url
 		link := fmt.Sprintf(GDTJ_QUARTER_LINK, gdtj.ID, date)
-		fmt.Println(link, file)
+		//fmt.Println(link, file)
 
 		if doc, err := gdtj.Doc.GDTJ_Request(link, file); err != nil {
 			return err

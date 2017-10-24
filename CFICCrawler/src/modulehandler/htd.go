@@ -5,6 +5,11 @@ import (
 	"fmt"
 	"time"
 	"strings"
+	"os"
+	"bufio"
+
+	"github.com/axgle/mahonia"
+	"io"
 )
 
 // This file processes the history trade data from http://quotes.money.163.com/
@@ -27,7 +32,7 @@ fields字段包括了开盘价、最高价、最低价、收盘价等
 */
 const (
 	// The Stock market started from 1990-12-19, so all the search start from this day.
-	HTD_DOWNLOAD_LINK ="http://quotes.money.163.com/service/chddata.html?code=%s&start=19901219&end=%s&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCH"
+	HTD_DOWNLOAD_LINK ="http://quotes.money.163.com/service/chddata.html?code=%s&start=19901219&end=%s&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;TURNOVER;VOTURNOVER;VATURNOVER;TCAP;MCAP"
 )
 
 func (htd *HTD)Download() error {
@@ -48,4 +53,36 @@ func (htd *HTD)Download() error {
 	}
 
 	return nil
+}
+
+func (htd *HTD)getData() {
+	file := htd.Folder + htd.Code + ".html.modules/htd/htd.txt"
+
+	f, err := os.Open(file)
+	if  err != nil {
+		fmt.Fprintf(os.Stderr, "Open file failure. %s\n", file)
+		return
+	}
+
+	// Decode data due to Chinese
+	decoder := mahonia.NewDecoder("gbk")
+	reader := bufio.NewReader(decoder.NewReader(f))
+
+	// Loop the file line by line
+	for {
+		l, err := reader.ReadString('\n')
+		if err != nil {
+			if err == io.EOF {
+				break
+			}
+
+			fmt.Fprintf(os.Stderr, "Read file failure. %s\n", file)
+		}
+
+		fmt.Fprintf(os.Stdout, "%s", l)
+	}
+}
+
+func (htd *HTD)Analyse(data map[string]*htmlparser.ShareHolerInfo) {
+	htd.getData()
 }
