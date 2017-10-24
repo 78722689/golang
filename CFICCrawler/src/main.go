@@ -171,7 +171,8 @@ func main() {
 		}
 	}
 
-	htd.Analyse(result)
+	//data := fmt.Sprintf("%v", reflect.ValueOf(result).MapKeys())
+	htd.Analyse()
 
 	fmt.Println("main is end...........................")
 

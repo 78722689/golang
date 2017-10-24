@@ -22,6 +22,24 @@ type HTD struct {
 	Doc *htmlparser.HTMLDoc
 }
 
+type HTData struct {
+	Date string			//历史数据日期
+	Code string			//股票代码
+	Name string			//股票名称
+	ClosePrice string  	//收盘价
+	HighPrice string   	// 最高价
+	LowPrice string    	//最低价
+	StartPrice string  	//开盘价
+	PClosePrice string 	//前收盘
+	UDShortfall string  //涨跌额
+	UDRange	string		//涨跌幅
+	TurnoverRate string	//换手率
+	VOL string			//成交量
+	AMO string			//成交金额
+	TotalValue string	//总市值
+	FreeValue string	// 流通市值
+}
+
 /*
 Example:
 http://quotes.money.163.com/service/chddata.html?code=1000002&start=19910129&end=20161006&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;TURNOVER;VOTURNOVER;VATURNOVER;TCAP;MCAP
@@ -55,19 +73,63 @@ func (htd *HTD)Download() error {
 	return nil
 }
 
-func (htd *HTD)getData() {
-	file := htd.Folder + htd.Code + ".html.modules/htd/htd.txt"
+
+
+func (htd *HTD)convert2HTData(line string) *HTData{
+	data := &HTData{}
+
+	for index, item := range strings.Split(strings.TrimSpace(line), ",") {
+		switch index {
+		case 0:
+			data.Date = item
+		case 1:
+			data.Code = strings.Trim(item, "'")
+		case 2:
+			data.Name = item
+		case 3:
+			data.ClosePrice = item
+		case 4:
+			data.HighPrice = item
+		case 5:
+			data.LowPrice = item
+		case 6:
+			data.StartPrice = item
+		case 7:
+			data.PClosePrice = item
+		case 8:
+			data.UDShortfall = item
+		case 9:
+			data.UDRange = item
+		case 10:
+			data.TurnoverRate = item
+		case 11:
+			data.VOL = item
+		case 12:
+			data.AMO = item
+		case 13:
+			data.TotalValue = item
+		case 14:
+			data.FreeValue = item
+		}
+	}
+
+	return data
+}
+
+func (htd *HTD)getData() []*HTData{
+	file := htd.Folder + htd.Code + ".html.modules/htd/htd.csv"
 
 	f, err := os.Open(file)
 	if  err != nil {
 		fmt.Fprintf(os.Stderr, "Open file failure. %s\n", file)
-		return
+		return nil
 	}
 
 	// Decode data due to Chinese
 	decoder := mahonia.NewDecoder("gbk")
 	reader := bufio.NewReader(decoder.NewReader(f))
 
+	var result []*HTData
 	// Loop the file line by line
 	for {
 		l, err := reader.ReadString('\n')
@@ -79,10 +141,30 @@ func (htd *HTD)getData() {
 			fmt.Fprintf(os.Stderr, "Read file failure. %s\n", file)
 		}
 
-		fmt.Fprintf(os.Stdout, "%s", l)
+		data := htd.convert2HTData(l)
+		//if data.Date != "" && data.Date ==
+		result = append(result, data)
+		fmt.Println(data.Name,
+					data.Code,
+					data.Date,
+					data.UDRange,
+					data.UDShortfall,
+					data.PClosePrice,
+					data.StartPrice,
+					data.LowPrice,
+					data.HighPrice,
+					data.ClosePrice,
+					data.AMO,
+					data.FreeValue,
+					data.TotalValue,
+					data.TurnoverRate,
+					data.VOL,
+					)
 	}
+
+	return result
 }
 
-func (htd *HTD)Analyse(data map[string]*htmlparser.ShareHolerInfo) {
+func (htd *HTD)Analyse() {
 	htd.getData()
 }

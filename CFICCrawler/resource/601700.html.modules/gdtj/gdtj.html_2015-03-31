@@ -161,8 +161,8 @@
 	</tr>
 	<tr>
 		<td id="tj" colspan="3">
-            <div id="div1" style="margin-top:20px; margin-left:auto; margin-right:auto; text-align:right;">当前页面生成股票行情总用时：<label style='color:red;'>15.8196</label>  毫秒(From 整页面的二级缓存),查询耗时:0</div>
-            <div id="div2" style="text-align: right"><!--<font style='font-size:9.8pt'>页面生成用时:<font style='color:red'>15.8196</font>毫秒</font>--></div>
+            <div id="div1" style="margin-top:20px; margin-left:auto; margin-right:auto; text-align:right;">当前页面生成股票行情总用时：<label style='color:red;'>31.2493</label>  毫秒(From 生成),查询耗时:0</div>
+            <div id="div2" style="text-align: right"><!--<font style='font-size:9.8pt'>页面生成用时:<font style='color:red'>31.2493</font>毫秒</font>--></div>
             <div id="div3" style="text-align: right">
             </div>
         </td>
