@@ -117,6 +117,7 @@ func (htd *HTD)convert2HTData(line string) *HTData{
 	return data
 }
 
+// Find the trade data by giving date list, and return them.
 func (htd *HTD)getData(dateList []interface{}) []*HTData{
 	file := htd.Folder + htd.Code + ".html.modules/htd/htd.csv"
 
@@ -130,9 +131,15 @@ func (htd *HTD)getData(dateList []interface{}) []*HTData{
 	decoder := mahonia.NewDecoder("gbk")
 	reader := bufio.NewReader(decoder.NewReader(f))
 
+	cnt := len(dateList)
+
 	var result []*HTData
 	// Loop the file line by line
 	for {
+		if cnt == 0 {
+			break
+		}
+
 		l, err := reader.ReadString('\n')
 		if err != nil {
 			if err == io.EOF {
@@ -140,37 +147,37 @@ func (htd *HTD)getData(dateList []interface{}) []*HTData{
 			}
 
 			fmt.Fprintf(os.Stderr, "Read file failure. %s\n", file)
+			break
 		}
 
 		data := htd.convert2HTData(l)
-		//if data.Date != "" && data.Date ==
-		result = append(result, data)
-		fmt.Println(data.Name,
-					data.Code,
-					data.Date,
-					data.UDRange,
-					data.UDShortfall,
-					data.PClosePrice,
-					data.StartPrice,
-					data.LowPrice,
-					data.HighPrice,
-					data.ClosePrice,
-					data.AMO,
-					data.FreeValue,
-					data.TotalValue,
-					data.TurnoverRate,
-					data.VOL,
-					)
+		if data.Date != "" && utility.Contains(dateList, data.Date) {
+			result = append(result, data)
+			cnt--
+
+			fmt.Println(data.Name,
+				data.Code,
+				data.Date,
+				data.UDRange,
+				data.UDShortfall,
+				data.PClosePrice,
+				data.StartPrice,
+				data.LowPrice,
+				data.HighPrice,
+				data.ClosePrice,
+				data.AMO,
+				data.FreeValue,
+				data.TotalValue,
+				data.TurnoverRate,
+				data.VOL,
+			)
+		}
 	}
 
 	return result
 }
 
 func (htd *HTD)Analyse(dateList []interface{}) {
-	//htd.getData(dateList)
-	if utility.Contains(dateList, "2013-12-31") {
-		fmt.Println("yes")
-	} else {
-		fmt.Println("no")
-	}
+	htd.getData(dateList)
+
 }

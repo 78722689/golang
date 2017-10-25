@@ -6,6 +6,7 @@ import (
 	"os"
 )
 
+
 // To check if the list contains the elem
 func Contains(list interface{}, elem interface{}) bool {
 	value := reflect.ValueOf(list)
