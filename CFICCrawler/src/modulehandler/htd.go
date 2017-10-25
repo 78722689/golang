@@ -10,6 +10,7 @@ import (
 
 	"github.com/axgle/mahonia"
 	"io"
+	"utility"
 )
 
 // This file processes the history trade data from http://quotes.money.163.com/
@@ -116,7 +117,7 @@ func (htd *HTD)convert2HTData(line string) *HTData{
 	return data
 }
 
-func (htd *HTD)getData() []*HTData{
+func (htd *HTD)getData(dateList []interface{}) []*HTData{
 	file := htd.Folder + htd.Code + ".html.modules/htd/htd.csv"
 
 	f, err := os.Open(file)
@@ -165,6 +166,11 @@ func (htd *HTD)getData() []*HTData{
 	return result
 }
 
-func (htd *HTD)Analyse() {
-	htd.getData()
+func (htd *HTD)Analyse(dateList []interface{}) {
+	//htd.getData(dateList)
+	if utility.Contains(dateList, "2013-12-31") {
+		fmt.Println("yes")
+	} else {
+		fmt.Println("no")
+	}
 }
