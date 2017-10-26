@@ -6,6 +6,8 @@ import (
 	"os"
 	"github.com/axgle/mahonia"
 	"bufio"
+	"path"
+	"strconv"
 )
 
 
@@ -43,16 +45,18 @@ func Keys(i interface{}) (keys []string) {
 }
 
 // Write one line to file.
-func WriteToFile(path string, line string) error{
-	file, err:= os.OpenFile(path, os.O_RDWR | os.O_CREATE | os.O_APPEND, 0777)
+func WriteToFile(file string, line string) error{
+	os.MkdirAll(path.Dir(file), 0777)
+
+	f, err:= os.OpenFile(file, os.O_RDWR | os.O_CREATE | os.O_APPEND, 0777)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "WARN: Open file %s failed, %s\n", path, err)
+		fmt.Fprintf(os.Stderr, "WARN: Open file %s failed, %s\n", file, err)
 		return err
 	}
-	defer file.Close()
+	defer f.Close()
 
 	encoder := mahonia.NewEncoder("gbk")
-	writer := bufio.NewWriter(encoder.NewWriter(file))
+	writer := bufio.NewWriter(encoder.NewWriter(f))
 	writer.WriteString(line + "\n")
 	writer.Flush()
 	//io.Copy(writer, strings.NewReader(line))
@@ -67,4 +71,21 @@ func IsFileExist(name string) bool {
 		}
 	}
 	return true
+}
+
+func String2Int64(value string) int64 {
+	if v,err := strconv.ParseInt(value, 0, 64); err != nil {
+		return 0
+	} else {
+		return v
+	}
+}
+
+func String2Folat32(value string) float32{
+	if v,err := strconv.ParseFloat(value, 32); err != nil {
+		return 0.0
+	} else {
+		return float32(v)
+	}
+
 }

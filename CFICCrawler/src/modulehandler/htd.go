@@ -28,18 +28,18 @@ type HTData struct {
 	Date string			//历史数据日期
 	Code string			//股票代码
 	Name string			//股票名称
-	ClosePrice string  	//收盘价
-	HighPrice string   	// 最高价
-	LowPrice string    	//最低价
-	StartPrice string  	//开盘价
-	PClosePrice string 	//前收盘
-	UDShortfall string  //涨跌额
-	UDRange	string		//涨跌幅
-	TurnoverRate string	//换手率
-	VOL string			//成交量
-	AMO string			//成交金额
-	TotalValue string	//总市值
-	FreeValue string	// 流通市值
+	ClosePrice float32  	//收盘价
+	HighPrice float32   	// 最高价
+	LowPrice float32    	//最低价
+	StartPrice float32  	//开盘价
+	PClosePrice float32 	//前收盘
+	UDShortfall float32  //涨跌额
+	UDRange	float32		//涨跌幅
+	TurnoverRate float32	//换手率
+	VOL float32			//成交量
+	AMO float32			//成交金额
+	TotalValue float32	//总市值
+	FreeValue float32	// 流通市值
 }
 
 /*
@@ -75,8 +75,6 @@ func (htd *HTD)Download() error {
 	return nil
 }
 
-
-
 func (htd *HTD)convert2HTData(line string) *HTData{
 	data := &HTData{}
 
@@ -89,29 +87,29 @@ func (htd *HTD)convert2HTData(line string) *HTData{
 		case 2:
 			data.Name = item
 		case 3:
-			data.ClosePrice = item
+			data.ClosePrice = utility.String2Folat32(item)
 		case 4:
-			data.HighPrice = item
+			data.HighPrice = utility.String2Folat32(item)
 		case 5:
-			data.LowPrice = item
+			data.LowPrice = utility.String2Folat32(item)
 		case 6:
-			data.StartPrice = item
+			data.StartPrice = utility.String2Folat32(item)
 		case 7:
-			data.PClosePrice = item
+			data.PClosePrice = utility.String2Folat32(item)
 		case 8:
-			data.UDShortfall = item
+			data.UDShortfall = utility.String2Folat32(item)
 		case 9:
-			data.UDRange = item
+			data.UDRange = utility.String2Folat32(item)
 		case 10:
-			data.TurnoverRate = item
+			data.TurnoverRate = utility.String2Folat32(item)
 		case 11:
-			data.VOL = item
+			data.VOL = utility.String2Folat32(item)
 		case 12:
-			data.AMO = item
+			data.AMO = utility.String2Folat32(item)
 		case 13:
-			data.TotalValue = item
+			data.TotalValue = utility.String2Folat32(item)
 		case 14:
-			data.FreeValue = item
+			data.FreeValue = utility.String2Folat32(item)
 		}
 	}
 
@@ -180,7 +178,8 @@ func (htd *HTD)getData(dateList []string) map[string]*HTData {
 }
 
 func (htd *HTD)Analyse(shi map[string]*htmlparser.ShareHolerInfo, name string) {
-	filename := "D:/Work/MyDemo/go/golang/CFICCrawler/resource/"+ name + ".csv"
+	//D:/Work/MyDemo/go/golang/CFICCrawler/resource/
+	filename := "E:/Programing/golang/CFICCrawler/resource/"+ name + "/" + htd.Code + ".csv"
 	utility.WriteToFile(filename, "Date,Count,Ratio,Price")
 
 	keys := utility.Keys(shi)
@@ -189,7 +188,7 @@ func (htd *HTD)Analyse(shi map[string]*htmlparser.ShareHolerInfo, name string) {
 	mapHistoryData := htd.getData(keys)
 	for _,key := range keys {
 		if value, ok := mapHistoryData[key];ok {
-			line := fmt.Sprintf("%s,%s,%s,%s", key, shi[key].Count, shi[key].Ratio, value.StartPrice)
+			line := fmt.Sprintf("%s,%d,%f,%f", key, shi[key].Count, shi[key].Ratio, value.StartPrice)
 			fmt.Println(line)
 			utility.WriteToFile(filename, line)
 		}

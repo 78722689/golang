@@ -3,12 +3,13 @@ package htmlparser
 import (
 	"httpcontroller"
 	"strings"
+	"utility"
 )
 
 type ShareHolerInfo struct {
 	Name string
-	Count string
-	Ratio string
+	Count int64
+	Ratio float32
 }
 
 
@@ -21,9 +22,10 @@ const (
 
 func (tree *HTMLDoc)GDTJ_Request(url string, file string) (*HTMLDoc, error){
 	request := httpcontroller.Request{
-		Proxy:&httpcontroller.Proxy{"HTTP", "203.17.66.134", "8000"},
+		//Proxy:&httpcontroller.Proxy{"HTTP", "203.17.66.134", "8000"},
 		Url : url,
 		File : file,
+		OverWrite : false,
 	}
 
 	if _, err := request.Get(); err != nil {
@@ -62,9 +64,9 @@ func (tree *HTMLDoc) GDTJ_GetShareholder(shType ShareHolderType) []*ShareHolerIn
 						case 0:
 							shi.Name = strings.TrimSpace(tn.Nodes[0].Root.Data)
 						case 1:
-							shi.Count = strings.TrimSpace(tn.Nodes[0].Root.Data)
+							shi.Count = utility.String2Int64(strings.TrimSpace(tn.Nodes[0].Root.Data))
 						case 2:
-							shi.Ratio = strings.TrimSpace(tn.Nodes[0].Root.Data)
+							shi.Ratio = utility.String2Folat32(strings.TrimSpace(tn.Nodes[0].Root.Data))
 						}
 
 						index ++

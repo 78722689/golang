@@ -23,6 +23,7 @@ type Request struct {
     Url string  // Url to request
     File string // Optional field, file to write the request result
     Root *html.Node // Nodes to buffer the request result
+    OverWrite bool // Overwrite file if already exist.
 }
 
 func (r *Request)isFileExist(name string) bool{
@@ -62,7 +63,11 @@ func (r *Request)Get() (*html.Node, error){
         // If file name passed, write the result to file.
         if len(r.File) > 0 {
             if r.isFileExist(r.File) {
-                os.Remove(r.File)
+                if r.OverWrite {
+                    os.Remove(r.File)
+                } else {
+                    return nil, nil
+                }
             }
 
             os.MkdirAll(path.Dir(r.File), 0777)
