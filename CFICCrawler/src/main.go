@@ -13,11 +13,9 @@ import (
 
 	//"modulehandler"
 	"fmt"
-	//"os"
 	"modulehandler"
 	"os"
 	"htmlparser"
-	"utility"
 )
 
 const (
@@ -149,7 +147,7 @@ func main() {
 		}
 */
 		htd := modulehandler.HTD{Code : "601700",
-								Folder : "E:/Programing/golang/CFICCrawler/resource/"} //"D:/Work/MyDemo/go/golang/CFICCrawler/resource/"
+								Folder : "D:/Work/MyDemo/go/golang/CFICCrawler/resource/"} //"E:/Programing/golang/CFICCrawler/resource/"
 
 	/*
 		htd.Download()
@@ -172,8 +170,7 @@ func main() {
 		}
 	}
 
-	//fmt.Println(utility.Keys(result))
-	htd.Analyse(utility.Keys(result))
+	htd.Analyse(result, example)
 
 	fmt.Println("main is end...........................")
 

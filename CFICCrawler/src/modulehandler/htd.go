@@ -11,6 +11,7 @@ import (
 	"github.com/axgle/mahonia"
 	"io"
 	"utility"
+	"sort"
 )
 
 // This file processes the history trade data from http://quotes.money.163.com/
@@ -118,7 +119,7 @@ func (htd *HTD)convert2HTData(line string) *HTData{
 }
 
 // Find the trade data by giving date list, and return them.
-func (htd *HTD)getData(dateList []interface{}) []*HTData{
+func (htd *HTD)getData(dateList []string) map[string]*HTData {
 	file := htd.Folder + htd.Code + ".html.modules/htd/htd.csv"
 
 	f, err := os.Open(file)
@@ -133,7 +134,7 @@ func (htd *HTD)getData(dateList []interface{}) []*HTData{
 
 	cnt := len(dateList)
 
-	var result []*HTData
+	var result = make(map[string]*HTData)
 	// Loop the file line by line
 	for {
 		if cnt == 0 {
@@ -152,7 +153,8 @@ func (htd *HTD)getData(dateList []interface{}) []*HTData{
 
 		data := htd.convert2HTData(l)
 		if data.Date != "" && utility.Contains(dateList, data.Date) {
-			result = append(result, data)
+			//result = append(result, data)
+			result[data.Date] = data
 			cnt--
 
 			fmt.Println(data.Name,
@@ -177,7 +179,19 @@ func (htd *HTD)getData(dateList []interface{}) []*HTData{
 	return result
 }
 
-func (htd *HTD)Analyse(dateList []interface{}) {
-	htd.getData(dateList)
+func (htd *HTD)Analyse(shi map[string]*htmlparser.ShareHolerInfo, name string) {
+	filename := "D:/Work/MyDemo/go/golang/CFICCrawler/resource/"+ name + ".csv"
+	utility.WriteToFile(filename, "Date,Count,Ratio,Price")
 
+	keys := utility.Keys(shi)
+	sort.Strings(keys)
+
+	mapHistoryData := htd.getData(keys)
+	for _,key := range keys {
+		if value, ok := mapHistoryData[key];ok {
+			line := fmt.Sprintf("%s,%s,%s,%s", key, shi[key].Count, shi[key].Ratio, value.StartPrice)
+			fmt.Println(line)
+			utility.WriteToFile(filename, line)
+		}
+	}
 }
