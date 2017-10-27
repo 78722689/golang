@@ -14,8 +14,8 @@ import (
 	//"modulehandler"
 	"fmt"
 	"modulehandler"
-	"os"
 	"htmlparser"
+	"utility"
 )
 
 const (
@@ -26,6 +26,10 @@ const (
 // proxy //http://203.17.66.133:8000   http://203.17.66.134:8000
 
 func main() {
+	// Log setting
+	logger := utility.GetLogger()
+	logger.SetMinorLogLevel(utility.DEBUG)
+
 	// goroutines settings
 	runtime.GOMAXPROCS(runtime.NumCPU())
 	/*
@@ -147,7 +151,7 @@ func main() {
 		}
 */
 		htd := modulehandler.HTD{Code : "601700",
-								Folder : "E:/Programing/golang/CFICCrawler/resource/"} //"D:/Work/MyDemo/go/golang/CFICCrawler/resource/"
+								Folder : "D:/Work/MyDemo/go/golang/CFICCrawler/resource/"} //"E:/Programing/golang/CFICCrawler/resource/"
 
 	/*
 		htd.Download()
@@ -161,9 +165,9 @@ func main() {
 			for _, item:= range shList {
 				//fmt.Fprintf(os.Stdout, "Name:%s, Count:%s, Ratio:%s\n", item.Name, item.Count, item.Ratio)
 				if item.Name == example {
-					fmt.Fprintf(os.Stdout, "Found %s in %s\n",
-						example, key)
 					result[key] = item
+
+					logger.DEBUG(fmt.Sprintf("Found %s in %s", example, key))
 					break
 				}
 			}
@@ -172,6 +176,6 @@ func main() {
 
 	htd.Analyse(result, example)
 
-	fmt.Println("main is end...........................")
+	logger.DEBUG("main is end...........................")
 
 }

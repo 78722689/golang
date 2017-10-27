@@ -55,6 +55,9 @@ const (
 	HTD_DOWNLOAD_LINK ="http://quotes.money.163.com/service/chddata.html?code=%s&start=19901219&end=%s&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;TURNOVER;VOTURNOVER;VATURNOVER;TCAP;MCAP"
 )
 
+// logger
+var logger = utility.GetLogger()
+
 func (htd *HTD)Download() error {
 	var code string
 
@@ -155,7 +158,8 @@ func (htd *HTD)getData(dateList []string) map[string]*HTData {
 			result[data.Date] = data
 			cnt--
 
-			fmt.Println(data.Name,
+			logger.DEBUG(fmt.Sprintf("%s %s %s %f %f %f %f %f %f %f %f %f %f %f %f ",
+				data.Name,
 				data.Code,
 				data.Date,
 				data.UDRange,
@@ -170,7 +174,7 @@ func (htd *HTD)getData(dateList []string) map[string]*HTData {
 				data.TotalValue,
 				data.TurnoverRate,
 				data.VOL,
-			)
+			))
 		}
 	}
 
@@ -178,8 +182,8 @@ func (htd *HTD)getData(dateList []string) map[string]*HTData {
 }
 
 func (htd *HTD)Analyse(shi map[string]*htmlparser.ShareHolerInfo, name string) {
-	//D:/Work/MyDemo/go/golang/CFICCrawler/resource/
-	filename := "E:/Programing/golang/CFICCrawler/resource/"+ name + "/" + htd.Code + ".csv"
+	//E:/Programing/golang/CFICCrawler/resource/
+	filename := "D:/Work/MyDemo/go/golang/CFICCrawler/resource/"+ name + "/" + htd.Code + ".csv"
 	utility.WriteToFile(filename, "Date,Count,Ratio,Price")
 
 	keys := utility.Keys(shi)
@@ -189,7 +193,7 @@ func (htd *HTD)Analyse(shi map[string]*htmlparser.ShareHolerInfo, name string) {
 	for _,key := range keys {
 		if value, ok := mapHistoryData[key];ok {
 			line := fmt.Sprintf("%s,%d,%f,%f", key, shi[key].Count, shi[key].Ratio, value.StartPrice)
-			fmt.Println(line)
+			logger.DEBUG(line)
 			utility.WriteToFile(filename, line)
 		}
 	}

@@ -18,7 +18,7 @@ type GDTJ struct {
 }
 
 const (
-	GDTJ_LOCATION = "E:/Programing/golang/CFICCrawler/resource/" //"D:/Work/MyDemo/go/golang/CFICCrawler/resource/"
+	GDTJ_LOCATION = "D:/Work/MyDemo/go/golang/CFICCrawler/resource/" //"E:/Programing/golang/CFICCrawler/resource/"
 	GDTJ_HTML = "gdtj.html"
 	GDTJ_QUARTER_LINK = "http://quote.cfi.cn/quote.aspx?stockid=%s&contenttype=gdtj&jzrq=%s"
 )
