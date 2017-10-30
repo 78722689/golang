@@ -52,14 +52,6 @@ func (r *Request)Get() (*html.Node, error){
             client = &http.Client{}
         }
 
-        resp, err := client.Get(r.Url)
-        if err != nil {
-            fmt.Fprintf(os.Stderr, "fetch: %v\n", err)
-
-            return nil, err
-        }
-        defer resp.Body.Close()
-
         // If file name passed, write the result to file.
         if len(r.File) > 0 {
             if r.isFileExist(r.File) {
@@ -69,8 +61,15 @@ func (r *Request)Get() (*html.Node, error){
                     return nil, nil
                 }
             }
-
             os.MkdirAll(path.Dir(r.File), 0777)
+
+            resp, err := client.Get(r.Url)
+            if err != nil {
+                fmt.Fprintf(os.Stderr, "fetch: %v\n", err)
+
+                return nil, err
+            }
+            defer resp.Body.Close()
 
             file, err:= os.OpenFile(r.File, os.O_RDWR | os.O_CREATE, 0777)
             if err != nil {
@@ -81,6 +80,14 @@ func (r *Request)Get() (*html.Node, error){
 
             io.Copy(file, resp.Body)
         } else {
+            resp, err := client.Get(r.Url)
+            if err != nil {
+                fmt.Fprintf(os.Stderr, "fetch: %v\n", err)
+
+                return nil, err
+            }
+            defer resp.Body.Close()
+
             root, err := html.Parse(resp.Body)
             if err != nil {
                 fmt.Fprintf(os.Stderr, "Error: parse response from url\n")

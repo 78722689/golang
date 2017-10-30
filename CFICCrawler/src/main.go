@@ -151,30 +151,35 @@ func main() {
 		}
 */
 		htd := modulehandler.HTD{Code : "601700",
-								Folder : "D:/Work/MyDemo/go/golang/CFICCrawler/resource/"} //"E:/Programing/golang/CFICCrawler/resource/"
+								Folder : "E:/Programing/golang/CFICCrawler/resource/"} //"D:/Work/MyDemo/go/golang/CFICCrawler/resource/"
 
 	/*
 		htd.Download()
 	*/
-	example := "中国工商银行-嘉实策略增长混合型证券投资基金"
-	result := make(map[string]*htmlparser.ShareHolerInfo)
+	funds := []string{"全国社保基金一零四组合","中国工商银行-嘉实策略增长混合型证券投资基金"}
+	result := make(map[string][]*htmlparser.ShareHolerInfo)
 
-	// Find out the fund when it happened any trade
+	// Find out the fund if it is in the reporter
 	for key, _ := range gdtj.GetDateList() {
 		if shList, err := gdtj.GetShareHolder(key); err == nil {
-			for _, item:= range shList {
-				//fmt.Fprintf(os.Stdout, "Name:%s, Count:%s, Ratio:%s\n", item.Name, item.Count, item.Ratio)
-				if item.Name == example {
-					result[key] = item
+			for _, fundname := range funds {
+				for _, sh := range shList {
+					if sh.Name == fundname {
+						result[fundname] = append(result[fundname], sh)
 
-					logger.DEBUG(fmt.Sprintf("Found %s in %s", example, key))
-					break
+						logger.DEBUG(fmt.Sprintf("Found %s in %s", fundname, key))
+						break
+					}
 				}
 			}
 		}
 	}
 
-	htd.Analyse(result, example)
+	// Requirements:
+	// 1. 加入同时期大盘指数走势
+	// 2. 计算除权价格？
+	// 3. 计算分红数据，持股变动后盈利以及总盈利。
+	htd.Analyse(result)
 
 	logger.DEBUG("main is end...........................")
 

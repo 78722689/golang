@@ -19,7 +19,10 @@ import (
 // History Trade Data
 type HTD struct {
 	Code string
-	Folder string // To write the history data
+	Folder string // To write the stock history data
+	SHMainIndexFile string // Where the Shang hai main index data file store in
+	SZMainIndexFile string // Where the Shen zhen main index data file store in
+	GEMfile	string	// Where the growth enterprises market data file store in
 
 	Doc *htmlparser.HTMLDoc
 }
@@ -181,20 +184,103 @@ func (htd *HTD)getData(dateList []string) map[string]*HTData {
 	return result
 }
 
-func (htd *HTD)Analyse(shi map[string]*htmlparser.ShareHolerInfo, name string) {
-	//E:/Programing/golang/CFICCrawler/resource/
-	filename := "D:/Work/MyDemo/go/golang/CFICCrawler/resource/"+ name + "/" + htd.Code + ".csv"
-	utility.WriteToFile(filename, "Date,Count,Ratio,Price")
+// Get the Shang hai main index data by gaving date list
+func (htd *HTD) getSHMainIndexdata(dateList []string) map[string]*HTData{
+	// TODO
+	var result = make(map[string]*HTData)
 
-	keys := utility.Keys(shi)
-	sort.Strings(keys)
+	return result
+}
 
-	mapHistoryData := htd.getData(keys)
-	for _,key := range keys {
-		if value, ok := mapHistoryData[key];ok {
-			line := fmt.Sprintf("%s,%d,%f,%f", key, shi[key].Count, shi[key].Ratio, value.StartPrice)
-			logger.DEBUG(line)
-			utility.WriteToFile(filename, line)
+// Get the Shen zhen main index data by gaving date list
+func (htd *HTD) getSZMainIndexdata(dateList []string) map[string]*HTData{
+	// TODO
+	var result = make(map[string]*HTData)
+
+	return result
+}
+
+// Get the growth enterprises market data by gaving date list
+func (htd *HTD) getGEMdata(dateList []string) map[string]*HTData{
+	// TODO
+	var result = make(map[string]*HTData)
+
+	return result
+}
+
+// Check if the date is not in the weekend, if yes, change it to Friday.
+func changeDate(dateList []string) []string{
+	var result []string
+	for _,item := range dateList {
+		temp := item
+		t, _ := time.Parse("2006-01-02", item)
+		if t.Weekday().String() == "Sunday" {
+			d, _ := time.ParseDuration("-48h")
+			temp = t.Add(d).Format("2006-01-02")
+			fmt.Println("changed Sunday", temp)
+		}
+		if t.Weekday().String() == "Saturday" {
+			d, _ := time.ParseDuration("-24h")
+			temp = t.Add(d).Format("2006-01-02")
+			fmt.Println("changed Saturday", temp)
+		}
+		result = append(result, temp)
+	}
+
+	return result
+}
+
+func (htd *HTD)Analyse(focusSHIs map[string][]*htmlparser.ShareHolerInfo) {
+	// To save all the date for every one focus shareholder
+	shDateMap := make(map[string][]string)
+	for fundname, shilist := range focusSHIs {
+		for _, shi := range shilist {
+			shDateMap[fundname] = append(shDateMap[fundname], shi.Date)
+		}
+	}
+
+	for fundname, dateList := range shDateMap {
+		//"D:/Work/MyDemo/go/golang/CFICCrawler/resource/"
+		filename := "E:/Programing/golang/CFICCrawler/resource/" + fundname + "/" + htd.Code + ".csv"
+		utility.WriteToFile(filename, "Date,Count,Ratio,Price,SH,SZ,GEM")
+
+		dlist := changeDate(dateList)
+		// Sort the date list so that searching data is sorted.
+		sort.Strings(dlist)
+
+		// Get the stock, main index and GEM history data, and write to file.
+		// So that the history data can compare together.
+		mapStockHistoryData := htd.getData(dlist)
+		//mapSHMainIndexHistoryData := htd.getSHMainIndexdata(dateList)
+		//mapSZMainIndexHistoryData := htd.getSZMainIndexdata(dateList)
+		//mapGEMHistoryData := htd.getGEMdata(dateList)
+
+		for _, date := range dlist {
+			//if dayData, ok := mapStockHistoryData[date]; ok {
+				for _, shi := range focusSHIs[fundname] {
+					if shi.Date == date {
+
+						line := fmt.Sprintf("%s,%d,%f,%f",
+											shi.Date,
+											shi.Count,
+											shi.Ratio,
+											mapStockHistoryData[date].StartPrice,
+											)
+						/*if data,ok := mapSHMainIndexHistoryData[date];ok {
+							line = fmt.Sprintf("%s,%f", data.StartPrice)
+						}
+						if data,ok := mapSZMainIndexHistoryData[date];ok {
+							line = fmt.Sprintf("%s,%f", data.StartPrice)
+						}
+						if data,ok := mapGEMHistoryData[date];ok {
+							line = fmt.Sprintf("%s,%f", data.StartPrice)
+						}*/
+
+						logger.DEBUG(line)
+						utility.WriteToFile(filename, line)
+					}
+				}
+			//}
 		}
 	}
 }

@@ -7,9 +7,10 @@ import (
 )
 
 type ShareHolerInfo struct {
-	Name string
-	Count int64
-	Ratio float32
+	Name	string
+	Count	int64
+	Ratio	float32
+	Date	string
 }
 
 
@@ -22,7 +23,7 @@ const (
 
 func (tree *HTMLDoc)GDTJ_Request(url string, file string) (*HTMLDoc, error){
 	request := httpcontroller.Request{
-		Proxy:&httpcontroller.Proxy{"HTTP", "203.17.66.134", "8000"},
+		//Proxy:&httpcontroller.Proxy{"HTTP", "203.17.66.134", "8000"},
 		Url : url,
 		File : file,
 		OverWrite : false,
@@ -45,6 +46,9 @@ func (tree *HTMLDoc) GDTJ_GetShareholder(shType ShareHolderType) []*ShareHolerIn
 	// Default to read table 6 for common shareholders.
 	tableID := 6
 	if shType == Major {tableID = 5}
+
+	// Get the date of this doc(page)
+	date := tree.GetCurrentDate()
 
 	tree.Find(TagNode, "table").Each(func(i int, table *Selection) {
 		if len(table.GetNodeByAttr("id", "tabh")) == 0 {return}
@@ -74,6 +78,7 @@ func (tree *HTMLDoc) GDTJ_GetShareholder(shType ShareHolderType) []*ShareHolerIn
 				})
 			})
 			if found {
+				shi.Date = date
 				shiList = append(shiList, shi)
 			}
 		})
