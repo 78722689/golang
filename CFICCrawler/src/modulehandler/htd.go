@@ -123,7 +123,7 @@ func (htd *HTD)convert2HTData(line string) *HTData{
 }
 
 // Find the trade data by giving date list, and return them.
-func (htd *HTD)getData(dateList []string) map[string]*HTData {
+func (htd *HTD)getData(dateList []interface{}) map[string]*HTData {
 	file := htd.Folder + htd.Code + ".html.modules/htd/htd.csv"
 
 	f, err := os.Open(file)
@@ -157,7 +157,6 @@ func (htd *HTD)getData(dateList []string) map[string]*HTData {
 
 		data := htd.convert2HTData(l)
 		if data.Date != "" && utility.Contains(dateList, data.Date) {
-			//result = append(result, data)
 			result[data.Date] = data
 			cnt--
 
@@ -209,22 +208,23 @@ func (htd *HTD) getGEMdata(dateList []string) map[string]*HTData{
 }
 
 // Check if the date is not in the weekend, if yes, change it to Friday.
-func changeDate(dateList []string) []string{
-	var result []string
+// Return origin date list and changed date list.
+func getNoWeekendDateList(dateList []string) (map[string]string) {
+	var result = make(map[string]string)
 	for _,item := range dateList {
 		temp := item
 		t, _ := time.Parse("2006-01-02", item)
 		if t.Weekday().String() == "Sunday" {
 			d, _ := time.ParseDuration("-48h")
 			temp = t.Add(d).Format("2006-01-02")
-			fmt.Println("changed Sunday", temp)
+			logger.WARN(fmt.Sprintf("Changed date Sunday (%s) to Friday (%s)", item, temp))
 		}
 		if t.Weekday().String() == "Saturday" {
 			d, _ := time.ParseDuration("-24h")
 			temp = t.Add(d).Format("2006-01-02")
-			fmt.Println("changed Saturday", temp)
+			logger.WARN(fmt.Sprintf("Changed date Saturday (%s) to to Friday (%s)", item, temp))
 		}
-		result = append(result, temp)
+		result[item] = temp
 	}
 
 	return result
@@ -240,31 +240,33 @@ func (htd *HTD)Analyse(focusSHIs map[string][]*htmlparser.ShareHolerInfo) {
 	}
 
 	for fundname, dateList := range shDateMap {
-		//"D:/Work/MyDemo/go/golang/CFICCrawler/resource/"
-		filename := "E:/Programing/golang/CFICCrawler/resource/" + fundname + "/" + htd.Code + ".csv"
+		//"E:/Programing/golang/CFICCrawler/resource/"
+		filename := "D:/Work/MyDemo/go/golang/CFICCrawler/resource/" + fundname + "/" + htd.Code + ".csv"
 		utility.WriteToFile(filename, "Date,Count,Ratio,Price,SH,SZ,GEM")
 
-		dlist := changeDate(dateList)
 		// Sort the date list so that searching data is sorted.
-		sort.Strings(dlist)
+		sort.Strings(dateList)
+
+		// Get the date without weekend.
+		noWeekendDatemap := getNoWeekendDateList(dateList)
+
 
 		// Get the stock, main index and GEM history data, and write to file.
 		// So that the history data can compare together.
-		mapStockHistoryData := htd.getData(dlist)
+		mapStockHistoryData := htd.getData(utility.Values(noWeekendDatemap))
 		//mapSHMainIndexHistoryData := htd.getSHMainIndexdata(dateList)
 		//mapSZMainIndexHistoryData := htd.getSZMainIndexdata(dateList)
 		//mapGEMHistoryData := htd.getGEMdata(dateList)
 
-		for _, date := range dlist {
+		for _, date := range dateList {
 			//if dayData, ok := mapStockHistoryData[date]; ok {
 				for _, shi := range focusSHIs[fundname] {
 					if shi.Date == date {
-
 						line := fmt.Sprintf("%s,%d,%f,%f",
 											shi.Date,
 											shi.Count,
 											shi.Ratio,
-											mapStockHistoryData[date].StartPrice,
+											mapStockHistoryData[noWeekendDatemap[date]].StartPrice,
 											)
 						/*if data,ok := mapSHMainIndexHistoryData[date];ok {
 							line = fmt.Sprintf("%s,%f", data.StartPrice)

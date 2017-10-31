@@ -20,7 +20,7 @@ func Contains(list interface{}, elem interface{}) bool {
 	}
 
 	for i:=0; i<value.Len();i++ {
-		if value.Index(i).Interface() == elem.(string) {
+		if value.Index(i).Interface() == elem {
 			return true
 		}
 	}
@@ -42,6 +42,23 @@ func Keys(i interface{}) (keys []string) {
 	}
 
 	return keys
+}
+
+// To get map values
+func Values(i interface{}) ([]interface{}) {
+	var result []interface{}
+	v := reflect.ValueOf(i)
+
+	if v.Kind() != reflect.Map {
+		fmt.Fprintf(os.Stderr, "Input type is not a map type: %v", v)
+		return nil
+	}
+
+	for _,key := range (v.MapKeys()) {
+		result = append(result, v.MapIndex(key).Interface())
+	}
+
+	return result
 }
 
 // Write one line to file.

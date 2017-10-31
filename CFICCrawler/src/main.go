@@ -151,7 +151,7 @@ func main() {
 		}
 */
 		htd := modulehandler.HTD{Code : "601700",
-								Folder : "E:/Programing/golang/CFICCrawler/resource/"} //"D:/Work/MyDemo/go/golang/CFICCrawler/resource/"
+								Folder : "D:/Work/MyDemo/go/golang/CFICCrawler/resource/"} //"E:/Programing/golang/CFICCrawler/resource/"
 
 	/*
 		htd.Download()
