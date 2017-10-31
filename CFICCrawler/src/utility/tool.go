@@ -106,3 +106,13 @@ func String2Folat32(value string) float32{
 	}
 
 }
+
+
+func String2Folat64(value string) float64{
+	if v,err := strconv.ParseFloat(value, 64); err != nil {
+		return 0.0
+	} else {
+		return float64(v)
+	}
+
+}

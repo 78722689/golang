@@ -3,18 +3,18 @@
   <component name="ChangeListManager">
     <list default="true" id="99f4474e-035d-490c-85d5-0b13ecb51133" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CFICCrawler/pkg/windows_amd64/htmlparser.a" afterPath="$PROJECT_DIR$/CFICCrawler/pkg/windows_amd64/htmlparser.a" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CFICCrawler/pkg/windows_amd64/httpcontroller.a" afterPath="$PROJECT_DIR$/CFICCrawler/pkg/windows_amd64/httpcontroller.a" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CFICCrawler/pkg/windows_amd64/modulehandler.a" afterPath="$PROJECT_DIR$/CFICCrawler/pkg/windows_amd64/modulehandler.a" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CFICCrawler/pkg/windows_amd64/utility.a" afterPath="$PROJECT_DIR$/CFICCrawler/pkg/windows_amd64/utility.a" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CFICCrawler/src/github.com/axgle/mahonia" afterPath="$PROJECT_DIR$/CFICCrawler/src/github.com/axgle/mahonia" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CFICCrawler/src/golang.org/x/net" afterPath="$PROJECT_DIR$/CFICCrawler/src/golang.org/x/net" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dictionaries/Administrator.xml" afterPath="$PROJECT_DIR$/.idea/dictionaries/Administrator.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CFICCrawler/src/htmlparser/GDTJHandler.go" afterPath="$PROJECT_DIR$/CFICCrawler/src/htmlparser/GDTJHandler.go" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CFICCrawler/src/htmlparser/HTDHandler.go" afterPath="$PROJECT_DIR$/CFICCrawler/src/htmlparser/HTDHandler.go" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CFICCrawler/src/httpcontroller/httpget.go" afterPath="$PROJECT_DIR$/CFICCrawler/src/httpcontroller/httpget.go" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CFICCrawler/src/main.go" afterPath="$PROJECT_DIR$/CFICCrawler/src/main.go" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CFICCrawler/src/modulehandler/gdtj.go" afterPath="$PROJECT_DIR$/CFICCrawler/src/modulehandler/gdtj.go" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CFICCrawler/src/modulehandler/htd.go" afterPath="$PROJECT_DIR$/CFICCrawler/src/modulehandler/htd.go" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CFICCrawler/src/utility/tool.go" afterPath="$PROJECT_DIR$/CFICCrawler/src/utility/tool.go" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -28,10 +28,22 @@
       <file leaf-file-name="main.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/CFICCrawler/src/main.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="179">
-              <caret line="181" column="0" lean-forward="false" selection-start-line="181" selection-start-column="0" selection-end-line="181" selection-end-column="0" />
+            <state relative-caret-position="159">
+              <caret line="163" column="41" lean-forward="false" selection-start-line="163" selection-start-column="41" selection-end-line="163" selection-end-column="41" />
               <folding>
                 <element signature="e#14#219#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="htd.go" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/CFICCrawler/src/modulehandler/htd.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="467">
+              <caret line="316" column="24" lean-forward="true" selection-start-line="316" selection-start-column="24" selection-end-line="316" selection-end-column="24" />
+              <folding>
+                <element signature="e#23#142#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -40,8 +52,8 @@
       <file leaf-file-name="gdtj.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/CFICCrawler/src/modulehandler/gdtj.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="271">
-              <caret line="97" column="36" lean-forward="false" selection-start-line="97" selection-start-column="36" selection-end-line="97" selection-end-column="36" />
+            <state relative-caret-position="270">
+              <caret line="79" column="30" lean-forward="false" selection-start-line="79" selection-start-column="30" selection-end-line="79" selection-end-column="30" />
               <folding />
             </state>
           </provider>
@@ -50,18 +62,8 @@
       <file leaf-file-name="GDTJHandler.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/CFICCrawler/src/htmlparser/GDTJHandler.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="115">
-              <caret line="9" column="6" lean-forward="false" selection-start-line="9" selection-start-column="6" selection-end-line="9" selection-end-column="6" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="htd.go" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/CFICCrawler/src/modulehandler/htd.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="171">
-              <caret line="237" column="45" lean-forward="false" selection-start-line="237" selection-start-column="45" selection-end-line="237" selection-end-column="45" />
+            <state relative-caret-position="138">
+              <caret line="11" column="4" lean-forward="false" selection-start-line="11" selection-start-column="4" selection-end-line="11" selection-end-column="4" />
               <folding />
             </state>
           </provider>
@@ -70,7 +72,7 @@
       <file leaf-file-name="logging.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/CFICCrawler/src/utility/logging.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="49">
+            <state relative-caret-position="230">
               <caret line="18" column="4" lean-forward="false" selection-start-line="18" selection-start-column="4" selection-end-line="18" selection-end-column="4" />
               <folding />
             </state>
@@ -100,8 +102,8 @@
       <file leaf-file-name="tool.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/CFICCrawler/src/utility/tool.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="529">
-              <caret line="31" column="5" lean-forward="false" selection-start-line="31" selection-start-column="5" selection-end-line="31" selection-end-column="5" />
+            <state relative-caret-position="266">
+              <caret line="111" column="24" lean-forward="false" selection-start-line="111" selection-start-column="24" selection-end-line="111" selection-end-column="24" />
               <folding />
             </state>
           </provider>
@@ -137,12 +139,12 @@
         <option value="$PROJECT_DIR$/CFICCrawler/src/golang.org/x/net/html/node.go" />
         <option value="$PROJECT_DIR$/CFICCrawler/src/htmlparser/StockPageHandler.go" />
         <option value="$PROJECT_DIR$/CFICCrawler/src/htmlparser/HTMLHandler.go" />
-        <option value="$PROJECT_DIR$/CFICCrawler/src/utility/tool.go" />
-        <option value="$PROJECT_DIR$/CFICCrawler/src/modulehandler/gdtj.go" />
-        <option value="$PROJECT_DIR$/CFICCrawler/src/htmlparser/HTDHandler.go" />
-        <option value="$PROJECT_DIR$/CFICCrawler/src/htmlparser/GDTJHandler.go" />
         <option value="$PROJECT_DIR$/CFICCrawler/src/httpcontroller/httpget.go" />
         <option value="$PROJECT_DIR$/CFICCrawler/src/main.go" />
+        <option value="$PROJECT_DIR$/CFICCrawler/src/htmlparser/HTDHandler.go" />
+        <option value="$PROJECT_DIR$/CFICCrawler/src/modulehandler/gdtj.go" />
+        <option value="$PROJECT_DIR$/CFICCrawler/src/utility/tool.go" />
+        <option value="$PROJECT_DIR$/CFICCrawler/src/htmlparser/GDTJHandler.go" />
         <option value="$PROJECT_DIR$/CFICCrawler/src/modulehandler/htd.go" />
       </list>
     </option>
@@ -174,7 +176,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -217,7 +219,7 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -263,14 +265,14 @@
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19818456" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20121029" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30098686" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17269737" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24013157" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -612,22 +614,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/CFICCrawler/src/htmlparser/HTDHandler.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="138">
-          <caret line="6" column="10" lean-forward="false" selection-start-line="6" selection-start-column="10" selection-end-line="6" selection-end-column="10" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/CFICCrawler/src/utility/tool.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="529">
-          <caret line="31" column="5" lean-forward="false" selection-start-line="31" selection-start-column="5" selection-end-line="31" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/CFICCrawler/src/httpcontroller/httpget.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1242">
@@ -636,35 +622,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/CFICCrawler/src/htmlparser/GDTJHandler.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="115">
-          <caret line="9" column="6" lean-forward="false" selection-start-line="9" selection-start-column="6" selection-end-line="9" selection-end-column="6" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/CFICCrawler/src/main.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="179">
-          <caret line="181" column="0" lean-forward="false" selection-start-line="181" selection-start-column="0" selection-end-line="181" selection-end-column="0" />
-          <folding>
-            <element signature="e#14#219#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/CFICCrawler/src/modulehandler/gdtj.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="271">
-          <caret line="97" column="36" lean-forward="false" selection-start-line="97" selection-start-column="36" selection-end-line="97" selection-end-column="36" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/CFICCrawler/src/utility/logging.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="49">
+        <state relative-caret-position="230">
           <caret line="18" column="4" lean-forward="false" selection-start-line="18" selection-start-column="4" selection-end-line="18" selection-end-column="4" />
           <folding />
         </state>
@@ -678,11 +638,55 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/CFICCrawler/src/main.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="159">
+          <caret line="163" column="41" lean-forward="false" selection-start-line="163" selection-start-column="41" selection-end-line="163" selection-end-column="41" />
+          <folding>
+            <element signature="e#14#219#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CFICCrawler/src/modulehandler/gdtj.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="79" column="30" lean-forward="false" selection-start-line="79" selection-start-column="30" selection-end-line="79" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CFICCrawler/src/htmlparser/HTDHandler.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="138">
+          <caret line="6" column="10" lean-forward="false" selection-start-line="6" selection-start-column="10" selection-end-line="6" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CFICCrawler/src/utility/tool.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="111" column="24" lean-forward="false" selection-start-line="111" selection-start-column="24" selection-end-line="111" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CFICCrawler/src/htmlparser/GDTJHandler.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="138">
+          <caret line="11" column="4" lean-forward="false" selection-start-line="11" selection-start-column="4" selection-end-line="11" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/CFICCrawler/src/modulehandler/htd.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="237" column="45" lean-forward="false" selection-start-line="237" selection-start-column="45" selection-end-line="237" selection-end-column="45" />
-          <folding />
+        <state relative-caret-position="467">
+          <caret line="316" column="24" lean-forward="true" selection-start-line="316" selection-start-column="24" selection-end-line="316" selection-end-column="24" />
+          <folding>
+            <element signature="e#23#142#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

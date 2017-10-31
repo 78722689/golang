@@ -4,11 +4,12 @@ import (
 	"httpcontroller"
 	"strings"
 	"utility"
+	"fmt"
 )
 
 type ShareHolerInfo struct {
 	Name	string
-	Count	int64
+	Count	string		// count is too large, so convert to float64 and save to string type.
 	Ratio	float32
 	Date	string
 }
@@ -23,7 +24,7 @@ const (
 
 func (tree *HTMLDoc)GDTJ_Request(url string, file string) (*HTMLDoc, error){
 	request := httpcontroller.Request{
-		Proxy:&httpcontroller.Proxy{"HTTP", "203.17.66.134", "8000"},
+		//Proxy:&httpcontroller.Proxy{"HTTP", "203.17.66.134", "8000"},
 		Url : url,
 		File : file,
 		OverWrite : false,
@@ -68,7 +69,7 @@ func (tree *HTMLDoc) GDTJ_GetShareholder(shType ShareHolderType) []*ShareHolerIn
 						case 0:
 							shi.Name = strings.TrimSpace(tn.Nodes[0].Root.Data)
 						case 1:
-							shi.Count = utility.String2Int64(strings.TrimSpace(tn.Nodes[0].Root.Data))
+							shi.Count = fmt.Sprintf("%.4f", utility.String2Folat64(strings.TrimSpace(tn.Nodes[0].Root.Data))/10000)
 						case 2:
 							shi.Ratio = utility.String2Folat32(strings.TrimSpace(tn.Nodes[0].Root.Data))
 						}

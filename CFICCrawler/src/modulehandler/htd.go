@@ -20,6 +20,7 @@ import (
 type HTD struct {
 	Code string
 	Folder string // To write the stock history data
+	StockDataFile	string // Where the stock history data file store in
 	SHMainIndexFile string // Where the Shang hai main index data file store in
 	SZMainIndexFile string // Where the Shen zhen main index data file store in
 	GEMfile	string	// Where the growth enterprises market data file store in
@@ -58,6 +59,14 @@ const (
 	HTD_DOWNLOAD_LINK ="http://quotes.money.163.com/service/chddata.html?code=%s&start=19901219&end=%s&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;TURNOVER;VOTURNOVER;VATURNOVER;TCAP;MCAP"
 )
 
+type Main_Index_Type uint8
+const  (
+	Stock Main_Index_Type = iota  // Stock
+	SH 	// Shanghai main index
+	SZ	// Shenzhen main index
+	GEM	// growth enterprises market
+)
+
 // logger
 var logger = utility.GetLogger()
 
@@ -77,6 +86,7 @@ func (htd *HTD)Download() error {
 	if err := htd.Doc.HTD_Request(link, file); err != nil {
 		return err
 	}
+	htd.StockDataFile = file
 
 	return nil
 }
@@ -123,8 +133,18 @@ func (htd *HTD)convert2HTData(line string) *HTData{
 }
 
 // Find the trade data by giving date list, and return them.
-func (htd *HTD)getData(dateList []interface{}) map[string]*HTData {
-	file := htd.Folder + htd.Code + ".html.modules/htd/htd.csv"
+func (htd *HTD)getData(dateList []interface{}, mit Main_Index_Type) map[string]*HTData {
+	file := ""
+	switch mit {
+	case Stock:
+		file = htd.Folder + htd.Code + ".html.modules/htd/htd.csv"
+	case SH:
+		file = htd.SHMainIndexFile
+	case SZ:
+		file = htd.SZMainIndexFile
+	case GEM:
+		file = htd.GEMfile
+	}
 
 	f, err := os.Open(file)
 	if  err != nil {
@@ -184,27 +204,48 @@ func (htd *HTD)getData(dateList []interface{}) map[string]*HTData {
 }
 
 // Get the Shang hai main index data by gaving date list
-func (htd *HTD) getSHMainIndexdata(dateList []string) map[string]*HTData{
-	// TODO
-	var result = make(map[string]*HTData)
-
-	return result
+func (htd *HTD) getSHMainIndexdata(dateList []interface{}) map[string]*HTData{
+	if htd.SHMainIndexFile == "" {
+		year,month,day := time.Now().Date()
+		link := fmt.Sprintf(HTD_DOWNLOAD_LINK, "0000001", fmt.Sprintf("%d%d%d", year, month, day))
+		file := htd.Folder + "000001/htd/htd.csv"
+		if err := htd.Doc.HTD_Request(link, file); err != nil {
+			logger.ERROR(fmt.Sprintf("Fetch Shang hai main index data failure, %s", link))
+			return nil
+		}
+		htd.SHMainIndexFile = file
+	}
+	return htd.getData(dateList, SH)
 }
 
 // Get the Shen zhen main index data by gaving date list
-func (htd *HTD) getSZMainIndexdata(dateList []string) map[string]*HTData{
-	// TODO
-	var result = make(map[string]*HTData)
-
-	return result
+func (htd *HTD) getSZMainIndexdata(dateList []interface{}) map[string]*HTData{
+	if htd.SZMainIndexFile == "" {
+		year,month,day := time.Now().Date()
+		link := fmt.Sprintf(HTD_DOWNLOAD_LINK, "1399001", fmt.Sprintf("%d%d%d", year, month, day))
+		file := htd.Folder + "399001/htd/htd.csv"
+		if err := htd.Doc.HTD_Request(link, file); err != nil {
+			logger.ERROR(fmt.Sprintf("Fetch Shen zhen main index data failure, %s", link))
+			return nil
+		}
+		htd.SZMainIndexFile = file
+	}
+	return htd.getData(dateList, SZ)
 }
 
 // Get the growth enterprises market data by gaving date list
-func (htd *HTD) getGEMdata(dateList []string) map[string]*HTData{
-	// TODO
-	var result = make(map[string]*HTData)
-
-	return result
+func (htd *HTD) getGEMdata(dateList []interface{}) map[string]*HTData{
+	if htd.GEMfile == "" {
+		year,month,day := time.Now().Date()
+		link := fmt.Sprintf(HTD_DOWNLOAD_LINK, "1399006", fmt.Sprintf("%d%d%d", year, month, day))
+		file := htd.Folder + "399006/htd/htd.csv"
+		if err := htd.Doc.HTD_Request(link, file); err != nil {
+			logger.ERROR(fmt.Sprintf("Fetch Shen zhen main index data failure, %s", link))
+			return nil
+		}
+		htd.GEMfile = file
+	}
+	return htd.getData(dateList, GEM)
 }
 
 // Check if the date is not in the weekend, if yes, change it to Friday.
@@ -240,8 +281,8 @@ func (htd *HTD)Analyse(focusSHIs map[string][]*htmlparser.ShareHolerInfo) {
 	}
 
 	for fundname, dateList := range shDateMap {
-		//"E:/Programing/golang/CFICCrawler/resource/"
-		filename := "D:/Work/MyDemo/go/golang/CFICCrawler/resource/" + fundname + "/" + htd.Code + ".csv"
+		//"D:/Work/MyDemo/go/golang/CFICCrawler/resource/"
+		filename := "E:/Programing/golang/CFICCrawler/resource/" + fundname + "/" + htd.Code + ".csv"
 		utility.WriteToFile(filename, "Date,Count,Ratio,Price,SH,SZ,GEM")
 
 		// Sort the date list so that searching data is sorted.
@@ -251,32 +292,33 @@ func (htd *HTD)Analyse(focusSHIs map[string][]*htmlparser.ShareHolerInfo) {
 		noWeekendDatemap := getNoWeekendDateList(dateList)
 
 
+		dlist := utility.Values(noWeekendDatemap)
 		// Get the stock, main index and GEM history data, and write to file.
 		// So that the history data can compare together.
-		mapStockHistoryData := htd.getData(utility.Values(noWeekendDatemap))
-		//mapSHMainIndexHistoryData := htd.getSHMainIndexdata(dateList)
-		//mapSZMainIndexHistoryData := htd.getSZMainIndexdata(dateList)
-		//mapGEMHistoryData := htd.getGEMdata(dateList)
+		mapStockHistoryData := htd.getData(dlist, Stock)
+		mapSHMainIndexHistoryData := htd.getSHMainIndexdata(dlist)
+		mapSZMainIndexHistoryData := htd.getSZMainIndexdata(dlist)
+		mapGEMHistoryData := htd.getGEMdata(dlist)
 
 		for _, date := range dateList {
 			//if dayData, ok := mapStockHistoryData[date]; ok {
 				for _, shi := range focusSHIs[fundname] {
 					if shi.Date == date {
-						line := fmt.Sprintf("%s,%d,%f,%f",
+						line := fmt.Sprintf("%s,%s,%f,%f",
 											shi.Date,
 											shi.Count,
 											shi.Ratio,
 											mapStockHistoryData[noWeekendDatemap[date]].StartPrice,
 											)
-						/*if data,ok := mapSHMainIndexHistoryData[date];ok {
-							line = fmt.Sprintf("%s,%f", data.StartPrice)
+						if data,ok := mapSHMainIndexHistoryData[noWeekendDatemap[date]];ok {
+							line = fmt.Sprintf("%s,%f", line, data.StartPrice)
 						}
-						if data,ok := mapSZMainIndexHistoryData[date];ok {
-							line = fmt.Sprintf("%s,%f", data.StartPrice)
+						if data,ok := mapSZMainIndexHistoryData[noWeekendDatemap[date]];ok {
+							line = fmt.Sprintf("%s,%f", line, data.StartPrice)
 						}
-						if data,ok := mapGEMHistoryData[date];ok {
-							line = fmt.Sprintf("%s,%f", data.StartPrice)
-						}*/
+						if data,ok := mapGEMHistoryData[noWeekendDatemap[date]];ok {
+							line = fmt.Sprintf("%s,%f", line, data.StartPrice)
+						}
 
 						logger.DEBUG(line)
 						utility.WriteToFile(filename, line)
