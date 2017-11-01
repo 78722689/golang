@@ -301,30 +301,24 @@ func (htd *HTD)Analyse(focusSHIs map[string][]*htmlparser.ShareHolerInfo) {
 		mapGEMHistoryData := htd.getGEMdata(dlist)
 
 		for _, date := range dateList {
-			//if dayData, ok := mapStockHistoryData[date]; ok {
-				for _, shi := range focusSHIs[fundname] {
-					if shi.Date == date {
-						line := fmt.Sprintf("%s,%s,%f,%f",
-											shi.Date,
-											shi.Count,
-											shi.Ratio,
-											mapStockHistoryData[noWeekendDatemap[date]].StartPrice,
-											)
-						if data,ok := mapSHMainIndexHistoryData[noWeekendDatemap[date]];ok {
-							line = fmt.Sprintf("%s,%f", line, data.StartPrice)
-						}
-						if data,ok := mapSZMainIndexHistoryData[noWeekendDatemap[date]];ok {
-							line = fmt.Sprintf("%s,%f", line, data.StartPrice)
-						}
-						if data,ok := mapGEMHistoryData[noWeekendDatemap[date]];ok {
-							line = fmt.Sprintf("%s,%f", line, data.StartPrice)
-						}
+			for _, shi := range focusSHIs[fundname] {
+				if shi.Date == date {
+					if data,ok := mapStockHistoryData[noWeekendDatemap[date]]; ok {
+						line := fmt.Sprintf("%s,%s,%f,%f,%f,%f,%f",
+							shi.Date,
+							shi.Count,
+							shi.Ratio,
+							data.StartPrice,
+							mapSHMainIndexHistoryData[noWeekendDatemap[date]].StartPrice,
+							mapSZMainIndexHistoryData[noWeekendDatemap[date]].StartPrice,
+							mapGEMHistoryData[noWeekendDatemap[date]].StartPrice,
+						)
 
 						logger.DEBUG(line)
 						utility.WriteToFile(filename, line)
 					}
 				}
-			//}
+			}
 		}
 	}
 }
