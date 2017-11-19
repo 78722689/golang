@@ -8,6 +8,7 @@ import (
 	"bufio"
 	"path"
 	"strconv"
+	"time"
 )
 
 
@@ -91,7 +92,7 @@ func IsFileExist(name string) bool {
 }
 
 func String2Int64(value string) int64 {
-	if v,err := strconv.ParseInt(value, 0, 64); err != nil {
+	if v,err := strconv.ParseInt(value, 0, 8); err != nil {
 		return 0
 	} else {
 		return v
@@ -115,4 +116,10 @@ func String2Folat64(value string) float64{
 		return float64(v)
 	}
 
+}
+
+func String2Date(value string) time.Time {
+	result, _ := time.Parse("2006-01-02", value)
+
+	return result
 }
