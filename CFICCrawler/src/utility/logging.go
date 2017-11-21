@@ -8,7 +8,6 @@ import (
 	"runtime"
 	"fmt"
 	"path/filepath"
-	"reflect"
 )
 
 type LogLevel uint16
@@ -37,70 +36,6 @@ func GetLogger() *LOG {
 	}
 
 	return logging
-}
-
-func log_sprintf(format string, a ...interface{}) {
-	result := ""
-	for _, item := range a {
-		temp := ""
-		switch reflect.ValueOf(item).Kind() {
-		case reflect.Bool:
-			temp = fmt.Sprintf("%t", reflect.ValueOf(item).Bool())
-		case reflect.Int:
-			temp = fmt.Sprintf("%d", reflect.ValueOf(item).Int())
-		case reflect.Int8:
-			temp = fmt.Sprintf("%d", reflect.ValueOf(item).Int())
-		case reflect.Int16:
-			temp = fmt.Sprintf("%d", reflect.ValueOf(item).Int())
-		case reflect.Int32:
-			temp = fmt.Sprintf("%d", reflect.ValueOf(item).Int())
-		case reflect.Int64:
-			temp = fmt.Sprintf("%d", reflect.ValueOf(item).Int())
-		case reflect.Uint:
-			temp = fmt.Sprintf("%d", reflect.ValueOf(item).Uint())
-		case reflect.Uint8:
-			temp = fmt.Sprintf("%d", reflect.ValueOf(item).Uint())
-		case reflect.Uint16:
-			temp = fmt.Sprintf("%d", reflect.ValueOf(item).Uint())
-		case reflect.Uint32:
-			temp = fmt.Sprintf("%d", reflect.ValueOf(item).Uint())
-		case reflect.Uint64:
-			temp = fmt.Sprintf("%d", reflect.ValueOf(item).Uint())
-		case reflect.Uintptr:
-			temp = fmt.Sprintf("%p", reflect.ValueOf(item).Pointer())
-		case reflect.Float32:
-			temp = fmt.Sprintf("%f", reflect.ValueOf(item).Float())
-		case reflect.Float64:
-			temp = fmt.Sprintf("%f", reflect.ValueOf(item).Float())
-		case reflect.Complex64:
-			temp = fmt.Sprintf("%v", reflect.ValueOf(item).Complex())
-		case reflect.Complex128:
-			temp = fmt.Sprintf("%v", reflect.ValueOf(item).Complex())
-		case reflect.Array:
-			temp = fmt.Sprintf("%v", reflect.ValueOf(item).Interface())
-		case reflect.Chan:
-			temp = fmt.Sprintf("%v", reflect.ValueOf(item).Interface())
-		case reflect.Func:
-			temp = fmt.Sprintf("%v", reflect.ValueOf(item).Interface())
-		case reflect.Interface:
-			temp = fmt.Sprintf("%v", reflect.ValueOf(item).Interface())
-		case reflect.Map:
-			temp = fmt.Sprintf("%v", reflect.ValueOf(item).Interface())
-		case reflect.Ptr:
-			temp = fmt.Sprintf("%v", reflect.ValueOf(item).Interface())
-		case reflect.Slice:
-			temp = fmt.Sprintf("%v", reflect.ValueOf(item).Interface())
-		case reflect.String:
-			temp = fmt.Sprintf("%s", reflect.ValueOf(item).String())
-		case reflect.Struct:
-			temp = fmt.Sprintf("%s", reflect.ValueOf(item).Interface())
-		default:
-			temp = fmt.Sprintf("%v", reflect.ValueOf(item).Interface())
-		}
-
-		result = result + temp
-	}
-
 }
 
 // To check if the log level is reach the setting

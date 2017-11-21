@@ -12,6 +12,7 @@ import (
 	"io"
 	"utility"
 	"sort"
+	"httpcontroller"
 )
 
 // This file processes the history trade data from http://quotes.money.163.com/
@@ -70,7 +71,7 @@ const  (
 // logger
 var logger = utility.GetLogger()
 
-func (htd *HTD)Download() error {
+func (htd *HTD)Download(proxy *httpcontroller.Proxy) error {
 	var code string
 
 	// 深市代码前加“1”，沪市股票代码前加“0”
@@ -83,7 +84,7 @@ func (htd *HTD)Download() error {
 	year,month,day := time.Now().Date()
 	link := fmt.Sprintf(HTD_DOWNLOAD_LINK, code, fmt.Sprintf("%d%d%d", year, month, day))
 	file := htd.Folder + htd.Code + ".html.modules/htd/htd.csv"
-	if err := htd.Doc.HTD_Request(link, file); err != nil {
+	if err := htd.Doc.HTD_Request(link, file, proxy); err != nil {
 		return err
 	}
 	htd.StockDataFile = file
@@ -204,12 +205,12 @@ func (htd *HTD)getData(dateList []interface{}, mit Main_Index_Type) map[string]*
 }
 
 // Get the Shang hai main index data by gaving date list
-func (htd *HTD) getSHMainIndexdata(dateList []interface{}) map[string]*HTData{
+func (htd *HTD) getSHMainIndexdata(dateList []interface{}, proxy *httpcontroller.Proxy) map[string]*HTData{
 	if htd.SHMainIndexFile == "" {
 		year,month,day := time.Now().Date()
 		link := fmt.Sprintf(HTD_DOWNLOAD_LINK, "0000001", fmt.Sprintf("%d%d%d", year, month, day))
 		file := htd.Folder + "000001/htd/htd.csv"
-		if err := htd.Doc.HTD_Request(link, file); err != nil {
+		if err := htd.Doc.HTD_Request(link, file, proxy); err != nil {
 			logger.ERROR(fmt.Sprintf("Fetch Shang hai main index data failure, %s", link))
 			return nil
 		}
@@ -219,12 +220,12 @@ func (htd *HTD) getSHMainIndexdata(dateList []interface{}) map[string]*HTData{
 }
 
 // Get the Shen zhen main index data by gaving date list
-func (htd *HTD) getSZMainIndexdata(dateList []interface{}) map[string]*HTData{
+func (htd *HTD) getSZMainIndexdata(dateList []interface{}, proxy *httpcontroller.Proxy) map[string]*HTData{
 	if htd.SZMainIndexFile == "" {
 		year,month,day := time.Now().Date()
 		link := fmt.Sprintf(HTD_DOWNLOAD_LINK, "1399001", fmt.Sprintf("%d%d%d", year, month, day))
 		file := htd.Folder + "399001/htd/htd.csv"
-		if err := htd.Doc.HTD_Request(link, file); err != nil {
+		if err := htd.Doc.HTD_Request(link, file, proxy); err != nil {
 			logger.ERROR(fmt.Sprintf("Fetch Shen zhen main index data failure, %s", link))
 			return nil
 		}
@@ -234,12 +235,12 @@ func (htd *HTD) getSZMainIndexdata(dateList []interface{}) map[string]*HTData{
 }
 
 // Get the growth enterprises market data by gaving date list
-func (htd *HTD) getGEMdata(dateList []interface{}) map[string]*HTData{
+func (htd *HTD) getGEMdata(dateList []interface{}, proxy *httpcontroller.Proxy) map[string]*HTData{
 	if htd.GEMfile == "" {
 		year,month,day := time.Now().Date()
 		link := fmt.Sprintf(HTD_DOWNLOAD_LINK, "1399006", fmt.Sprintf("%d%d%d", year, month, day))
 		file := htd.Folder + "399006/htd/htd.csv"
-		if err := htd.Doc.HTD_Request(link, file); err != nil {
+		if err := htd.Doc.HTD_Request(link, file, proxy); err != nil {
 			logger.ERROR(fmt.Sprintf("Fetch Shen zhen main index data failure, %s", link))
 			return nil
 		}
@@ -271,35 +272,7 @@ func getNoWeekendDateList(dateList []string) (map[string]string) {
 	return result
 }
 
-// Get the nearest FHPX data by date
-func (htd *HTD)getNearestFHPXDataByDate(date string) *htmlparser.FHPX_DATA {
-	// Get all the FHPX data on the stock
-	fhpxInfo := FHPX_INFO{Code : htd.Code, Folder : htd.Folder}
-	fhpxDatalist,err := fhpxInfo.GetFHPXData()
-	if err != nil {
-		logger.ERROR("Get FHPX data failure")
-		return nil
-	}
-
-	htdDate := utility.String2Date(date)
-	var result *htmlparser.FHPX_DATA
-	for _, fhpx := range fhpxDatalist {
-		exDividendDate := utility.String2Date(fhpx.ExDividendDate)
-		if 	(htdDate.Year() - exDividendDate.Year()) == 0 &&
-			((htdDate.Month() - exDividendDate.Month()) >=0 &&
-				(htdDate.Month() - exDividendDate.Month()) <= 3) {
-			result = fhpx
-
-			logger.DEBUG(fmt.Sprintf("FouND FHPX data, date-%s vs htd date %s",
-				fhpx.ExDividendDate,
-				date))
-		}
-	}
-
-	return result
-}
-
-func (htd *HTD)Analyse(focusSHIs map[string][]*htmlparser.ShareHolerInfo) {
+func (htd *HTD)Analyse(focusSHIs map[string][]*htmlparser.ShareHolerInfo, proxy *httpcontroller.Proxy) {
 	// To save all the date for every one focus shareholder
 	shDateMap := make(map[string][]string)
 	for fundname, shilist := range focusSHIs {
@@ -323,9 +296,9 @@ func (htd *HTD)Analyse(focusSHIs map[string][]*htmlparser.ShareHolerInfo) {
 		// Get the stock, main index and GEM history data, and write to file.
 		// So that the history data can compare together.
 		mapStockHistoryData := htd.getData(dlist, Stock)
-		mapSHMainIndexHistoryData := htd.getSHMainIndexdata(dlist)
-		mapSZMainIndexHistoryData := htd.getSZMainIndexdata(dlist)
-		mapGEMHistoryData := htd.getGEMdata(dlist)
+		mapSHMainIndexHistoryData := htd.getSHMainIndexdata(dlist, proxy)
+		mapSZMainIndexHistoryData := htd.getSZMainIndexdata(dlist, proxy)
+		mapGEMHistoryData := htd.getGEMdata(dlist, proxy)
 
 		for _, date := range dateList {
 			for _, shi := range focusSHIs[fundname] {

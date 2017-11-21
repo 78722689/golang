@@ -22,9 +22,9 @@ const (
 	Free
 )
 
-func (tree *HTMLDoc)GDTJ_Request(url string, file string) (*HTMLDoc, error){
+func (tree *HTMLDoc)GDTJ_Request(url string, file string, proxy *httpcontroller.Proxy) (*HTMLDoc, error){
 	request := httpcontroller.Request{
-		//Proxy:&httpcontroller.Proxy{"HTTP", "203.17.66.134", "8000"},
+		Proxy: proxy, //&httpcontroller.Proxy{"HTTP", "203.17.66.134", "8000"},
 		Url : url,
 		File : file,
 		OverWrite : false,
