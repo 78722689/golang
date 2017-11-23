@@ -272,6 +272,34 @@ func getNoWeekendDateList(dateList []string) (map[string]string) {
 	return result
 }
 
+// Get the nearest FHPX data by date
+func (htd *HTD)getNearestFHPXDataByDate(date string) *htmlparser.FHPX_DATA {
+	// Get all the FHPX data on the stock
+	fhpxInfo := FHPX_INFO{Code : htd.Code, Folder : htd.Folder}
+	fhpxDatalist,err := fhpxInfo.GetFHPXData()
+	if err != nil {
+		logger.ERROR("Get FHPX data failure")
+		return nil
+	}
+
+	htdDate := utility.String2Date(date)
+	var result *htmlparser.FHPX_DATA
+	for _, fhpx := range fhpxDatalist {
+		exDividendDate := utility.String2Date(fhpx.ExDividendDate)
+		if      (htdDate.Year() - exDividendDate.Year()) == 0 &&
+			((htdDate.Month() - exDividendDate.Month()) >=0 &&
+				(htdDate.Month() - exDividendDate.Month()) <= 3) {
+			result = fhpx
+
+			logger.DEBUG(fmt.Sprintf("FouND FHPX data, date-%s vs htd date %s",
+				fhpx.ExDividendDate,
+				date))
+		}
+	}
+
+	return result
+}
+
 func (htd *HTD)Analyse(focusSHIs map[string][]*htmlparser.ShareHolerInfo, proxy *httpcontroller.Proxy) {
 	// To save all the date for every one focus shareholder
 	shDateMap := make(map[string][]string)
@@ -283,7 +311,7 @@ func (htd *HTD)Analyse(focusSHIs map[string][]*htmlparser.ShareHolerInfo, proxy 
 
 	for fundname, dateList := range shDateMap {
 		filename := htd.Folder + fundname + "/" + htd.Code + ".csv"
-		utility.WriteToFile(filename, "Date,Count,Ratio,Price,SH,SZ,GEM,ExDividendPrice")
+		utility.WriteToFile(filename, "Date,Count,Ratio,Price,SH,SZ,GEM,ExDividendPrice,Profit")
 
 		// Sort the date list so that searching data is sorted.
 		sort.Strings(dateList)
@@ -301,6 +329,7 @@ func (htd *HTD)Analyse(focusSHIs map[string][]*htmlparser.ShareHolerInfo, proxy 
 		mapGEMHistoryData := htd.getGEMdata(dlist, proxy)
 
 		for _, date := range dateList {
+			preCount := 0.0
 			for _, shi := range focusSHIs[fundname] {
 				if shi.Date == date {
 					if data,ok := mapStockHistoryData[noWeekendDatemap[date]]; ok {
@@ -313,7 +342,17 @@ func (htd *HTD)Analyse(focusSHIs map[string][]*htmlparser.ShareHolerInfo, proxy 
 							priceOnFHPXDay = float64(mapTemp[fhpxData.ExDividendDate].StartPrice)
 						}
 
-						line := fmt.Sprintf("%s,%s,%f,%f,%f,%f,%f,%f",
+						profit := 0
+						changeCount := preCount - utility.String2Folat64(shi.Count)
+						if changeCount != 0.0 {
+							profit = int(changeCount * 10000 * priceOnFHPXDay)
+							// Caculate profit if the count happened changing.
+							//if priceOnFHPXDay != 0.0 {
+
+							//}
+						}
+
+						line := fmt.Sprintf("%s,%s,%f,%f,%f,%f,%f,%f, %d",
 							shi.Date,
 							shi.Count,
 							shi.Ratio,
@@ -322,10 +361,13 @@ func (htd *HTD)Analyse(focusSHIs map[string][]*htmlparser.ShareHolerInfo, proxy 
 							mapSZMainIndexHistoryData[noWeekendDatemap[date]].StartPrice,
 							mapGEMHistoryData[noWeekendDatemap[date]].StartPrice,
 							priceOnFHPXDay,
+							profit,
 						)
 
 						logger.DEBUG(line)
 						utility.WriteToFile(filename, line)
+
+						preCount = utility.String2Folat64(shi.Count)
 					}
 				}
 			}

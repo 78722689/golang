@@ -17,10 +17,6 @@ import (
 	"htmlparser"
 	"utility"
 	"httpcontroller"
-	"os"
-	"strings"
-	"sync"
-	"path/filepath"
 )
 
 const (
@@ -35,42 +31,44 @@ func main() {
 	logger := utility.GetLogger()
 	logger.SetMinorLogLevel(utility.DEBUG)
 
-	proxy := &httpcontroller.Proxy{"HTTP", "203.17.66.134", "8000"}
-	folder := "D:/Work/MyDemo/go/golang/CFICCrawler/resource/"
+	var proxy *httpcontroller.Proxy = nil
+	//proxy := &httpcontroller.Proxy{"HTTP", "203.17.66.134", "8000"}
+	//folder := "D:/Work/MyDemo/go/golang/CFICCrawler/resource/"
+	folder := "E:/Programing/golang/CFICCrawler/resource/"
 
 	// goroutines settings
 	runtime.GOMAXPROCS(runtime.NumCPU())
+	/*
+			wg := sync.WaitGroup{}
 
-		wg := sync.WaitGroup{}
-/*
-		// Request homepage to get all the stocks
-		request := httpcontroller.Request {
-			Url   : "http://quote.cfi.cn/stockList.aspx?t=11",
-		}
-		root,_ := request.Get()
+			// Request homepage to get all the stocks
+			request := httpcontroller.Request {
+				Url   : "http://quote.cfi.cn/stockList.aspx?t=11",
+			}
+			root,_ := request.Get()
 
-		doc,err := htmlparser.ParseFromNode(root)
-		if err != nil {
-			fmt.Fprintf(os.Stdout, "Parse file error, %v", err)
-			os.Exit(1)
-		}
+			doc,err := htmlparser.ParseFromNode(root)
+			if err != nil {
+				fmt.Fprintf(os.Stdout, "Parse file error, %v", err)
+				os.Exit(1)
+			}
 
-		// Download all the homepage of stocks and write to file.
-		for _, stockinfo := range doc.GetAllStocks() {
-			go func(si htmlparser.StockInfo) {
-				fmt.Fprintf(os.Stdout, "Downloading link:%v name:%v, number:%v\r\n", si.Link, si.Name, si.Number)
-				wg.Add(1)
-				stock_request := httpcontroller.Request {
-					Url  : QUOTE_HOMEPAGE + si.Link,
-					File : FOLDER_TOWRITE + si.Link,
-				}
-				stock_request.Get()
-				wg.Done()
-			}(stockinfo)
-		}
+			// Download all the homepage of stocks and write to file.
+			for _, stockinfo := range doc.GetAllStocks() {
+				go func(si htmlparser.StockInfo) {
+					fmt.Fprintf(os.Stdout, "Downloading link:%v name:%v, number:%v\r\n", si.Link, si.Name, si.Number)
+					wg.Add(1)
+					stock_request := httpcontroller.Request {
+						Url  : QUOTE_HOMEPAGE + si.Link,
+						File : FOLDER_TOWRITE + si.Link,
+					}
+					stock_request.Get()
+					wg.Done()
+				}(stockinfo)
+			}
 
-		wg.Wait()
-*/
+			wg.Wait()
+
 		// To walk the folder in order to find out the stock homepage html.
 		err := filepath.Walk(folder, func(path string, fi os.FileInfo, err error) error {
 			strRet, _ := os.Getwd()
@@ -150,7 +148,7 @@ func main() {
 		wg.Wait()
 
 
-
+*/
 
 	gdtj := &modulehandler.GDTJ{Code:"601700", Folder:folder}
 /*
@@ -189,7 +187,7 @@ func main() {
 	// 1. 加入同时期大盘指数走势----->done
 	// 2. 计算除权价格？
 	// 3. 计算分红数据，持股变动后盈利以及总盈利。
-	htd.Analyse(result, &httpcontroller.Proxy{"HTTP", "203.17.66.134", "8000"})
+	htd.Analyse(result, proxy)
 
 	logger.DEBUG("main is end...........................")
 
