@@ -31,10 +31,10 @@ func main() {
 	logger := utility.GetLogger()
 	logger.SetMinorLogLevel(utility.DEBUG)
 
-	var proxy *httpcontroller.Proxy = nil
-	//proxy := &httpcontroller.Proxy{"HTTP", "203.17.66.134", "8000"}
-	//folder := "D:/Work/MyDemo/go/golang/CFICCrawler/resource/"
-	folder := "E:/Programing/golang/CFICCrawler/resource/"
+	//var proxy *httpcontroller.Proxy = nil
+	proxy := &httpcontroller.Proxy{"HTTP", "203.17.66.134", "8000"}
+	folder := "D:/Work/MyDemo/go/golang/CFICCrawler/resource/"
+	//folder := "E:/Programing/golang/CFICCrawler/resource/"
 
 	// goroutines settings
 	runtime.GOMAXPROCS(runtime.NumCPU())
@@ -149,8 +149,8 @@ func main() {
 
 
 */
-
-	gdtj := &modulehandler.GDTJ{Code:"601700", Folder:folder}
+	code := "601699" //"601700"
+	gdtj := &modulehandler.GDTJ{Code:code, Folder:folder}
 /*
 	if sh, err := gdtj.GetShareHolder("2015-12-31", proxy); err == nil {
 		for _, item:= range sh {
@@ -158,12 +158,11 @@ func main() {
 		}
 	}
 */
-	htd := modulehandler.HTD{Code : "601700",
+	htd := modulehandler.HTD{Code : code,
 							Folder : folder}
 
-	/*
-		htd.Download(proxy)
-	*/
+	htd.Download(proxy)
+
 	funds := []string{"全国社保基金一零四组合","中国工商银行-嘉实策略增长混合型证券投资基金"}
 	result := make(map[string][]*htmlparser.ShareHolerInfo)
 

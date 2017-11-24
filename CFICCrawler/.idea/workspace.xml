@@ -14,15 +14,12 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="main.go" pinned="false" current-in-tab="true">
+      <file leaf-file-name="main.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="95" column="80" lean-forward="false" selection-start-line="95" selection-start-column="80" selection-end-line="95" selection-end-column="80" />
-              <folding>
-                <element signature="e#14#279#0" expanded="true" />
-                <marker date="1510642542068" expanded="true" signature="3852:3892" ph="{...}" />
-              </folding>
+            <state relative-caret-position="102">
+              <caret line="167" column="0" lean-forward="true" selection-start-line="167" selection-start-column="0" selection-end-line="167" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -37,14 +34,24 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="htd.go" pinned="false" current-in-tab="false">
+      <file leaf-file-name="htd.go" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/modulehandler/htd.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3434">
-              <caret line="215" column="9" lean-forward="false" selection-start-line="215" selection-start-column="9" selection-end-line="215" selection-end-column="9" />
+            <state relative-caret-position="352">
+              <caret line="350" column="31" lean-forward="false" selection-start-line="350" selection-start-column="31" selection-end-line="350" selection-end-column="31" />
               <folding>
                 <element signature="e#23#160#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="FHPXHandler.go" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/htmlparser/FHPXHandler.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="119">
+              <caret line="10" column="0" lean-forward="false" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="37" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -68,7 +75,7 @@
               <caret line="6" column="22" lean-forward="false" selection-start-line="6" selection-start-column="8" selection-end-line="6" selection-end-column="22" />
               <folding>
                 <element signature="e#20#43#0" expanded="true" />
-                <marker date="1510640025788" expanded="true" signature="212:245" ph="{...}" />
+                <marker date="1511169951891" expanded="true" signature="212:245" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -81,18 +88,6 @@
               <caret line="18" column="9" lean-forward="false" selection-start-line="18" selection-start-column="9" selection-end-line="18" selection-end-column="9" />
               <folding>
                 <element signature="e#23#88#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="GDTJHandler.go" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/htmlparser/GDTJHandler.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="24" column="85" lean-forward="false" selection-start-line="24" selection-start-column="58" selection-end-line="24" selection-end-column="85" />
-              <folding>
-                <marker date="1510639919466" expanded="false" signature="27:69" ph="..." />
               </folding>
             </state>
           </provider>
@@ -112,9 +107,9 @@
         <entry file="file://$PROJECT_DIR$/src/utility/tool.go">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="204">
-              <caret line="20" column="0" lean-forward="false" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
+              <caret line="21" column="0" lean-forward="false" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
               <folding>
-                <marker date="1509500796763" expanded="true" signature="24:87" ph="..." />
+                <marker date="1511169900669" expanded="true" signature="24:87" ph="..." />
               </folding>
             </state>
           </provider>
@@ -143,6 +138,7 @@
       <find>gbk</find>
       <find>httpcontroller</find>
       <find>Download</find>
+      <find>OfferNum</find>
     </findStrings>
   </component>
   <component name="GoLibraries">
@@ -168,9 +164,9 @@
         <option value="$PROJECT_DIR$/src/utility/logging.go" />
         <option value="$PROJECT_DIR$/src/htmlparser/GDTJHandler.go" />
         <option value="$PROJECT_DIR$/src/htmlparser/HTDHandler.go" />
-        <option value="$PROJECT_DIR$/src/modulehandler/htd.go" />
         <option value="$PROJECT_DIR$/src/modulehandler/gdtj.go" />
         <option value="$PROJECT_DIR$/src/main.go" />
+        <option value="$PROJECT_DIR$/src/modulehandler/htd.go" />
       </list>
     </option>
   </component>
@@ -201,7 +197,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -250,6 +245,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scratches" />
       <pane id="PackagesPane" />
       <pane id="AndroidView" />
     </panes>
@@ -369,13 +365,14 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1616" height="876" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.165625" sideWeight="0.492569" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32843137" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23039216" sideWeight="0.5030257" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.36766624" sideWeight="0.4969743" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3559322" sideWeight="0.4969743" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32843137" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2647504" sideWeight="0.507431" order="6" side_tool="true" content_ui="tabs" />
@@ -411,17 +408,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#14#279#0" expanded="true" />
-            <marker date="1510642542068" expanded="true" signature="3852:3892" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/htmlparser/HTMLHandler.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="138">
@@ -624,52 +610,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/utility/tool.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="20" column="0" lean-forward="false" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
-          <folding>
-            <marker date="1509500796763" expanded="true" signature="24:87" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/utility/logging.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="51">
           <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
           <folding>
             <element signature="e#17#89#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/htmlparser/GDTJHandler.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="24" column="85" lean-forward="false" selection-start-line="24" selection-start-column="58" selection-end-line="24" selection-end-column="85" />
-          <folding>
-            <marker date="1510639919466" expanded="false" signature="27:69" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/modulehandler/htd.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3434">
-          <caret line="215" column="9" lean-forward="false" selection-start-line="215" selection-start-column="9" selection-end-line="215" selection-end-column="9" />
-          <folding>
-            <element signature="e#23#160#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/modulehandler/gdtj.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="18" column="9" lean-forward="false" selection-start-line="18" selection-start-column="9" selection-end-line="18" selection-end-column="9" />
-          <folding>
-            <element signature="e#23#88#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -703,18 +649,63 @@
           <caret line="6" column="22" lean-forward="false" selection-start-line="6" selection-start-column="8" selection-end-line="6" selection-end-column="22" />
           <folding>
             <element signature="e#20#43#0" expanded="true" />
-            <marker date="1510640025788" expanded="true" signature="212:245" ph="{...}" />
+            <marker date="1511169951891" expanded="true" signature="212:245" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/htmlparser/GDTJHandler.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="11" column="4" lean-forward="false" selection-start-line="11" selection-start-column="4" selection-end-line="11" selection-end-column="4" />
+          <folding>
+            <marker date="1511169951891" expanded="false" signature="27:69" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/modulehandler/gdtj.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="18" column="9" lean-forward="false" selection-start-line="18" selection-start-column="9" selection-end-line="18" selection-end-column="9" />
+          <folding>
+            <element signature="e#23#88#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/htmlparser/FHPXHandler.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="10" column="0" lean-forward="false" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/utility/tool.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="21" column="0" lean-forward="false" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+          <folding>
+            <marker date="1511169900669" expanded="true" signature="24:87" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="95" column="80" lean-forward="false" selection-start-line="95" selection-start-column="80" selection-end-line="95" selection-end-column="80" />
+        <state relative-caret-position="102">
+          <caret line="167" column="0" lean-forward="true" selection-start-line="167" selection-start-column="0" selection-end-line="167" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/modulehandler/htd.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="352">
+          <caret line="350" column="31" lean-forward="false" selection-start-line="350" selection-start-column="31" selection-end-line="350" selection-end-column="31" />
           <folding>
-            <element signature="e#14#279#0" expanded="true" />
-            <marker date="1510642542068" expanded="true" signature="3852:3892" ph="{...}" />
+            <element signature="e#23#160#0" expanded="true" />
           </folding>
         </state>
       </provider>
