@@ -20,7 +20,7 @@ import (
 )
 
 const (
-	QUOTE_HOMEPAGE string = "http://quote.cfi.cn/"
+	//QUOTE_HOMEPAGE string = "http://quote.cfi.cn/"
 	FOLDER_TOWRITE string = "E:/programing/GO/CFICCrawler/resource/"
 )
 
