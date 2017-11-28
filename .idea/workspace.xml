@@ -2,12 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="99f4474e-035d-490c-85d5-0b13ecb51133" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CFICCrawler/pkg/windows_amd64/htmlparser.a" afterPath="$PROJECT_DIR$/CFICCrawler/pkg/windows_amd64/htmlparser.a" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CFICCrawler/pkg/windows_amd64/modulehandler.a" afterPath="$PROJECT_DIR$/CFICCrawler/pkg/windows_amd64/modulehandler.a" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CFICCrawler/pkg/windows_amd64/utility.a" afterPath="$PROJECT_DIR$/CFICCrawler/pkg/windows_amd64/utility.a" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CFICCrawler/src/github.com/axgle/mahonia" afterPath="$PROJECT_DIR$/CFICCrawler/src/github.com/axgle/mahonia" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CFICCrawler/src/golang.org/x/net" afterPath="$PROJECT_DIR$/CFICCrawler/src/golang.org/x/net" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CFICCrawler/resource/中国工商银行-嘉实策略增长混合型证券投资基金/601699.csv" afterPath="$PROJECT_DIR$/CFICCrawler/resource/中国工商银行-嘉实策略增长混合型证券投资基金/601699.csv" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CFICCrawler/src/main.go" afterPath="$PROJECT_DIR$/CFICCrawler/src/main.go" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CFICCrawler/src/modulehandler/htd.go" afterPath="$PROJECT_DIR$/CFICCrawler/src/modulehandler/htd.go" />
     </list>
@@ -20,11 +17,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="main.go" pinned="false" current-in-tab="false">
+      <file leaf-file-name="main.go" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/CFICCrawler/src/main.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="100">
-              <caret line="189" column="0" lean-forward="false" selection-start-line="189" selection-start-column="0" selection-end-line="189" selection-end-column="0" />
+            <state relative-caret-position="161">
+              <caret line="171" column="21" lean-forward="true" selection-start-line="171" selection-start-column="21" selection-end-line="171" selection-end-column="21" />
               <folding>
                 <element signature="e#14#237#0" expanded="true" />
               </folding>
@@ -35,7 +32,7 @@
       <file leaf-file-name="fhpx.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/CFICCrawler/src/modulehandler/fhpx.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="414">
+            <state relative-caret-position="23">
               <caret line="21" column="37" lean-forward="false" selection-start-line="21" selection-start-column="37" selection-end-line="21" selection-end-column="37" />
               <folding>
                 <element signature="e#23#54#0" expanded="true" />
@@ -56,11 +53,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="htd.go" pinned="false" current-in-tab="true">
+      <file leaf-file-name="htd.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/CFICCrawler/src/modulehandler/htd.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-323">
-              <caret line="344" column="27" lean-forward="true" selection-start-line="344" selection-start-column="27" selection-end-line="344" selection-end-column="27" />
+            <state relative-caret-position="238">
+              <caret line="327" column="46" lean-forward="false" selection-start-line="327" selection-start-column="46" selection-end-line="327" selection-end-column="46" />
               <folding />
             </state>
           </provider>
@@ -79,12 +76,11 @@
       <file leaf-file-name="gdtj.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/CFICCrawler/src/modulehandler/gdtj.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2116">
-              <caret line="99" column="35" lean-forward="false" selection-start-line="99" selection-start-column="35" selection-end-line="99" selection-end-column="35" />
+            <state relative-caret-position="122">
+              <caret line="58" column="17" lean-forward="false" selection-start-line="58" selection-start-column="17" selection-end-line="58" selection-end-column="17" />
               <folding>
                 <marker date="1511436178769" expanded="false" signature="30:69" ph="..." />
                 <marker date="1511436178769" expanded="true" signature="2229:2549" ph="{...}" />
-                <marker date="1511436178769" expanded="true" signature="2334:2421" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -188,6 +184,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
@@ -242,7 +239,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -288,16 +284,16 @@
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22541603" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22995462" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.19572368" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32894737" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1118421" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32894737" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.40789473" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -358,7 +354,6 @@
           <folding>
             <marker date="1511436178769" expanded="false" signature="30:69" ph="..." />
             <marker date="1511436178769" expanded="true" signature="2229:2549" ph="{...}" />
-            <marker date="1511436178769" expanded="true" signature="2334:2421" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -388,7 +383,6 @@
           <folding>
             <marker date="1511436178769" expanded="false" signature="30:69" ph="..." />
             <marker date="1511436178769" expanded="true" signature="2229:2549" ph="{...}" />
-            <marker date="1511436178769" expanded="true" signature="2334:2421" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -432,7 +426,6 @@
           <folding>
             <marker date="1511436178769" expanded="false" signature="30:69" ph="..." />
             <marker date="1511436178769" expanded="true" signature="2229:2549" ph="{...}" />
-            <marker date="1511436178769" expanded="true" signature="2334:2421" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -477,7 +470,6 @@
           <folding>
             <marker date="1511436178769" expanded="false" signature="30:69" ph="..." />
             <marker date="1511436178769" expanded="true" signature="2229:2549" ph="{...}" />
-            <marker date="1511436178769" expanded="true" signature="2334:2421" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -630,16 +622,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/CFICCrawler/src/modulehandler/fhpx.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="414">
-          <caret line="21" column="37" lean-forward="false" selection-start-line="21" selection-start-column="37" selection-end-line="21" selection-end-column="37" />
-          <folding>
-            <element signature="e#23#54#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://C:/go/src/time/format.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="147">
@@ -660,18 +642,6 @@
           <caret line="35" column="27" lean-forward="false" selection-start-line="35" selection-start-column="27" selection-end-line="35" selection-end-column="27" />
           <folding>
             <element signature="e#20#52#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/CFICCrawler/src/modulehandler/gdtj.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2116">
-          <caret line="99" column="35" lean-forward="false" selection-start-line="99" selection-start-column="35" selection-end-line="99" selection-end-column="35" />
-          <folding>
-            <marker date="1511436178769" expanded="false" signature="30:69" ph="..." />
-            <marker date="1511436178769" expanded="true" signature="2229:2549" ph="{...}" />
-            <marker date="1511436178769" expanded="true" signature="2334:2421" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -706,25 +676,45 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="161">
           <caret line="7" column="40" lean-forward="false" selection-start-line="7" selection-start-column="40" selection-end-line="7" selection-end-column="40" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/CFICCrawler/src/main.go">
+    <entry file="file://$PROJECT_DIR$/CFICCrawler/src/modulehandler/gdtj.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="100">
-          <caret line="189" column="0" lean-forward="false" selection-start-line="189" selection-start-column="0" selection-end-line="189" selection-end-column="0" />
+        <state relative-caret-position="122">
+          <caret line="58" column="17" lean-forward="false" selection-start-line="58" selection-start-column="17" selection-end-line="58" selection-end-column="17" />
           <folding>
-            <element signature="e#14#237#0" expanded="true" />
+            <marker date="1511436178769" expanded="false" signature="30:69" ph="..." />
+            <marker date="1511436178769" expanded="true" signature="2229:2549" ph="{...}" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/CFICCrawler/src/modulehandler/htd.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-323">
-          <caret line="344" column="27" lean-forward="true" selection-start-line="344" selection-start-column="27" selection-end-line="344" selection-end-column="27" />
+        <state relative-caret-position="238">
+          <caret line="327" column="46" lean-forward="false" selection-start-line="327" selection-start-column="46" selection-end-line="327" selection-end-column="46" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CFICCrawler/src/modulehandler/fhpx.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="23">
+          <caret line="21" column="37" lean-forward="false" selection-start-line="21" selection-start-column="37" selection-end-line="21" selection-end-column="37" />
+          <folding>
+            <element signature="e#23#54#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CFICCrawler/src/main.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="161">
+          <caret line="171" column="21" lean-forward="true" selection-start-line="171" selection-start-column="21" selection-end-line="171" selection-end-column="21" />
+          <folding>
+            <element signature="e#14#237#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
