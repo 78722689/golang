@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"runtime"
 )
 
 const (
@@ -20,17 +21,21 @@ type DownloadInfo struct {
 	Proxy *httpcontroller.Proxy
 }
 
+func (d *DownloadInfo)InitGoRouting() {
+	runtime.GOMAXPROCS(runtime.NumCPU())
+}
+
 func (d *DownloadInfo)Download() {
+	d.InitGoRouting()
 	d.downloadHomePage()
 	d.downloadModules()
 }
 
 func (d *DownloadInfo)downloadHomePage() {
-	wg := sync.WaitGroup{}
-
 	// Request homepage to get all the stocks
 	request := httpcontroller.Request {
 		Url   : STOCK_LIST_URL,
+		Proxy : d.Proxy,
 	}
 	root,_ := request.Get()
 
@@ -40,6 +45,7 @@ func (d *DownloadInfo)downloadHomePage() {
 		os.Exit(1)
 	}
 
+	wg := sync.WaitGroup{}
 	// Download all the homepage of stocks and write to file.
 	for _, stockinfo := range doc.GetAllStocks() {
 		go func(si htmlparser.StockInfo) {
@@ -48,6 +54,7 @@ func (d *DownloadInfo)downloadHomePage() {
 			stock_request := httpcontroller.Request {
 				Url  : QUOTE_HOMEPAGE_URL + si.Link,
 				File : d.Foler + si.Link,
+				Proxy: d.Proxy,
 			}
 			stock_request.Get()
 			wg.Done()
