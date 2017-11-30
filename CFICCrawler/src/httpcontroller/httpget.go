@@ -9,7 +9,10 @@ import (
     "io"
     "path"
 
+    "utility"
 )
+
+var logger = utility.GetLogger()
 
 type Proxy struct {
     Protocol string
@@ -58,6 +61,8 @@ func (r *Request)Get() (*html.Node, error){
                 if r.OverWrite {
                     os.Remove(r.File)
                 } else {
+                    logger.WARN(fmt.Sprintf("File %s is already exist, skip the request. If you want to overwrite the request file, please set OverWrite to true in request.",
+                                            r.File))
                     return nil, nil
                 }
             }

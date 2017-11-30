@@ -1,4 +1,4 @@
-package main
+package downloader
 
 import (
 	"sync"
@@ -8,8 +8,11 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"runtime"
+	"utility"
+	"time"
 )
+
+var logger = utility.GetLogger()
 
 const (
 	STOCK_LIST_URL string = "http://quote.cfi.cn/stockList.aspx?t=11"
@@ -19,19 +22,30 @@ const (
 type DownloadInfo struct {
 	Foler string
 	Proxy *httpcontroller.Proxy
+	Overwrite bool
 }
 
-func (d *DownloadInfo)InitGoRouting() {
-	runtime.GOMAXPROCS(runtime.NumCPU())
+type DownloadTask struct {
+	Name string
 }
 
-func (d *DownloadInfo)Download() {
-	d.InitGoRouting()
-	d.downloadHomePage()
-	d.downloadModules()
+func (task *DownloadTask)Task(id int) {
+	fmt.Println(fmt.Sprintf("Thread - %d is running with DownloadTask - %s", id, task.Name))
+	time.Sleep(time.Second*2)
 }
 
-func (d *DownloadInfo)downloadHomePage() {
+func (d *DownloadInfo)DownloadAll() {
+	d.downloadStocksHomePage([]string{}, d.Overwrite)
+	//d.downloadModules([]string{}, false)
+}
+
+func (d *DownloadInfo)DownloadByStockIDs(ids []string) {
+	d.downloadStocksHomePage(ids, d.Overwrite)
+	//d.downloadModules([]string{}, true)
+}
+
+// Download the stocks home page, if overwrite is true, the exist home page will be rewrite.
+func (d *DownloadInfo)downloadStocksHomePage(ids []string, overwrite bool) {
 	// Request homepage to get all the stocks
 	request := httpcontroller.Request {
 		Url   : STOCK_LIST_URL,
@@ -41,22 +55,24 @@ func (d *DownloadInfo)downloadHomePage() {
 
 	doc,err := htmlparser.ParseFromNode(root)
 	if err != nil {
-		fmt.Fprintf(os.Stdout, "Parse file error, %v", err)
+		logger.ERROR(fmt.Sprintf("Parse file error, %v", err))
+
 		os.Exit(1)
 	}
 
 	wg := sync.WaitGroup{}
-	// Download all the homepage of stocks and write to file.
-	for _, stockinfo := range doc.GetAllStocks() {
+	for _, stockinfo := range doc.GetStocks(ids) {
+		wg.Add(1)
 		go func(si htmlparser.StockInfo) {
-			fmt.Fprintf(os.Stdout, "Downloading link:%v name:%v, number:%v\r\n", si.Link, si.Name, si.Number)
-			wg.Add(1)
+			logger.INFO(fmt.Sprintf("Downloading link:%v name:%v, number:%v\r\n", si.Link, si.Name, si.Number))
+
 			stock_request := httpcontroller.Request {
 				Url  : QUOTE_HOMEPAGE_URL + si.Link,
-				File : d.Foler + si.Link,
+				File : d.Foler + si.Number + "/" + si.Link,
 				Proxy: d.Proxy,
-			}
+				OverWrite:overwrite}
 			stock_request.Get()
+
 			wg.Done()
 		}(stockinfo)
 	}
@@ -64,7 +80,7 @@ func (d *DownloadInfo)downloadHomePage() {
 	wg.Wait()
 }
 
-func (d *DownloadInfo)downloadModules() {
+func (d *DownloadInfo)downloadModules(ids []string, overwrite bool) {
 	wg := sync.WaitGroup{}
 
 	// To walk the folder in order to find out the stock homepage html.
@@ -97,10 +113,11 @@ func (d *DownloadInfo)downloadModules() {
 		// an example filter on a stock modules
 		filters := []string{"gdtj", "fhpx"}
 
+		wg.Add(1)
 		// Begin to request the modules
 		// filters: specify only to reqeust the interesting modules.
 		go func(urls []string, filters []string) {
-			wg.Add(1)
+
 			defer wg.Done()
 			for _, url := range urls {
 				fmt.Fprintf(os.Stdout, "Checking stock module url:%s\n", url)
@@ -129,8 +146,7 @@ func (d *DownloadInfo)downloadModules() {
 						Proxy: d.Proxy,
 						Url:  QUOTE_HOMEPAGE_URL + url,
 						File: file,
-					}
-
+						OverWrite:overwrite}
 					request.Get()
 				}
 			}

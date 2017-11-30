@@ -17,7 +17,7 @@ const (
 )
 
 func (fhpx *FHPX_INFO) GetFHPXData() ([]*htmlparser.FHPX_DATA, error) {
-	path := fhpx.Folder + fhpx.Code + ".html.modules/" + FHPX_HOMEPAGE
+	path := fhpx.Folder + fhpx.Code + "/modules/fhpx/" + FHPX_HOMEPAGE
 
 	doc, err := htmlparser.ParseFromFile(path)
 	if err != nil {

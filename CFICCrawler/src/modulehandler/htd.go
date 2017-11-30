@@ -83,7 +83,7 @@ func (htd *HTD)Download(proxy *httpcontroller.Proxy) error {
 
 	year,month,day := time.Now().Date()
 	link := fmt.Sprintf(HTD_DOWNLOAD_LINK, code, fmt.Sprintf("%d%d%d", year, month, day))
-	file := htd.Folder + htd.Code + ".html.modules/htd/htd.csv"
+	file := htd.Folder + htd.Code + "/modules/htd/htd.csv"
 	if err := htd.Doc.HTD_Request(link, file, proxy); err != nil {
 		return err
 	}
@@ -138,7 +138,7 @@ func (htd *HTD)getData(dateList []interface{}, mit Main_Index_Type) map[string]*
 	file := ""
 	switch mit {
 	case Stock:
-		file = htd.Folder + htd.Code + ".html.modules/htd/htd.csv"
+		file = htd.Folder + htd.Code + "modules/htd/htd.csv"
 	case SH:
 		file = htd.SHMainIndexFile
 	case SZ:
@@ -209,7 +209,7 @@ func (htd *HTD) getSHMainIndexdata(dateList []interface{}, proxy *httpcontroller
 	if htd.SHMainIndexFile == "" {
 		year,month,day := time.Now().Date()
 		link := fmt.Sprintf(HTD_DOWNLOAD_LINK, "0000001", fmt.Sprintf("%d%d%d", year, month, day))
-		file := htd.Folder + "000001/htd/htd.csv"
+		file := htd.Folder + "mainindex/000001/modules/htd/htd.csv"
 		if err := htd.Doc.HTD_Request(link, file, proxy); err != nil {
 			logger.ERROR(fmt.Sprintf("Fetch Shang hai main index data failure, %s", link))
 			return nil
@@ -224,7 +224,7 @@ func (htd *HTD) getSZMainIndexdata(dateList []interface{}, proxy *httpcontroller
 	if htd.SZMainIndexFile == "" {
 		year,month,day := time.Now().Date()
 		link := fmt.Sprintf(HTD_DOWNLOAD_LINK, "1399001", fmt.Sprintf("%d%d%d", year, month, day))
-		file := htd.Folder + "399001/htd/htd.csv"
+		file := htd.Folder + "mainindex/399001/modules/htd/htd.csv"
 		if err := htd.Doc.HTD_Request(link, file, proxy); err != nil {
 			logger.ERROR(fmt.Sprintf("Fetch Shen zhen main index data failure, %s", link))
 			return nil
@@ -239,7 +239,7 @@ func (htd *HTD) getGEMdata(dateList []interface{}, proxy *httpcontroller.Proxy) 
 	if htd.GEMfile == "" {
 		year,month,day := time.Now().Date()
 		link := fmt.Sprintf(HTD_DOWNLOAD_LINK, "1399006", fmt.Sprintf("%d%d%d", year, month, day))
-		file := htd.Folder + "399006/htd/htd.csv"
+		file := htd.Folder + "mainindex/399006/modules/htd/htd.csv"
 		if err := htd.Doc.HTD_Request(link, file, proxy); err != nil {
 			logger.ERROR(fmt.Sprintf("Fetch Shen zhen main index data failure, %s", link))
 			return nil

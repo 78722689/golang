@@ -7,7 +7,9 @@ import (
 	"fmt"
 	"strings"
 	"regexp"
+	"utility"
 )
+var logger = utility.GetLogger()
 
 type FindType uint32
 const (
@@ -92,7 +94,8 @@ func (tree *HTMLDoc) getStockNumberByValue(value string) []byte {
 	return reg.Find([]byte(value))
 }
 
-func (tree *HTMLDoc) GetAllStocks() []StockInfo {
+// Get the stocks info by filter. If filter is empty, get all stocks info
+func (tree *HTMLDoc) GetStocks(filterIDs []string) []StockInfo {
 	var loopnode func(*html.Node)
 	var stockList []StockInfo
 
@@ -104,20 +107,25 @@ func (tree *HTMLDoc) GetAllStocks() []StockInfo {
 				len(child.Parent.Attr) > 0 &&
 				child.Parent.Attr[0].Key == "href" {
 
-				// Put stock details to array.
-				stockList = append(stockList, StockInfo{
-						Link:child.Parent.Attr[0].Val,
-						Number:string(tree.getStockNumberByValue(child.Data)),
-						Name:string(tree.getStockNameByValue(child.Data)),
-					})
+					stockID := string(tree.getStockNumberByValue(child.Data))
+					if stockID != "" {
+						si := StockInfo{
+							Link:   child.Parent.Attr[0].Val,
+							Number: stockID,
+							Name:   string(tree.getStockNameByValue(child.Data)),
+						}
 
+						if len(filterIDs) == 0 {
+							stockList = append(stockList, si)
+						} else if utility.Contains(filterIDs, stockID) {
+							logger.DEBUG("found........................................")
+							stockList = append(stockList, si)
+						}
 
-					fmt.Fprintf(os.Stdout, "Found link:%s len-%d number:%s name:%s\r\n",
-						child.Parent.Attr[0].Val,
-						len(child.Data),
-						tree.getStockNumberByValue(child.Data),
-						tree.getStockNameByValue(child.Data))
-
+						logger.DEBUG(fmt.Sprintf("Found link:%s len-%d number:%s name:%s", si.Link, len(child.Data), si.Number, si.Name))
+					} else {
+						logger.WARN(fmt.Sprintf("Not found stock ID in node, %v", child))
+					}
 			}
 
 			loopnode(child)

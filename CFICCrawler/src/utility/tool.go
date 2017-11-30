@@ -11,12 +11,14 @@ import (
 	"time"
 )
 
+var logger = GetLogger()
 
 // To check if the list contains the elem
 func Contains(list interface{}, elem interface{}) bool {
 	value := reflect.ValueOf(list)
 	if value.Kind() != reflect.Slice {
-		fmt.Fprintf(os.Stderr, "Input type is not an array or slice type: %v, kind:%s", value, value.Kind())
+		logger.ERROR(fmt.Sprintf("Input type is not an array or slice type: %v, kind:%s", value, value.Kind()))
+
 		return false
 	}
 
@@ -25,7 +27,6 @@ func Contains(list interface{}, elem interface{}) bool {
 			return true
 		}
 	}
-
 	return false
 }
 

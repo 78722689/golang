@@ -26,7 +26,7 @@ const (
 )
 
 func (gdtj *GDTJ)parseByDate(date string, proxy *httpcontroller.Proxy) error{
-	file := gdtj.Folder + gdtj.Code + ".html.modules/gdtj/" + GDTJ_HTML + "_" + date
+	file := gdtj.Folder + gdtj.Code + "/modules/gdtj/" + GDTJ_HTML + "_" + date
 
 	val,ok := gdtj.DateList[date]
 	if !ok {
@@ -87,7 +87,7 @@ func (gdtj *GDTJ)GetShareHolder(date string, proxy *httpcontroller.Proxy) ([]*ht
 
 func (gdtj *GDTJ)getBasicData() error {
 	if gdtj.ID == "" || len(gdtj.DateList) == 0  || gdtj.Doc == nil {
-		file := gdtj.Folder + gdtj.Code + ".html.modules/" + GDTJ_HTML
+		file := gdtj.Folder + gdtj.Code + "/modules/" + GDTJ_HTML
 		doc, err := htmlparser.ParseFromFile(file)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Parse file %s faild, err:%s", file, err)
