@@ -4,7 +4,6 @@ import (
 "fmt"
 "sync/atomic"
 "sync"
-	"time"
 )
 
 type ThreadPool struct {
@@ -32,9 +31,12 @@ func (pool *ThreadPool)startWorkThread(id int) {
 	for {
 		select {
 		case task := <-pool.taskWorkQueue:
+			fmt.Println("received task work....")
 			pool.wg.Add(1)
 
+			fmt.Println("Begin run ", id)
 			task.run(id)
+			fmt.Println("end run ", id)
 
 			atomic.AddInt32(&pool.activeThread, -1)
 			atomic.AddInt32(&pool.freeThread, 1)
@@ -53,6 +55,7 @@ func (pool *ThreadPool)startQueueThread() {
 	for {
 		select {
 		case task := <-pool.taskCacheQueue:
+			fmt.Println("received cache task........")
 			//pool.wg.Add(1)
 			pool.taskWorkQueue <- task
 
@@ -63,7 +66,9 @@ func (pool *ThreadPool)startQueueThread() {
 }
 
 func(pool *ThreadPool)PutTask(task Task) {
+	fmt.Println("puting.......")
 	pool.taskCacheQueue <- task
+	fmt.Println("puted.......")
 }
 
 func GetPool(number int, capacity int) *ThreadPool {
@@ -75,6 +80,7 @@ func GetPool(number int, capacity int) *ThreadPool {
 		taskWorkQueue  : make(chan Task),
 		taskCacheQueue : make(chan Task),
 		shutdown       : make(chan bool),
+		wg				: sync.WaitGroup{},
 	}
 
 	return &pool
@@ -88,16 +94,18 @@ type Task interface {
 	run(id int)
 }
 
-type MyTask struct {
+type Caller struct {
 	Name string
 	Call func(id int)
 }
 
-func (task *MyTask)run(id int)  {
+func (c Caller)run(id int)  {
 	//fmt.Println(fmt.Sprintf("Thread - %d is running with task - %s", id, task.Name))
-	task.Call(id)
+	fmt.Println("Begin call ", c.Name)
+	c.Call(id)
+	fmt.Println("End call ", c.Name)
 
-	time.Sleep(time.Second*2)
+	//time.Sleep(time.Second*2)
 }
 
 /*

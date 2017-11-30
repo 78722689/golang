@@ -6,7 +6,7 @@ import (
 	"runtime"
 	"routingpool"
 	"downloader"
-	"fmt"
+	"httpcontroller"
 )
 
 // proxy //http://203.17.66.133:8000   http://203.17.66.134:8000
@@ -17,9 +17,9 @@ func main() {
 	logger := utility.GetLogger()
 	logger.SetMinorLogLevel(utility.DEBUG)
 
-	myPool := routingpool.GetPool(100, 100)
-	myPool.Start()
-
+	pool := routingpool.GetPool(100, 100)
+	pool.Start()
+/*
 	for i := 0; i<=20; i++ {
 		go func(id int) {
 			for j := 0; j<=20; j++ {
@@ -29,18 +29,19 @@ func main() {
 			}
 		}(i)
 	}
+*/
 
-	// Waiting for all threads finish and exit
-	myPool.Wait()
 
-	//var proxy *httpcontroller.Proxy = nil
+	var proxy *httpcontroller.Proxy = nil
 	//proxy := &httpcontroller.Proxy{"HTTP", "203.17.66.134", "8000"}
 	//folder := "D:/Work/MyDemo/go/golang/CFICCrawler/resource/download/"
-	//folder := "E:/Programing/golang/CFICCrawler/resource/download/"
-/*
-	downloader := downloader.DownloadInfo{Foler:folder, Proxy:proxy, Overwrite:true}
+	folder := "E:/Programing/golang/CFICCrawler/resource/download/"
+
+	downloader := downloader.DownloadInfo{Foler:folder, Proxy:proxy, Overwrite:true, RoutingPool:pool}
 	downloader.DownloadByStockIDs([]string{"600089", "600096"})
-*/
+
+	// Waiting for all threads finish and exit
+	pool.Wait()
 /*
 	code := "601700" //"601699"
 	gdtj := &modulehandler.GDTJ{Code:code, Folder:folder}

@@ -10,6 +10,7 @@ import (
 	"strings"
 	"utility"
 	"time"
+	"routingpool"
 )
 
 var logger = utility.GetLogger()
@@ -23,14 +24,16 @@ type DownloadInfo struct {
 	Foler string
 	Proxy *httpcontroller.Proxy
 	Overwrite bool
+
+	RoutingPool *routingpool.ThreadPool
 }
 
 type DownloadTask struct {
 	Name string
 }
 
-func (task *DownloadTask)Task(id int) {
-	fmt.Println(fmt.Sprintf("Thread - %d is running with DownloadTask - %s", id, task.Name))
+func (info *DownloadInfo)Task(id int) {
+	//fmt.Println(fmt.Sprintf("Thread - %d is running with DownloadTask - %s", id, task.Name))
 	time.Sleep(time.Second*2)
 }
 
@@ -60,24 +63,31 @@ func (d *DownloadInfo)downloadStocksHomePage(ids []string, overwrite bool) {
 		os.Exit(1)
 	}
 
-	wg := sync.WaitGroup{}
-	for _, stockinfo := range doc.GetStocks(ids) {
-		wg.Add(1)
-		go func(si htmlparser.StockInfo) {
-			logger.INFO(fmt.Sprintf("Downloading link:%v name:%v, number:%v\r\n", si.Link, si.Name, si.Number))
+	mainTask := routingpool.Caller{Name:"Main-download-task", Call: func(id int) {
+		fmt.Println("in caller...", ids)
+		time.Sleep(time.Second*3)
+		fmt.Println("in caller...after sleep", ids)
 
-			stock_request := httpcontroller.Request {
-				Url  : QUOTE_HOMEPAGE_URL + si.Link,
-				File : d.Foler + si.Number + "/" + si.Link,
-				Proxy: d.Proxy,
-				OverWrite:overwrite}
-			stock_request.Get()
+		for _, stockinfo := range doc.GetStocks(ids) {
+			fmt.Println("stockinfo caller....")
+			c := func (id int) {
+				logger.INFO(fmt.Sprintf("Downloading link:%v name:%v, number:%v\r\n", stockinfo.Link, stockinfo.Name, stockinfo.Number))
 
-			wg.Done()
-		}(stockinfo)
-	}
+				stock_request := httpcontroller.Request {
+					Url  : QUOTE_HOMEPAGE_URL + stockinfo.Link,
+					File : d.Foler + stockinfo.Number + "/" + stockinfo.Link,
+					Proxy: d.Proxy,
+					OverWrite:overwrite}
+				stock_request.Get()
+			}
+			d.RoutingPool.PutTask(routingpool.Caller{Name:"Download-Homepage",Call:c})
+		}
+		fmt.Println("end caller...", ids)
 
-	wg.Wait()
+	}}
+
+	//task := routingpool.Caller{Name:"DownloaderHomepage",Call:caller}
+	d.RoutingPool.PutTask(mainTask)
 }
 
 func (d *DownloadInfo)downloadModules(ids []string, overwrite bool) {
