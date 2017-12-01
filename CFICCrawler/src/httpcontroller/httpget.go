@@ -68,6 +68,8 @@ func (r *Request)Get() (*html.Node, error){
             }
             os.MkdirAll(path.Dir(r.File), 0777)
 
+            logger.INFO(fmt.Sprintf("Requesting %s", r.Url))
+
             resp, err := client.Get(r.Url)
             if err != nil {
                 fmt.Fprintf(os.Stderr, "fetch: %v\n", err)

@@ -117,12 +117,11 @@ func (tree *HTMLDoc) GetStocks(filterIDs []string) []StockInfo {
 
 						if len(filterIDs) == 0 {
 							stockList = append(stockList, si)
+							logger.DEBUG(fmt.Sprintf("Found stock. Link:%s Len-%d Number:%s Name:%s", si.Link, len(child.Data), si.Number, si.Name))
 						} else if utility.Contains(filterIDs, stockID) {
-							logger.DEBUG("found........................................")
 							stockList = append(stockList, si)
+							logger.DEBUG(fmt.Sprintf("Found stock. Link:%s Len-%d Number:%s Name:%s", si.Link, len(child.Data), si.Number, si.Name))
 						}
-
-						logger.DEBUG(fmt.Sprintf("Found link:%s len-%d number:%s name:%s", si.Link, len(child.Data), si.Number, si.Name))
 					} else {
 						logger.WARN(fmt.Sprintf("Not found stock ID in node, %v", child))
 					}

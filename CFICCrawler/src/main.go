@@ -32,10 +32,10 @@ func main() {
 */
 
 
-	var proxy *httpcontroller.Proxy = nil
-	//proxy := &httpcontroller.Proxy{"HTTP", "203.17.66.134", "8000"}
-	//folder := "D:/Work/MyDemo/go/golang/CFICCrawler/resource/download/"
-	folder := "E:/Programing/golang/CFICCrawler/resource/download/"
+	//var proxy *httpcontroller.Proxy = nil
+	proxy := &httpcontroller.Proxy{"HTTP", "203.17.66.134", "8000"}
+	folder := "D:/Work/MyDemo/go/golang/CFICCrawler/resource/download/"
+	//folder := "E:/Programing/golang/CFICCrawler/resource/download/"
 
 	downloader := downloader.DownloadInfo{Foler:folder, Proxy:proxy, Overwrite:true, RoutingPool:pool}
 	downloader.DownloadByStockIDs([]string{"600089", "600096"})

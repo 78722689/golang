@@ -63,30 +63,25 @@ func (d *DownloadInfo)downloadStocksHomePage(ids []string, overwrite bool) {
 		os.Exit(1)
 	}
 
-	mainTask := routingpool.Caller{Name:"Main-download-task", Call: func(id int) {
-		fmt.Println("in caller...", ids)
-		time.Sleep(time.Second*3)
-		fmt.Println("in caller...after sleep", ids)
-
+	mainTask := routingpool.NewCaller("Main-download-task", func(id int) {
 		for _, stockinfo := range doc.GetStocks(ids) {
-			fmt.Println("stockinfo caller....")
+			temp := stockinfo   // Copy the value, so that below closure run correctly
 			c := func (id int) {
-				logger.INFO(fmt.Sprintf("Downloading link:%v name:%v, number:%v\r\n", stockinfo.Link, stockinfo.Name, stockinfo.Number))
+				logger.INFO(fmt.Sprintf("[Thread-%d] Downloading link:%v name:%v, number:%v", id, temp.Link, temp.Name, temp.Number))
 
 				stock_request := httpcontroller.Request {
-					Url  : QUOTE_HOMEPAGE_URL + stockinfo.Link,
-					File : d.Foler + stockinfo.Number + "/" + stockinfo.Link,
+					Url  : QUOTE_HOMEPAGE_URL + temp.Link,
+					File : d.Foler + temp.Number + "/" + temp.Link,
 					Proxy: d.Proxy,
 					OverWrite:overwrite}
 				stock_request.Get()
+
+				logger.INFO(fmt.Sprintf("[Thread-%d] Downloaded link:%v name:%v, number:%v", id, temp.Link, temp.Name, temp.Number))
 			}
-			d.RoutingPool.PutTask(routingpool.Caller{Name:"Download-Homepage",Call:c})
+			d.RoutingPool.PutTask(routingpool.NewCaller("Download-Homepage", c))
 		}
-		fmt.Println("end caller...", ids)
+	})
 
-	}}
-
-	//task := routingpool.Caller{Name:"DownloaderHomepage",Call:caller}
 	d.RoutingPool.PutTask(mainTask)
 }
 
