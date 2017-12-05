@@ -1,28 +1,26 @@
 package downloader
 
 import (
-	"sync"
-	"httpcontroller"
-	"htmlparser"
 	"fmt"
+	"htmlparser"
+	"httpcontroller"
 	"os"
-	"path/filepath"
-	"strings"
-	"utility"
-	"time"
 	"routingpool"
+	"strings"
+	"time"
+	"utility"
 )
 
 var logger = utility.GetLogger()
 
 const (
-	STOCK_LIST_URL string = "http://quote.cfi.cn/stockList.aspx?t=11"
+	STOCK_LIST_URL     string = "http://quote.cfi.cn/stockList.aspx?t=11"
 	QUOTE_HOMEPAGE_URL string = "http://quote.cfi.cn/"
 )
 
 type DownloadInfo struct {
-	Foler string
-	Proxy *httpcontroller.Proxy
+	Foler     string
+	Proxy     *httpcontroller.Proxy
 	Overwrite bool
 
 	RoutingPool *routingpool.ThreadPool
@@ -32,31 +30,31 @@ type DownloadTask struct {
 	Name string
 }
 
-func (info *DownloadInfo)Task(id int) {
+func (info *DownloadInfo) Task(id int) {
 	//fmt.Println(fmt.Sprintf("Thread - %d is running with DownloadTask - %s", id, task.Name))
-	time.Sleep(time.Second*2)
+	time.Sleep(time.Second * 2)
 }
 
-func (d *DownloadInfo)DownloadAll() {
+func (d *DownloadInfo) DownloadAll() {
 	d.downloadStocksHomePage([]string{}, d.Overwrite)
 	//d.downloadModules([]string{}, false)
 }
 
-func (d *DownloadInfo)DownloadByStockIDs(ids []string) {
+func (d *DownloadInfo) DownloadByStockIDs(ids []string) {
 	d.downloadStocksHomePage(ids, d.Overwrite)
 	//d.downloadModules([]string{}, true)
 }
 
 // Download the stocks home page, if overwrite is true, the exist home page will be rewrite.
-func (d *DownloadInfo)downloadStocksHomePage(ids []string, overwrite bool) {
+func (d *DownloadInfo) downloadStocksHomePage(ids []string, overwrite bool) {
 	// Request homepage to get all the stocks
-	request := httpcontroller.Request {
-		Url   : STOCK_LIST_URL,
-		Proxy : d.Proxy,
+	request := httpcontroller.Request{
+		Url:   STOCK_LIST_URL,
+		Proxy: d.Proxy,
 	}
-	root,_ := request.Get()
+	root, _ := request.Get()
 
-	doc,err := htmlparser.ParseFromNode(root)
+	doc, err := htmlparser.ParseFromNode(root)
 	if err != nil {
 		logger.ERROR(fmt.Sprintf("Parse file error, %v", err))
 
@@ -65,104 +63,75 @@ func (d *DownloadInfo)downloadStocksHomePage(ids []string, overwrite bool) {
 
 	mainTask := routingpool.NewCaller("Main-download-task", func(id int) {
 		for _, stockinfo := range doc.GetStocks(ids) {
-			temp := stockinfo   // Copy the value, so that below closure run correctly
-			c := func (id int) {
-				logger.INFO(fmt.Sprintf("[Thread-%d] Downloading link:%v name:%v, number:%v", id, temp.Link, temp.Name, temp.Number))
 
-				stock_request := httpcontroller.Request {
-					Url  : QUOTE_HOMEPAGE_URL + temp.Link,
-					File : d.Foler + temp.Number + "/" + temp.Link,
-					Proxy: d.Proxy,
-					OverWrite:overwrite}
-				stock_request.Get()
+			// To request home page.
+			tempStockinfo := stockinfo // Copy the value, so that below closure run correctly
+			homepageCaller := func(id int) {
+				logger.INFO(fmt.Sprintf("[Thread-%d] Downloading link:%v name:%v, number:%v", id, tempStockinfo.Link, tempStockinfo.Name, tempStockinfo.Number))
 
-				logger.INFO(fmt.Sprintf("[Thread-%d] Downloaded link:%v name:%v, number:%v", id, temp.Link, temp.Name, temp.Number))
+				file := d.Foler + tempStockinfo.Number + "/" + tempStockinfo.Link
+				stock_request := httpcontroller.Request{
+					Url:       QUOTE_HOMEPAGE_URL + tempStockinfo.Link,
+					File:      file,
+					Proxy:     d.Proxy,
+					OverWrite: overwrite}
+				_, err := stock_request.Get()
+				if err != nil {
+					logger.ERROR(fmt.Sprintf("Request failure, %s", err))
+					return
+				}
+
+				logger.INFO(fmt.Sprintf("[Thread-%d] Downloaded homepage link:%v name:%v, number:%v", id, tempStockinfo.Link, tempStockinfo.Name, tempStockinfo.Number))
+
+				// To request modules for each stock.
+				moduleCaller := func(id int) {
+					doc, err := htmlparser.ParseFromFile(file)
+					if err != nil {
+						logger.ERROR(fmt.Sprintf("Parse file failure, %s", err))
+						return
+					}
+
+					stock_modules_url := doc.GetModuleURL(tempStockinfo.Link)
+					for _, url := range stock_modules_url {
+						// an example filter on a stock modules
+						filters := []string{"gdtj", "fhpx"}
+
+						var found bool = false
+						for _, filter := range filters {
+							if strings.Contains(url, filter) {
+								found = true
+								break
+							}
+						}
+
+						if found {
+							logger.INFO(fmt.Sprintf("[Thread-%d] Found module, requesting %s\n", id, url))
+
+							values := strings.Split(url, "/")
+							var moduleName string
+							if len(values) == 4 {
+								moduleName = values[1] // example data "/tzzk/19770/601015.html"
+							} else {
+								moduleName = values[2] // example data "http://gg.cfi.cn/cbgg/19770/601015.html"
+							}
+
+							file := d.Foler + tempStockinfo.Number + "/modules/" + moduleName + ".html"
+							request := httpcontroller.Request{
+								Proxy:     d.Proxy,
+								Url:       QUOTE_HOMEPAGE_URL + url,
+								File:      file,
+								OverWrite: overwrite}
+							request.Get()
+						}
+					}
+				}
+
+				d.RoutingPool.PutTask(routingpool.NewCaller("Download-Module", moduleCaller))
 			}
-			d.RoutingPool.PutTask(routingpool.NewCaller("Download-Homepage", c))
+
+			d.RoutingPool.PutTask(routingpool.NewCaller("Download-Homepage", homepageCaller))
 		}
 	})
 
 	d.RoutingPool.PutTask(mainTask)
-}
-
-func (d *DownloadInfo)downloadModules(ids []string, overwrite bool) {
-	wg := sync.WaitGroup{}
-
-	// To walk the folder in order to find out the stock homepage html.
-	err := filepath.Walk(d.Foler, func(path string, fi os.FileInfo, err error) error {
-		strRet, _ := os.Getwd()
-		ostype := os.Getenv("GOOS") // windows, linux
-
-		if ostype == "windows" {
-			strRet += "\\"
-		} else if ostype == "linux" {
-			strRet += "/"
-		}
-
-		if fi == nil {
-			return err
-		}
-		if fi.IsDir() {
-			return nil
-		}
-
-		// Begin to parse the stock home page.
-		fmt.Fprintf(os.Stdout, "Parsing file %s\n", path)
-		doc, err := htmlparser.ParseFromFile(path)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "Parse file %s faild, err:%s", path, err)
-			return err
-		}
-		stock_modules_url := doc.GetModuleURL(fi.Name())
-
-		// an example filter on a stock modules
-		filters := []string{"gdtj", "fhpx"}
-
-		wg.Add(1)
-		// Begin to request the modules
-		// filters: specify only to reqeust the interesting modules.
-		go func(urls []string, filters []string) {
-
-			defer wg.Done()
-			for _, url := range urls {
-				fmt.Fprintf(os.Stdout, "Checking stock module url:%s\n", url)
-
-				var found bool = false
-				for _, filter := range filters {
-					if strings.Contains(url, filter) {
-						found = true
-						break
-					}
-				}
-
-				if found {
-					fmt.Fprintf(os.Stdout, "Found! goto request:%s\n", url)
-
-					values := strings.Split(url, "/")
-					var filename string
-					if len(values) == 4 {
-						filename = values[1] // example data "/tzzk/19770/601015.html"
-					} else {
-						filename = values[2] // example data "http://gg.cfi.cn/cbgg/19770/601015.html"
-					}
-
-					file := d.Foler + values[len(values)-1] + ".modules/" + filename + ".html"
-					request := httpcontroller.Request{
-						Proxy: d.Proxy,
-						Url:  QUOTE_HOMEPAGE_URL + url,
-						File: file,
-						OverWrite:overwrite}
-					request.Get()
-				}
-			}
-
-		}(stock_modules_url, filters)
-
-		return nil
-	})
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "No any file found in folder %s, err:%s", d.Foler, err)
-	}
-
-	wg.Wait()
 }
