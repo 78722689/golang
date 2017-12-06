@@ -2,12 +2,12 @@ package htmlparser
 
 import "httpcontroller"
 
-func (doc *HTMLDoc)HTD_Request(url string, file string, proxy *httpcontroller.Proxy) error{
+func (doc *HTMLDoc) HTD_Request(url string, file string, proxy *httpcontroller.Proxy) error {
 	request := httpcontroller.Request{
-		Proxy: proxy, //&httpcontroller.Proxy{"HTTP", "203.17.66.134", "8000"},
-		Url : url,
-		File : file,
-		OverWrite : false,
+		Proxy:     proxy, //&httpcontroller.Proxy{"HTTP", "203.17.66.134", "8000"},
+		Url:       url,
+		File:      file,
+		OverWrite: true,
 	}
 
 	if _, err := request.Get(); err != nil {

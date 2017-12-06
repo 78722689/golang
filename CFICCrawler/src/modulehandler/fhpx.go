@@ -1,12 +1,12 @@
 package modulehandler
 
 import (
-	"htmlparser"
 	"fmt"
+	"htmlparser"
 )
 
 type FHPX_INFO struct {
-	Code string
+	Code   string
 	Folder string
 
 	Doc *htmlparser.HTMLDoc
@@ -17,7 +17,7 @@ const (
 )
 
 func (fhpx *FHPX_INFO) GetFHPXData() ([]*htmlparser.FHPX_DATA, error) {
-	path := fhpx.Folder + fhpx.Code + "/modules/fhpx/" + FHPX_HOMEPAGE
+	path := fhpx.Folder + fhpx.Code + "/modules/" + FHPX_HOMEPAGE
 
 	doc, err := htmlparser.ParseFromFile(path)
 	if err != nil {
@@ -28,11 +28,11 @@ func (fhpx *FHPX_INFO) GetFHPXData() ([]*htmlparser.FHPX_DATA, error) {
 	data := doc.GetFHPXData()
 	for _, d := range data {
 		logger.DEBUG(fmt.Sprintf("ExDividendDate:%s, BTaxCashDividend:%f, TransformNum:%d, ATaxCashDividend:%f OfferNum:%d",
-							d.ExDividendDate,
-							d.BTaxCashDividend,
-							d.TransformNum,
-							d.ATaxCashDividend,
-							d.OfferNum))
+			d.ExDividendDate,
+			d.BTaxCashDividend,
+			d.TransformNum,
+			d.ATaxCashDividend,
+			d.OfferNum))
 	}
 
 	return data, nil
