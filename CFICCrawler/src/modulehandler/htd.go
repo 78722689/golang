@@ -293,7 +293,7 @@ func (htd *HTD) getNearestFHPXDataByDate(date string) *htmlparser.FHPX_DATA {
 				(htdDate.Month()-exDividendDate.Month()) <= 3) {
 			result = fhpx
 
-			logger.DEBUG(fmt.Sprintf("FouND FHPX data, date-%s vs htd date %s",
+			logger.DEBUG(fmt.Sprintf("Found FHPX data, date-%s vs htd date %s",
 				fhpx.ExDividendDate,
 				date))
 		}
@@ -330,12 +330,34 @@ func (htd *HTD) getFundsFinalProfit(funds []*FundPerformanceData) {
 		lastCount := 0.0
 		lastDate := ""
 
+        filename := htd.Folder + "/" + htd.Code + "/performance/" + fund.Name + "/performance.csv"
+        utility.WriteToFile(filename, "Date,Count,Ratio,Price,SH,SZ,GEM,ExDividendPrice,ChangeProfit,FHPXProfit,OfferNumber,TransformNumber")
+
 		for _, d := range fund.Data {
 			changeProfit += d.ChangeProfit
 			fhpxProfit += d.FHPXProfit
 			lastCount = utility.String2Folat64(d.Count)
 			lastDate = d.Date //getNoWeekendDateList([]string{d.Date})[d.Date]
-		}
+
+
+            line := fmt.Sprintf("%s,%s,%f,%f,%f,%f,%f,%f,%f,%f,%d,%d",
+                d.Date,
+                d.Count,
+                d.Ratio,
+                d.StartPrice,
+                d.SHStartPrice,
+                d.SZStartPrice,
+                d.GEMStartPrice,
+                d.PriceOnFHPXDay,
+                float64(d.ChangeProfit)/10000,
+                float64(d.FHPXProfit)/10000,
+                d.OfferNum,
+                d.TransformNum,
+            )
+
+            logger.DEBUG(line)
+            utility.WriteToFile(filename, line)
+        }
 
 		// Get the next performace day and get the history data, and then to calculate the final profit.
 		t, _ := time.Parse("2006-01-02", lastDate)
@@ -344,8 +366,26 @@ func (htd *HTD) getFundsFinalProfit(funds []*FundPerformanceData) {
 		noWeekendDay := getNoWeekendDateList([]string{temp})[temp]
 		historyDataMap := htd.getData([]interface{}{noWeekendDay}, Stock)
 
-		finalProfit := changeProfit + int((lastCount * 10000 * float64(historyDataMap[noWeekendDay].StartPrice))) + fhpxProfit
-		logger.DEBUG(fmt.Sprintf("fund-%s, changeProfit-%d, lastCount-%f, startprice-%f, fhpxProfit-%d, finalProfit-%d",
+		finalProfit := float64((changeProfit + int((lastCount * 10000 * float64(historyDataMap[noWeekendDay].StartPrice))) + fhpxProfit))/10000
+
+        line := fmt.Sprintf("%s,%s,%f,%f,%f,%f,%f,%f,%f,%f,%d,%d",
+            noWeekendDay,
+            "0",
+            0.0,
+            historyDataMap[noWeekendDay].StartPrice,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            finalProfit,
+            0.0,
+            0,
+            0,
+        )
+        utility.WriteToFile(filename, line)
+
+        logger.DEBUG(line)
+		logger.DEBUG(fmt.Sprintf("fund:%s, changeProfit:%d, lastCount:%f, startprice:%f, fhpxProfit:%d, finalProfit:%d",
 			fund.Name,
 			changeProfit,
 			lastCount,
@@ -439,7 +479,7 @@ func (htd *HTD) GetFundsPerformance(focusSHIs map[string][]*htmlparser.ShareHole
 								OfferNum:       offerNum,
 								TransformNum:   transformNum},
 						)
-
+/*
 						line := fmt.Sprintf("%s,%s,%f,%f,%f,%f,%f,%f,%d,%d,%d,%d",
 							shi.Date,
 							shi.Count,
@@ -454,10 +494,9 @@ func (htd *HTD) GetFundsPerformance(focusSHIs map[string][]*htmlparser.ShareHole
 							offerNum,
 							transformNum,
 						)
-
 						logger.DEBUG(line)
 						//utility.WriteToFile(filename, line)
-
+*/
 						preCount = utility.String2Folat64(shi.Count)
 					}
 				}

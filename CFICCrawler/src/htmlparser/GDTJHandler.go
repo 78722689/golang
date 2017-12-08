@@ -27,7 +27,7 @@ func (tree *HTMLDoc) GDTJ_Request(url string, file string, proxy *httpcontroller
 		Proxy:     proxy, //&httpcontroller.Proxy{"HTTP", "203.17.66.134", "8000"},
 		Url:       url,
 		File:      file,
-		OverWrite: true,
+		OverWrite: false,
 	}
 
 	if _, err := request.Get(); err != nil {
