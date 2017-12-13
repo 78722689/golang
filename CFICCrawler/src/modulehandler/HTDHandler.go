@@ -385,7 +385,7 @@ func (htd *HTD) getFundsFinalProfit(funds []*FundPerformanceData) {
         utility.WriteToFile(filename, line)
 
         logger.DEBUG(line)
-		logger.DEBUG(fmt.Sprintf("fund:%s, changeProfit:%d, lastCount:%f, startprice:%f, fhpxProfit:%d, finalProfit:%d",
+		logger.DEBUG(fmt.Sprintf("fund:%s, changeProfit:%d, lastCount:%f, startprice:%f, fhpxProfit:%d, finalProfit:%f",
 			fund.Name,
 			changeProfit,
 			lastCount,
@@ -495,7 +495,6 @@ func (htd *HTD) GetFundsPerformance(focusSHIs map[string][]*htmlparser.ShareHole
 							transformNum,
 						)
 						logger.DEBUG(line)
-						//utility.WriteToFile(filename, line)
 */
 						preCount = utility.String2Folat64(shi.Count)
 					}
