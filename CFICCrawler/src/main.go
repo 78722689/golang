@@ -4,10 +4,10 @@ import (
 	"utility"
 	//	"sync"
 	"downloader"
-	"fmt"
-	"htmlparser"
+	//"fmt"
+	//"htmlparser"
 	"httpcontroller"
-	"modulehandler"
+	//"modulehandler"
 	"routingpool"
 	"runtime"
 )
@@ -34,32 +34,32 @@ func main() {
 		}
 	*/
 
-	//var proxy *httpcontroller.Proxy = nil
-	proxy := &httpcontroller.Proxy{"HTTP", "203.17.66.134", "8000"}
-	folder := "D:/Work/MyDemo/go/golang/CFICCrawler/resource/download/"
-	//folder := "E:/Programing/golang/CFICCrawler/resource/download/"
+	var proxy *httpcontroller.Proxy = nil
+	//proxy := &httpcontroller.Proxy{"HTTP", "203.17.66.134", "8000"}
+	//folder := "D:/Work/MyDemo/go/golang/CFICCrawler/resource/download/"
+	folder := "E:/Programing/golang/CFICCrawler/resource/download/"
 
-	downloader := downloader.DownloadInfo{Foler: folder, Proxy: proxy, Overwrite: false, RoutingPool: pool}
-	downloader.DownloadByStockIDs([]string{"600089", "600096"})
+	downloader := downloader.DownloadInfo{Folder: folder, Proxy: proxy, Overwrite: false, RoutingPool: pool}
+	downloader.DownloadByStockIDs([]string{"600089"}) //, "600096", "600036"
 
 	// Waiting for all threads finish and exit
 	pool.Wait()
 
-	code := "600089" //"601699"
-	gdtj := &modulehandler.GDTJ{Code: code, Folder: folder}
+	//code := "600036" //"600089"
+	//gdtj := &modulehandler.GDTJ{Code: code, Folder: folder, Proxy : proxy}
 
 	/*
-		if sh, err := gdtj.GetShareHolder("2015-12-31", proxy); err == nil {
+		if sh, err := gdtj.GetShareHolder("2015-12-31"); err == nil {
 			for _, item:= range sh {
 				fmt.Fprintf(os.Stdout, "Name:%s, Count:%s, Ratio:%s\n", item.Name, item.Count, item.Ratio)
 			}
 		}
 	*/
 
-	htd := modulehandler.HTD{Code: code, Folder: folder}
-	htd.Download(proxy)
+	/*htd := modulehandler.HTD{Code: code, Folder: folder, Proxy: proxy}
+	htd.Download()
 
-	funds := []string{"博时基金－农业银行－博时中证金融资产管理计划", "工银瑞信基金－农业银行－工银瑞信中证金融资产管理计划"}
+	funds := []string{"上海汽车集团股份有限公司", "香港中央结算有限公司", "深圳市楚源投资发展有限公司"}
 	result := make(map[string][]*htmlparser.ShareHolerInfo)
 
 	// Find out the fund if it is in the reporter
@@ -78,12 +78,8 @@ func main() {
 		}
 	}
 
-	// Requirements:
-	// 1. 加入同时期大盘指数走势----->done
-	// 2. 计算除权价格？
-	// 3. 计算分红数据，持股变动后盈利以及总盈利。
 	htd.GetFundsPerformance(result, proxy)
-
+	*/
 	logger.DEBUG("main is end...........................")
 
 }

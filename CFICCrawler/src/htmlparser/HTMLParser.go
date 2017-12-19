@@ -1,17 +1,19 @@
 package htmlparser
 
 import (
-	"golang.org/x/net/html"
-	"io/ioutil"
-	"os"
 	"fmt"
-	"strings"
+	"io/ioutil"
 	"regexp"
+	"strings"
 	"utility"
+
+	"golang.org/x/net/html"
 )
+
 var logger = utility.GetLogger()
 
 type FindType uint32
+
 const (
 	TagNode FindType = iota
 	TextNode
@@ -21,13 +23,13 @@ const (
 
 type StockInfo struct {
 	Number string
-	Name string
-	Link string
+	Name   string
+	Link   string
 }
 
 type Selection struct {
 	//Nodes []*html.Node
-	Nodes []*HTMLDoc
+	Nodes  []*HTMLDoc
 	PreSel *Selection
 }
 
@@ -56,20 +58,23 @@ func (doc *HTMLDoc) getFirstChildNodeType() FindType {
 	return ErrNode
 }
 
-func (doc *HTMLDoc)GetData() string {
+func (doc *HTMLDoc) GetData() string {
 	return doc.Root.Data
 }
 
-
-func (doc *HTMLDoc)GetParentNodeTagname() string {
+func (doc *HTMLDoc) GetParentNodeTagname() string {
 	return doc.Root.Parent.Data
 }
 
-func (doc *HTMLDoc)GetAttrByName(name string) string{
-	if len(doc.Root.Attr) == 0 {return ""}
+func (doc *HTMLDoc) GetAttrByName(name string) string {
+	if len(doc.Root.Attr) == 0 {
+		return ""
+	}
 
 	for _, value := range doc.Root.Attr {
-		if value.Key == name {return  value.Val}
+		if value.Key == name {
+			return value.Val
+		}
 	}
 
 	return ""
@@ -102,29 +107,29 @@ func (tree *HTMLDoc) GetStocks(filterIDs []string) []StockInfo {
 	// Loop all nodes to lookup the node where the name matched.
 	loopnode = func(node *html.Node) {
 		for child := node.FirstChild; child != nil; child = child.NextSibling {
-			if  len(tree.isStockName(child.Data)) > 0 &&
+			if len(tree.isStockName(child.Data)) > 0 &&
 				child.Parent.Data == "a" &&
 				len(child.Parent.Attr) > 0 &&
 				child.Parent.Attr[0].Key == "href" {
 
-					stockID := string(tree.getStockNumberByValue(child.Data))
-					if stockID != "" {
-						si := StockInfo{
-							Link:   child.Parent.Attr[0].Val,
-							Number: stockID,
-							Name:   string(tree.getStockNameByValue(child.Data)),
-						}
-
-						if len(filterIDs) == 0 {
-							stockList = append(stockList, si)
-							logger.DEBUG(fmt.Sprintf("Found stock. Link:%s Len-%d Number:%s Name:%s", si.Link, len(child.Data), si.Number, si.Name))
-						} else if utility.Contains(filterIDs, stockID) {
-							stockList = append(stockList, si)
-							logger.DEBUG(fmt.Sprintf("Found stock. Link:%s Len-%d Number:%s Name:%s", si.Link, len(child.Data), si.Number, si.Name))
-						}
-					} else {
-						logger.WARN(fmt.Sprintf("Not found stock ID in node, %v", child))
+				stockID := string(tree.getStockNumberByValue(child.Data))
+				if stockID != "" {
+					si := StockInfo{
+						Link:   child.Parent.Attr[0].Val,
+						Number: stockID,
+						Name:   string(tree.getStockNameByValue(child.Data)),
 					}
+
+					if len(filterIDs) == 0 {
+						stockList = append(stockList, si)
+						logger.DEBUG(fmt.Sprintf("Found stock. Link:%s Len-%d Number:%s Name:%s", si.Link, len(child.Data), si.Number, si.Name))
+					} else if utility.Contains(filterIDs, stockID) {
+						stockList = append(stockList, si)
+						logger.DEBUG(fmt.Sprintf("Found stock. Link:%s Len-%d Number:%s Name:%s", si.Link, len(child.Data), si.Number, si.Name))
+					}
+				} else {
+					logger.WARN(fmt.Sprintf("Not found stock ID in node, %v", child))
+				}
 			}
 
 			loopnode(child)
@@ -136,24 +141,25 @@ func (tree *HTMLDoc) GetStocks(filterIDs []string) []StockInfo {
 	return stockList
 }
 
-
 func ParseFromFile(file string) (*HTMLDoc, error) {
 
 	tree := &HTMLDoc{}
-	contents,err := ioutil.ReadFile(file)
+	contents, err := ioutil.ReadFile(file)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Read file %v failed\n", file)
+		logger.ERROR(fmt.Sprintf("Read file %v failed\n", file))
 		return tree, err
 	}
 
-	doc,err := html.Parse(strings.NewReader(string(contents)))
+	logger.INFO(fmt.Sprintf("Begin to parse file, %s", file))
+
+	doc, err := html.Parse(strings.NewReader(string(contents)))
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Parse file %v failed\n", file)
+		logger.ERROR(fmt.Sprintf("Parse file %v failed\n", file))
 		return tree, err
 	}
 	tree.Root = doc
 	tree.Selection = &Selection{[]*HTMLDoc{tree},
-								nil}
+		nil}
 	return tree, nil
 }
 
@@ -164,8 +170,7 @@ func ParseFromNode(root *html.Node) (*HTMLDoc, error) {
 	return tree, nil
 }
 
-
-func loopNodeByTag(node *HTMLDoc, nodeType html.NodeType,filter string) []*HTMLDoc {
+func loopNodeByTag(node *HTMLDoc, nodeType html.NodeType, filter string) []*HTMLDoc {
 	var result []*HTMLDoc
 
 	for child := node.Root.FirstChild; child != nil; child = child.NextSibling {
@@ -221,11 +226,10 @@ func findByText(node *HTMLDoc, filter string) []*HTMLDoc {
 
 	result = append(result, loopNode(node, html.TextNode, filter)...)
 
-
 	return result
 }
 
-func (sel *Selection)Find(mode FindType, filter string) *Selection {
+func (sel *Selection) Find(mode FindType, filter string) *Selection {
 	var nodes []*HTMLDoc
 
 	for _, doc := range sel.Nodes {
@@ -237,11 +241,10 @@ func (sel *Selection)Find(mode FindType, filter string) *Selection {
 		}
 	}
 
-
 	return &Selection{nodes, sel}
 }
 
-func (sel *Selection)Each(f func(int, *Selection)) *Selection {
+func (sel *Selection) Each(f func(int, *Selection)) *Selection {
 	for i, node := range sel.Nodes {
 		s := &Selection{[]*HTMLDoc{node}, sel}
 		f(i, s)
@@ -250,7 +253,7 @@ func (sel *Selection)Each(f func(int, *Selection)) *Selection {
 	return sel
 }
 
-func (sel *Selection)GetNodeByAttr(name string, value string) []*HTMLDoc {
+func (sel *Selection) GetNodeByAttr(name string, value string) []*HTMLDoc {
 	var result []*HTMLDoc
 
 	for _, n := range sel.Nodes {

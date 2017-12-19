@@ -1,34 +1,36 @@
 package modulehandler
 
 import (
-	"fmt"
-	"os"
-	"htmlparser"
 	"errors"
+	"fmt"
+	"htmlparser"
 	"httpcontroller"
+	"os"
 )
 
 // The file to handle the data of "gdtj" module
 
 type GDTJ struct {
-	Code string
-	ID string
-	DateList map[string]bool  //date:isDownloaded
+	Code        string
+	ID          string
+	DateList    map[string]bool //date:isDownloaded
 	CurrentDate string
-	Doc *htmlparser.HTMLDoc
-	Folder string
+	Doc         *htmlparser.HTMLDoc
+	Folder      string
+
+	Proxy *httpcontroller.Proxy
 }
 
 const (
 	//GDTJ_LOCATION = "D:/Work/MyDemo/go/golang/CFICCrawler/resource/" //"E:/Programing/golang/CFICCrawler/resource/"
-	GDTJ_HTML = "gdtj.html"
+	GDTJ_HTML         = "gdtj.html"
 	GDTJ_QUARTER_LINK = "http://quote.cfi.cn/quote.aspx?stockid=%s&contenttype=gdtj&jzrq=%s"
 )
 
-func (gdtj *GDTJ)parseByDate(date string, proxy *httpcontroller.Proxy) error{
+func (gdtj *GDTJ) parseByDate(date string, proxy *httpcontroller.Proxy) error {
 	file := gdtj.Folder + gdtj.Code + "/modules/gdtj/" + GDTJ_HTML + "_" + date
 
-	val,ok := gdtj.DateList[date]
+	val, ok := gdtj.DateList[date]
 	if !ok {
 		return errors.New("Date does not exist")
 	}
@@ -40,11 +42,11 @@ func (gdtj *GDTJ)parseByDate(date string, proxy *httpcontroller.Proxy) error{
 			gdtj.Doc = doc
 			gdtj.CurrentDate = date
 		}
-	} else {  // Download by url
+	} else { // Download by url
 		link := fmt.Sprintf(GDTJ_QUARTER_LINK, gdtj.ID, date)
 		//fmt.Println(link, file)
 
-		if doc, err := gdtj.Doc.GDTJ_Request(link, file, proxy); err != nil {
+		if doc, err := gdtj.Doc.GDTJ_Request(link, file, gdtj.Proxy); err != nil {
 			return err
 		} else {
 			gdtj.Doc = doc
@@ -56,7 +58,7 @@ func (gdtj *GDTJ)parseByDate(date string, proxy *httpcontroller.Proxy) error{
 	return nil
 }
 
-func (gdtj *GDTJ)GetDateList() map[string]bool {
+func (gdtj *GDTJ) GetDateList() map[string]bool {
 	if err := gdtj.getBasicData(); err != nil {
 		return nil
 	}
@@ -65,13 +67,13 @@ func (gdtj *GDTJ)GetDateList() map[string]bool {
 }
 
 // Get the shareholder in the specified perioid
-func (gdtj *GDTJ)GetShareHolder(date string, proxy *httpcontroller.Proxy) ([]*htmlparser.ShareHolerInfo, error) {
+func (gdtj *GDTJ) GetShareHolder(date string) ([]*htmlparser.ShareHolerInfo, error) {
 	if err := gdtj.getBasicData(); err != nil {
 		return []*htmlparser.ShareHolerInfo{}, err
 	}
 
 	if gdtj.CurrentDate != date {
-		if err := gdtj.parseByDate(date, proxy); err != nil {
+		if err := gdtj.parseByDate(date, gdtj.Proxy); err != nil {
 			return []*htmlparser.ShareHolerInfo{}, err
 		}
 	}
@@ -85,8 +87,8 @@ func (gdtj *GDTJ)GetShareHolder(date string, proxy *httpcontroller.Proxy) ([]*ht
 	return sh, nil
 }
 
-func (gdtj *GDTJ)getBasicData() error {
-	if gdtj.ID == "" || len(gdtj.DateList) == 0  || gdtj.Doc == nil {
+func (gdtj *GDTJ) getBasicData() error {
+	if gdtj.ID == "" || len(gdtj.DateList) == 0 || gdtj.Doc == nil {
 		file := gdtj.Folder + gdtj.Code + "/modules/" + GDTJ_HTML
 		doc, err := htmlparser.ParseFromFile(file)
 		if err != nil {

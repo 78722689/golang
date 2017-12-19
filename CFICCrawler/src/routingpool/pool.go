@@ -1,9 +1,9 @@
 package routingpool
 
 import (
-"fmt"
-"sync/atomic"
-"sync"
+	"fmt"
+	"sync"
+	"sync/atomic"
 	"utility"
 )
 
@@ -11,32 +11,32 @@ var logger = utility.GetLogger()
 
 type ThreadPool struct {
 	numberOfThread int
-	queueCapacity int
-	activeThread int32
-	freeThread int32
-	taskWorkQueue chan Task
+	queueCapacity  int
+	activeThread   int32
+	freeThread     int32
+	taskWorkQueue  chan Task
 	taskCacheQueue chan Task
-	wg sync.WaitGroup
-	shutdown chan bool
+	wg             sync.WaitGroup
+	shutdown       chan bool
 }
 
 func GetPool(number int, capacity int) *ThreadPool {
-	pool := ThreadPool {
-		numberOfThread 	: number,
-		queueCapacity  	: capacity,
-		activeThread   	: 0,
-		freeThread     	: int32(number),
-		taskWorkQueue  	: make(chan Task),
-		taskCacheQueue 	: make(chan Task),
-		shutdown       	: make(chan bool),
-		wg				: sync.WaitGroup{},
+	pool := ThreadPool{
+		numberOfThread: number,
+		queueCapacity:  capacity,
+		activeThread:   0,
+		freeThread:     int32(number),
+		taskWorkQueue:  make(chan Task),
+		taskCacheQueue: make(chan Task),
+		shutdown:       make(chan bool),
+		wg:             sync.WaitGroup{},
 	}
 
 	return &pool
 }
 
 // Startup threads
-func (pool *ThreadPool)Start() {
+func (pool *ThreadPool) Start() {
 
 	for routine := 0; routine < pool.numberOfThread; routine++ {
 		pool.wg.Add(1)
@@ -50,7 +50,7 @@ func (pool *ThreadPool)Start() {
 	pool.Wait()
 }
 
-func (pool *ThreadPool)startWorkThread(id int) {
+func (pool *ThreadPool) startWorkThread(id int) {
 	pool.wg.Done()
 
 	for {
@@ -59,16 +59,16 @@ func (pool *ThreadPool)startWorkThread(id int) {
 			pool.wg.Add(1)
 			task.sendResponse()
 
-			logger.DEBUG(fmt.Sprintf("Thread[%d, %s] Started! Routing status: Active threads - %d, Free thread - %d, ", id, task.getTaskName(), pool.activeThread, pool.freeThread))
+			logger.DEBUG(fmt.Sprintf("[Thread id-%d, name-%s] Thread Started! Routing pool status: Active threads-%d, Free threads-%d", id, task.getTaskName(), pool.activeThread, pool.freeThread))
 
 			task.run(id)
 
 			atomic.AddInt32(&pool.activeThread, -1)
 			atomic.AddInt32(&pool.freeThread, 1)
 
-			logger.DEBUG(fmt.Sprintf("Thread[%d, %s] Finished! Routing status: Active threads - %d, Free thread - %d, ", id, task.getTaskName(), pool.activeThread, pool.freeThread))
-
 			pool.wg.Done()
+
+			logger.DEBUG(fmt.Sprintf("[Thread id-%d, name-%s] Thread Finished! Routing pool status: Active threads-%d, Free threads-%d", id, task.getTaskName(), pool.activeThread, pool.freeThread))
 
 		case <-pool.shutdown:
 			//pool.wg.Done()
@@ -78,7 +78,7 @@ func (pool *ThreadPool)startWorkThread(id int) {
 }
 
 // Start queue thread to collect the requests from client.
-func (pool *ThreadPool)startQueueThread() {
+func (pool *ThreadPool) startQueueThread() {
 	pool.wg.Done()
 
 	for {
@@ -95,13 +95,13 @@ func (pool *ThreadPool)startQueueThread() {
 	}
 }
 
-func(pool *ThreadPool)PutTask(task Task) {
+func (pool *ThreadPool) PutTask(task Task) {
 	pool.taskCacheQueue <- task
 
 	task.waitForResponse()
 }
 
-func(pool *ThreadPool)Wait() {
+func (pool *ThreadPool) Wait() {
 	pool.wg.Wait()
 }
 
@@ -122,22 +122,22 @@ type Caller struct {
 	response chan bool
 }
 
-func NewCaller(name string, call func(int)) *Caller{
-	return &Caller{Name:name, Call:call, response:make(chan bool)}
+func NewCaller(name string, call func(int)) *Caller {
+	return &Caller{Name: name, Call: call, response: make(chan bool)}
 }
 
-func (c *Caller)run(id int)  {
+func (c *Caller) run(id int) {
 	c.Call(id)
 }
 
-func (c *Caller)waitForResponse()  {
-	<- c.response
+func (c *Caller) waitForResponse() {
+	<-c.response
 }
 
-func (c *Caller)sendResponse()  {
+func (c *Caller) sendResponse() {
 	c.response <- true
 }
 
-func (c *Caller)getTaskName() string {
+func (c *Caller) getTaskName() string {
 	return c.Name
 }

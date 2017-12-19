@@ -1,0 +1,280 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+      <meta charset="UTF-8"/>
+      <meta http-equiv="Cache-Control" content="no-cache"/>
+
+    
+  
+    <title>招商银行(600036)_股东名单_中财网</title>
+<meta name='keywords' content='招商银行,600036,招商银行股票行情,600036股票行情,招商银行实时行情,招商银行财务分析, 中财网-股票,基金,理财，港股，海外股市' />
+<meta name='description' content='中财网提供招商银行（600036）实时行情动态分析,全面报道招商银行（600036）基本资料及重大新闻、行业资讯,浏览招商银行（600036）财务数据、行情数据,公司公告,重大事件。' /> 
+    <link id="cfitreeskin" href="/Styles/cfitree.css" rel="stylesheet" type="text/css"></link>
+    <link id="quoteskin" href="/Styles/skin.css" rel="stylesheet" type="text/css"></link>
+    <link id="autotxtskin" href="/Styles/autotxt.css" rel="stylesheet" type="text/css"></link>  
+         
+    <link href="/Styles/phonequote_menu.css" rel="stylesheet" type="text/css" />
+    <base id="mybase" target="_blank"></base>
+     <style type="text/css">
+         pre { white-space: pre-wrap; /* css-3 */ white-space: -moz-pre-wrap; /* Mozilla, since 1999 */ white-space: -pre-wrap; /* Opera 4-6 */ white-space: -o-pre-wrap; /* Opera 7 */ }
+    </style>
+    
+    
+        
+<link id="fundquoteskin" href="/Styles/quotepage.css" rel="stylesheet" type="text/css"></link>
+<script src='/Scripts/addCustomStock.js' type='text/javascript'></script>
+<script src='/Scripts/quote_imageOperate.js' type='text/javascript'></script>  
+           
+         
+ 
+  <!--[if IE]>
+    <script type="text/javascript" src="/MsChartDraw/excanvas.js"></script>
+            <![endif]-->  
+
+ <script type="text/javascript" src="/MsChartDraw/chartcaller.js"></script>
+
+</head>
+<body style="margin: 0;">
+    <form id="formsearch" name="formsearch" enableviewstate="false" method="get" action="/quote.aspx"  target="_top">  
+    
+    <input type="hidden" id="actstockid" name="actstockid" value="" />   
+  
+    <input type="hidden" id="actcontenttype" name="actcontenttype" value='gdtj' />
+    <input type="hidden" id="hidsel" value="-1" />
+    <input type="hidden" id="mousemoveEnable" value="true" />
+    <input name="automarketid" type="hidden" id="automarketid" />    
+    <input name="client" type="hidden" id="client" />
+     
+    <table id="tabMain" style="width: 990px; border-collapse: collapse; margin:0 auto;">
+	<tr id="titletr">
+		<td colspan="3" style="text-align: center; background-repeat: repeat; vertical-align: middle; padding:0;
+                height: 45px;">
+                <table id="cfi_menu" class="menutab" style=" display:none;">
+			<tr>
+				<td id="mm0" onclick="javascript:window.location.href=&#39;http://sj.cfi.cn&#39;">
+             <!--   <img src="home.png" style="border: 0; padding: 2px 0 3px 0;" />-->
+             中财网
+            </td>
+				<td id="mm1" style="display:none;">
+             
+            </td>
+				<td id="mm2">
+                市场
+            </td>
+				<td id="mm3">
+                ▼
+            </td>
+				<td id="mm4">
+              排行
+            </td>
+				<td id="mm5">
+                ▼
+            </td>
+				<td id="mm6" style="border-right: 1px solid Gray;" onclick="javascript:window.location.href=&#39;phonequotelist.aspx&#39;">
+               自选股
+            </td>
+				<td id="mm7" style=" display:none;">
+             
+            </td>
+			</tr>
+		</table>
+		
+     <div id="divMenuChild">
+    </div>    
+                <table id="tabImg" style="width:100%; border: 0;" cellpadding="0" cellspacing="0">
+			<tr style="border: 0;">
+				<td style="border: 0; text-align:left;">
+                            <a href="http://cfi.cn">
+                                <img src="http://img.cfi.cn/pic/cficback.jpg" border="0" title="中财网" alt="中财网" /></a>
+                        </td>
+				<td style="border: 0; text-align:right;">
+                            <img src="http://img.cfi.cn/drawtext.aspx?type=channel&catid=GS_A0A1A2831A3631_&v=2008" id="imgright" title="中财网股票行情" alt="中财网股票行情" />  
+                        </td>
+			</tr>
+		</table>
+		
+                
+                <table id="tabautocomplete_pc" border="0" cellpadding="5" cellspacing="0" class="border" style="width:100%; height:20px; background-color:#F0F0F0; border-collapse:collapse; margin:0; ">
+			<tr style="border: 0; height: 20px;">
+				<td id="indextd" style="width: 600px; height: 20px; font-size: 9pt; margin:0;padding-left:7px;
+                            text-align: left; border: 0; vertical-align:middle;">
+                            上证指数:0000.00 +0.00% 深成指数: 0000.00 +0.00% 恒生指数:0000.00 +0.00%
+                        </td>
+				<td style="width: 350px; font-size: 9pt; text-align: left; border: 0;">
+                            <div style="float: right; text-align: right; vertical-align: middle; height: 20px;
+                                border: 0;">
+                                <input type="text" id="searchcode" name="searchcode" value="输入代码、简称或拼音" style="margin-bottom: 3px;"
+                                    autocomplete="off" /><img src="/Image/arrowdown.gif" style="cursor: pointer;
+                                        padding-left: 0; padding-bottom: 0px; vertical-align: bottom; width: 23px; height: 24px;"
+                                        onclick="act_showHistoryCode()" title="历史访问股票查询" />
+                                <input type="image" id="submit" src="/Image/go2.gif" style="width: 24px; height: 24px;
+                                     vertical-align: bottom;" title="股票查询" />
+                                    <a href="/stockList.aspx" target="_blank">代码表</a>
+                               
+                            </div>
+                        </td>
+			</tr>
+		</table>
+		
+                <div id="divautocomplete_phone" style="width: 825px; display:none;">
+                <table id="tabautocomplete_phone" style="width:300px; border-collapse: collapse; line-height: 22px; margin:10px 0 0 auto;">
+			<tr>
+				<td id="autophoneLabel1" style="font-size: 10.8pt; vertical-align: middle; width: 40px;">
+                            查询:
+                        </td>
+				<td style="font-size: 10.8pt; vertical-align: middle; width: 80px;">
+                            <input name="searchcode_phone" type="text" id="searchcode_phone" value="代码/拼音" autocomplete="off" />                         
+                        </td>
+				<td style="font-size: 10.8pt; vertical-align: middle; width: 25px;">
+                            <img src="Image/ok.png" id="autophoneImg" style="width: 50px; height: 25px;" onclick="javascript:window.location.href=&#39;quote.aspx?stockcode=&#39;+document.getElementById(&#39;searchcode_phone&#39;).value;" />
+                        </td>
+				<td id="autophoneLabel2" style="font-size: 10.8pt; vertical-align: middle; width: 50px; text-align: right;">
+                            <a href="javascript:void(0);">取消</a>
+                        </td>
+				<td id="autophoneLabel3" style="font-size: 9pt; color: black; vertical-align: middle; text-align: right;
+                            line-height: 13px;">
+                            <div>
+                                <a href="quote.aspx?stockid=887&contenttype=gdtj&client=pc" target="_self">切换到<br />
+                                    电脑版</a></div>                                    
+                        </td>
+			</tr>
+		</table>
+		    
+                </div>
+                    <div id="divAutocomplete">
+                                </div>          
+            </td>
+	</tr>
+	<tr id="trContent_pc">
+		<td id="menutd" class="border" style="width:153px; vertical-align: top; padding:0;">
+            <div id="menu" style="width:150px; position: static; margin-top: 3px; margin-left:0;"><div id='tree' style='width:150px;'><DIV id='node1' class='t1' onclick='k("node1_sub")'><NOBR><SPAN class='fold'>概览</SPAN></NOBR></DIV><DIV id='node1_sub' class='d1'><DIV class='b' id='nodea0'  ><NOBR><a target='_self' href='/600036.html' >行情首页</a></NOBR></DIV><DIV class='b' id='nodea1'  ><NOBR><a target='_self' href='/cwfxzb/887/600036.html' >财务分析指标</a></NOBR></DIV><DIV class='b' id='nodea2'  ><NOBR><a target='_self' href='/qgqp/887/600036.html' >千股千评</a></NOBR></DIV><DIV class='b' id='nodea2'  ><NOBR><a target='_blank' href='http://so.cfi.cn/so.aspx?txquery=600036&w=cfibase' >搜索</a></NOBR></DIV><DIV class='b' id='nodea3'  ><NOBR><a target='_self' href='/yjyg/887/600036.html' >业绩预告</a></NOBR></DIV><DIV class='b' id='nodea4'  ><NOBR><a target='_self' href='/yjkb/887/600036.html' >业绩快报</a></NOBR></DIV><DIV class='b' id='nodea5'  ><NOBR><a target='_self' href='/fxysg/887/600036.html' >申购状况</a></NOBR></DIV></div><DIV id='node2' class='t1' onclick='k("node2_sub")'><NOBR><SPAN class='fold'>版块分析</SPAN></NOBR></DIV><DIV id='node2_sub' class='d1'><DIV class='b' id='nodea6'  ><NOBR><a target='_self' href='/same_hy/887/600036.html' >同行业板块</a></NOBR></DIV><DIV class='b' id='nodea7'  ><NOBR><a target='_self' href='/same_dq/887/600036.html' >同地区板块</a></NOBR></DIV><DIV class='b' id='nodea8'  ><NOBR><a target='_self' href='/same_gn/887/600036.html' >同概念板块</a></NOBR></DIV></div><DIV id='node3' class='t1' onclick='k("node3_sub")'><NOBR><SPAN class='fold'>财报分析</SPAN></NOBR></DIV><DIV id='node3_sub' class='d1'><DIV class='b' id='nodea9'  ><NOBR><a target='_self' href='/ybyl/887/600036.html' >研报一览</a></NOBR></DIV><DIV class='b' id='nodea10'  ><NOBR><a target='_self' href='/zcfzb_x/887/600036.html' >资产负债表</a></NOBR></DIV><DIV class='b' id='nodea11'  ><NOBR><a target='_self' href='/lrfpb_x/887/600036.html' >利润分配表</a></NOBR></DIV><DIV class='b' id='nodea12'  ><NOBR><a target='_self' href='/xjll/887/600036.html' >现金流量表</a></NOBR></DIV><DIV class='b' id='nodea13'  ><NOBR><a target='_self' href='/FJCXSY_HJ/887/600036.html' >非经常性损益合计</a></NOBR></DIV></div><DIV id='node4' class='t1' onclick='k("node4_sub")'><NOBR><SPAN class='fold'>经营情况</SPAN></NOBR></DIV><DIV id='node4_sub' class='d1'><DIV class='b' id='nodea14'  ><NOBR><a target='_self' href='/gsda/887/600036.html' >公司档案</a></NOBR></DIV><DIV class='b' id='nodea15'  ><NOBR><a target='_self' href='/zyfb/887/600036.html' >主营分布</a></NOBR></DIV><DIV class='b' id='nodea16'  ><NOBR><a target='_self' href='/ggyl/887/600036.html' >高管一览</a></NOBR></DIV></div><DIV id='node5' class='t1' onclick='k("node5_sub")'><NOBR><SPAN class='fold'>主力动向</SPAN></NOBR></DIV><DIV id='node5_sub' class='d1'><DIV class='b' id='nodea17'  ><NOBR><a target='_self' href='/zlsj/887/600036.html' >交易异动</a></NOBR></DIV><DIV class='b' id='nodea18'  ><NOBR><a target='_self' href='/dzjy/887/600036.html' >大宗交易</a></NOBR></DIV><DIV class='b' id='nodea19'  ><NOBR><a target='_self' href='/yxsb/887/600036.html' >大宗申报</a></NOBR></DIV><DIV class='b' id='nodea20'  ><NOBR><a target='_self' href='/rzrq/887/600036.html' >融资融券</a></NOBR></DIV></div><DIV id='node6' class='t1' onclick='k("node6_sub")'><NOBR><SPAN class='fold'>股东统计</SPAN></NOBR></DIV><DIV id='node6_sub' class='d1'><DIV class='b' id='nodea21'  ><NOBR><a target='_self' href='/gbjg/887/600036.html' >股本结构</a></NOBR></DIV><DIV class='b' id='nodea22'  ><NOBR><font style='font-weight:bold;'>股东名单</font></NOBR></DIV><DIV class='b' id='nodea23'  ><NOBR><a target='_self' href='/gdhs/887/600036.html' >股东户数</a></NOBR></DIV></div><DIV id='node7' class='t1' onclick='k("node7_sub")'><NOBR><SPAN class='fold'>持仓分析</SPAN></NOBR></DIV><DIV id='node7_sub' class='d1'><DIV class='b' id='nodea24'  ><NOBR><a target='_self' href='/jjcc/887/600036.html' >基金持仓</a></NOBR></DIV><DIV class='b' id='nodea25'  ><NOBR><a target='_self' href='/jjccbd/887/600036.html' >基金持仓变动</a></NOBR></DIV></div><DIV id='node8' class='t1' onclick='k("node8_sub")'><NOBR><SPAN class='fold'>分红扩股</SPAN></NOBR></DIV><DIV id='node8_sub' class='d1'><DIV class='b' id='nodea26'  ><NOBR><a target='_self' href='/fhpx/887/600036.html' >分红派息</a></NOBR></DIV><DIV class='b' id='nodea27'  ><NOBR><a target='_self' href='/pgzf/887/600036.html' >配股增发</a></NOBR></DIV></div><DIV id='node9' class='t1' onclick='k("node9_sub")'><NOBR><SPAN class='fold'>管理层报告</SPAN></NOBR></DIV><DIV id='node9_sub' class='d1'><DIV class='b' id='nodea28'  ><NOBR><a target='_self' href='/jyzj/887/600036.html' >经营总结</a></NOBR></DIV><DIV class='b' id='nodea29'  ><NOBR><a target='_self' href='/tzzk/887/600036.html' >投资状况</a></NOBR></DIV></div><DIV id='node10' class='t1' onclick='k("node10_sub")'><NOBR><SPAN class='fold'>公开信息</SPAN></NOBR></DIV><DIV id='node10_sub' class='d1'><DIV class='b' id='nodea30'  ><NOBR><a target='_self' href='http://gg.cfi.cn/cbgg/887/600036.html' >财报全文</a></NOBR></DIV><DIV class='b' id='nodea31'  ><NOBR><a target='_self' href='http://gg.cfi.cn/ggqw/887/600036.html' >公告全文</a></NOBR></DIV><DIV class='b' id='nodea32'  ><NOBR><a target='_self' href='/zdsj/887/600036.html' >重大事件</a></NOBR></DIV></div><DIV id='node11' class='t1' onclick='k("node11_sub")'><NOBR><SPAN class='fold'>财务分析指标</SPAN></NOBR></DIV><DIV id='node11_sub' class='d1'><DIV class='b' id='nodea33'  ><NOBR><a target='_self' href='/cwzbMgfxzb/887/600036.html' >每股指标</a></NOBR></DIV><DIV class='b' id='nodea34'  ><NOBR><a target='_self' href='/cwzbHlnl/887/600036.html' >盈利能力</a></NOBR></DIV><DIV class='b' id='nodea35'  ><NOBR><a target='_self' href='/cwzbCznl/887/600036.html' >偿债能力</a></NOBR></DIV><DIV class='b' id='nodea36'  ><NOBR><a target='_self' href='/cwzbFznl/887/600036.html' >成长能力</a></NOBR></DIV><DIV class='b' id='nodea37'  ><NOBR><a target='_self' href='/cwzbJynl/887/600036.html' >营运能力</a></NOBR></DIV><DIV class='b' id='nodea38'  ><NOBR><a target='_self' href='/cwzbXjllfx/887/600036.html' >现金状况</a></NOBR></DIV><DIV class='b' id='nodea39'  ><NOBR><a target='_self' href='/cwzbFhnl/887/600036.html' >分红能力</a></NOBR></DIV><DIV class='b' id='nodea40'  ><NOBR><a target='_self' href='/cwzbZbjg/887/600036.html' >资本结构</a></NOBR></DIV><DIV class='b' id='nodea41'  ><NOBR><a target='_self' href='/cwzbLrgc/887/600036.html' >收益质量</a></NOBR></DIV><DIV class='b' id='nodea42'  ><NOBR><a target='_self' href='/cwzbDbfx/887/600036.html' >杜邦分析</a></NOBR></DIV></div></div></div>
+        </td>
+		<td id="blanktd" style="width:10px; border:none;"></td>
+		<td id="content" style="width: 825px; vertical-align: top; padding:0;"> <div id='act_quote' runat='server'></div>
+        <div><img title='招商银行(600036)主要股东图' alt='招商银行(600036)主要股东图' src='http://quoteimg.cfi.cn/ReadImage.aspx?dmType=gpdm&class=BaseGdtj&stockcode=600036&dateto=2006-09-30&islastest=false'/><script language='javascript' type='text/javascript'>function fun(){ var sel=document.getElementById('sel'); window.location='/quote.aspx?stockid=887&contenttype=gdtj&jzrq='+sel.options[sel.selectedIndex].value;}</script><table id='tabh' style='width:100%; border-collapse:collapse ;margin:0;padding:0;'> <tr style='background-color:rgb(218,218,218);height:50px;'><td colspan='5' style='text-align:center;vertical-align:middle;'><b>招商银行(600036)主要股东</b>&nbsp;&nbsp;&nbsp;&nbsp;年份：<select id='sel' onchange='fun()' style='width:100px;'><option value='2017-09-30'>2017-09-30</option><option value='2017-06-30'>2017-06-30</option><option value='2017-03-31'>2017-03-31</option><option value='2016-12-31'>2016-12-31</option><option value='2016-09-30'>2016-09-30</option><option value='2016-06-30'>2016-06-30</option><option value='2016-03-31'>2016-03-31</option><option value='2015-12-31'>2015-12-31</option><option value='2015-09-30'>2015-09-30</option><option value='2015-06-30'>2015-06-30</option><option value='2015-03-31'>2015-03-31</option><option value='2014-12-31'>2014-12-31</option><option value='2014-09-30'>2014-09-30</option><option value='2014-06-30'>2014-06-30</option><option value='2014-03-31'>2014-03-31</option><option value='2013-12-31'>2013-12-31</option><option value='2013-09-30'>2013-09-30</option><option value='2013-09-05'>2013-09-05</option><option value='2013-06-30'>2013-06-30</option><option value='2012-12-31'>2012-12-31</option><option value='2012-06-30'>2012-06-30</option><option value='2011-12-31'>2011-12-31</option><option value='2011-06-30'>2011-06-30</option><option value='2010-12-31'>2010-12-31</option><option value='2010-06-30'>2010-06-30</option><option value='2010-03-15'>2010-03-15</option><option value='2009-12-31'>2009-12-31</option><option value='2009-09-30'>2009-09-30</option><option value='2009-06-30'>2009-06-30</option><option value='2009-03-31'>2009-03-31</option><option value='2008-12-31'>2008-12-31</option><option value='2008-09-30'>2008-09-30</option><option value='2008-06-30'>2008-06-30</option><option value='2008-03-31'>2008-03-31</option><option value='2007-12-31'>2007-12-31</option><option value='2007-06-30'>2007-06-30</option><option value='2006-12-31'>2006-12-31</option><option selected='selected' value='2006-09-30'>2006-09-30</option><option value='2006-06-30'>2006-06-30</option><option value='2006-03-31'>2006-03-31</option><option value='2005-12-31'>2005-12-31</option><option value='2005-09-30'>2005-09-30</option><option value='2005-06-30'>2005-06-30</option><option value='2005-03-31'>2005-03-31</option><option value='2004-12-31'>2004-12-31</option><option value='2004-09-30'>2004-09-30</option><option value='2004-06-30'>2004-06-30</option><option value='2003-12-31'>2003-12-31</option><option value='2003-06-30'>2003-06-30</option><option value='2002-12-31'>2002-12-31</option><option value='2002-09-30'>2002-09-30</option><option value='2002-06-30'>2002-06-30</option><option value='2002-04-09'>2002-04-09</option><option value='2002-03-31'>2002-03-31</option><option value='2001-12-31'>2001-12-31</option></select></td></tr><tr style='background-color:rgb(234,234,234);'><td style='font-weight:bold;'>截止日期</td><td style='font-weight:bold;'>股东名称</td><td style='font-weight:bold;'>持股数(股)</td><td style='font-weight:bold;'>持股比例(%)</td><td style='font-weight:bold;'>股本性质</td></tr><tr><td><a target=_blank href=/BigImage.aspx?stockid=887&date=2006-09-30>2006-09-30</a></td><td>香港中央结算(代理人)有限公司</td><td>2343093500</td><td>16.178722</td><td>H股</td></tr><tr style='background-color:rgb(234,234,234);'><td><a target=_blank href=/BigImage.aspx?stockid=887&date=2006-09-30>2006-09-30</a></td><td>招商局轮船股份有限公司</td><td>1779162511</td><td>12.284860</td><td>流通A股</td></tr><tr><td><a target=_blank href=/BigImage.aspx?stockid=887&date=2006-09-30>2006-09-30</a></td><td>中国远洋运输(集团)总公司</td><td>947548668</td><td>6.542687</td><td>流通A股</td></tr><tr style='background-color:rgb(234,234,234);'><td><a target=_blank href=/BigImage.aspx?stockid=887&date=2006-09-30>2006-09-30</a></td><td>广州海运(集团)有限公司</td><td>565359590</td><td>3.903726</td><td>流通A股</td></tr><tr><td><a target=_blank href=/BigImage.aspx?stockid=887&date=2006-09-30>2006-09-30</a></td><td>深圳市晏清投资发展有限公司</td><td>433484335</td><td>2.993147</td><td>流通A股</td></tr><tr style='background-color:rgb(234,234,234);'><td><a target=_blank href=/BigImage.aspx?stockid=887&date=2006-09-30>2006-09-30</a></td><td>深圳市楚源投资发展有限公司</td><td>378715868</td><td>2.614978</td><td>流通A股</td></tr><tr><td><a target=_blank href=/BigImage.aspx?stockid=887&date=2006-09-30>2006-09-30</a></td><td>中国交通建设集团有限公司</td><td>261024805</td><td>1.802339</td><td>流通A股</td></tr><tr style='background-color:rgb(234,234,234);'><td><a target=_blank href=/BigImage.aspx?stockid=887&date=2006-09-30>2006-09-30</a></td><td>上海汽车工业有限公司</td><td>250564996</td><td>1.730115</td><td>流通A股</td></tr><tr><td><a target=_blank href=/BigImage.aspx?stockid=887&date=2006-09-30>2006-09-30</a></td><td>中海石油投资控股有限公司</td><td>205305070</td><td>1.417602</td><td>流通A股</td></tr><tr style='background-color:rgb(234,234,234);'><td><a target=_blank href=/BigImage.aspx?stockid=887&date=2006-09-30>2006-09-30</a></td><td>中国海运(集团)总公司</td><td>175950157</td><td>1.214910</td><td>流通A股</td></tr><tr><td><a target=_blank href=/BigImage.aspx?stockid=887&date=2006-09-30>2006-09-30</a></td><td>山东省国有资产投资控股有限公司</td><td>175950157</td><td>1.214910</td><td>流通A股</td></tr><tr style='background-color:rgb(234,234,234);'><td><a target=_blank href=/BigImage.aspx?stockid=887&date=2006-09-30>2006-09-30</a></td><td>广东省公路管理局</td><td>175950157</td><td>1.214910</td><td>流通A股</td></tr><tr><td><a target=_blank href=/BigImage.aspx?stockid=887&date=2006-09-30>2006-09-30</a></td><td>秦皇岛港务集团有限公司                                                                                                                                                                                  </td><td>175950157</td><td>1.214910</td><td>流通A股                                           </td></tr><tr style='background-color:rgb(234,234,234);'><td><a target=_blank href=/BigImage.aspx?stockid=887&date=2006-09-30>2006-09-30</a></td><td>中国人寿保险股份有限公司-分红-个人分红-005L-FH002沪</td><td>88357649</td><td>0.610097</td><td>流通A股</td></tr><tr><td><a target=_blank href=/BigImage.aspx?stockid=887&date=2006-09-30>2006-09-30</a></td><td>银华优质增长股票型证券投资基金</td><td>67922658</td><td>0.468996</td><td>流通A股</td></tr><tr style='background-color:rgb(234,234,234);'><td><a target=_blank href=/BigImage.aspx?stockid=887&date=2006-09-30>2006-09-30</a></td><td>MORGAN STANLEY & CO.INTERNATIONAL LIMITED</td><td>67062526</td><td>0.463057</td><td>流通A股</td></tr><tr><td><a target=_blank href=/BigImage.aspx?stockid=887&date=2006-09-30>2006-09-30</a></td><td>香港上海汇丰银行有限公司</td><td>67026122</td><td>0.462806</td><td>流通A股</td></tr><tr style='background-color:rgb(234,234,234);'><td><a target=_blank href=/BigImage.aspx?stockid=887&date=2006-09-30>2006-09-30</a></td><td>GOVERNMENT OF SINGAPORE INVESTMENT CORPORATION PTE LTD</td><td>66257450</td><td>0.457498</td><td>流通A股</td></tr><tr><td><a target=_blank href=/BigImage.aspx?stockid=887&date=2006-09-30>2006-09-30</a></td><td>UBS LIMITED</td><td>61684855</td><td>0.425925</td><td>流通A股</td></tr><tr style='background-color:rgb(234,234,234);'><td><a target=_blank href=/BigImage.aspx?stockid=887&date=2006-09-30>2006-09-30</a></td><td>嘉实主题精选混合型证券投资基金</td><td>58267770</td><td>0.402331</td><td>流通A股</td></tr><tr><td><a target=_blank href=/BigImage.aspx?stockid=887&date=2006-09-30>2006-09-30</a></td><td>CITIGROUP GLOBAL MARKETS LIMITED</td><td>56313677</td><td>0.388838</td><td>流通A股</td></tr><tr style='background-color:rgb(234,234,234);'><td><a target=_blank href=/BigImage.aspx?stockid=887&date=2006-09-30>2006-09-30</a></td><td>中国平安人寿保险股份有限公司-传统-普通保险产品</td><td>55338811</td><td>0.382106</td><td>流通A股</td></tr><tr><td colspan='5' style='text-align:right;'></td></tr></table><table id='tabh' style='width:100%; border-collapse:collapse;margin:0;padding:0;'><tr style='background-color:rgb(218,218,218);height:50px;'><td colspan='5' style='text-align:center;vertical-align:middle;'><b>招商银行(600036)流通股股东</b></td></tr><tr style='background-color:rgb(234,234,234);'><td style='font-weight:bold;'>截止日期</td><td style='font-weight:bold;'>股东名称</td><td style='font-weight:bold;'>持股数(股)</td><td style='font-weight:bold;'>持股比例(%)</td><td style='font-weight:bold;'>股本性质</td></tr><tr><td><a target=_blank href=/BigImage.aspx?stockid=887&date=2006-09-30>2006-09-30</a></td><td>香港中央结算(代理人)有限公司</td><td>2343093500</td><td>--</td><td>H股</td></tr><tr style='background-color:rgb(234,234,234);'><td><a target=_blank href=/BigImage.aspx?stockid=887&date=2006-09-30>2006-09-30</a></td><td>中国人寿保险股份有限公司-分红-个人分红-005L-FH002沪</td><td>88357649</td><td>--</td><td>流通A股</td></tr><tr><td><a target=_blank href=/BigImage.aspx?stockid=887&date=2006-09-30>2006-09-30</a></td><td>银华优质增长股票型证券投资基金</td><td>67922658</td><td>--</td><td>流通A股</td></tr><tr style='background-color:rgb(234,234,234);'><td><a target=_blank href=/BigImage.aspx?stockid=887&date=2006-09-30>2006-09-30</a></td><td>MORGAN STANLEY & CO.INTERNATIONAL LIMITED</td><td>67062526</td><td>--</td><td>流通A股</td></tr><tr><td><a target=_blank href=/BigImage.aspx?stockid=887&date=2006-09-30>2006-09-30</a></td><td>香港上海汇丰银行有限公司</td><td>67026122</td><td>--</td><td>流通A股</td></tr><tr style='background-color:rgb(234,234,234);'><td><a target=_blank href=/BigImage.aspx?stockid=887&date=2006-09-30>2006-09-30</a></td><td>GOVERNMENT OF SINGAPORE INVESTMENT CORPORATION PTE LTD</td><td>66257450</td><td>--</td><td>流通A股</td></tr><tr><td><a target=_blank href=/BigImage.aspx?stockid=887&date=2006-09-30>2006-09-30</a></td><td>UBS LIMITED</td><td>61684855</td><td>--</td><td>流通A股</td></tr><tr style='background-color:rgb(234,234,234);'><td><a target=_blank href=/BigImage.aspx?stockid=887&date=2006-09-30>2006-09-30</a></td><td>嘉实主题精选混合型证券投资基金</td><td>58267770</td><td>--</td><td>流通A股</td></tr><tr><td><a target=_blank href=/BigImage.aspx?stockid=887&date=2006-09-30>2006-09-30</a></td><td>CITIGROUP GLOBAL MARKETS LIMITED</td><td>56313677</td><td>--</td><td>流通A股</td></tr><tr style='background-color:rgb(234,234,234);'><td><a target=_blank href=/BigImage.aspx?stockid=887&date=2006-09-30>2006-09-30</a></td><td>中国平安人寿保险股份有限公司-传统-普通保险产品</td><td>55338811</td><td>--</td><td>流通A股</td></tr></table></div></td>
+	</tr>
+	<tr>
+		<td id="gotofirst" colspan="3" style="text-align: right;"><h4 style='font-weight:normal;'><a href='/quote_600036.html'>转至招商银行（600036）行情首页</a><h4></td>
+	</tr>
+	<tr>
+		<td id="tj" colspan="3">
+            <div id="div1" style="margin-top:20px; margin-left:auto; margin-right:auto; text-align:right;">当前页面生成股票行情总用时：<label style='color:red;'>46.8756</label>  毫秒(From 生成),查询耗时:0</div>
+            <div id="div2" style="text-align: right"><!--<font style='font-size:9.8pt'>页面生成用时:<font style='color:red'>46.8756</font>毫秒</font>--></div>
+            <div id="div3" style="text-align: right">
+            </div>
+        </td>
+	</tr>
+</table>
+
+    
+    <table id="tabfootlink" border="0" cellpadding="3" cellspacing="0" width="800px;" style="margin-top: 50px; margin-left:auto; margin-right:auto;">
+	<tr>
+		<td width="100%" align="middle" style="font-size: 9pt; text-align: center;">
+                中国财经信息网为您服务:&nbsp<a href="http://cfi.cn/pic/items1.htm" target="_blank">免责条款</a>
+                | <a href="http://cfi.cn/pic/hylg.htm" target="_blank">欢迎来稿</a> | <a href="http://cfi.cn/pic/cooperation.htm"
+                    target="_blank">合 作</a> | <a href="http://cfi.cn/pic/cfiad.htm" title="最具吸引力的网站，迅速让你的网站与产品人尽皆知"
+                        target="_blank">广告服务</a> | <a href="http://cfi.cn/pic/policy-cn.htm" target="_blank">
+                            隐私条款</a> | <a href="http://cfi.cn/pic/conus.htm" target="_blank">联系我们</a>&nbsp;|
+                <a href="http://cfi.cn/pic/cfijob.htm" target="_blank">工作机会</a>
+            </td>
+	</tr>
+</table>
+
+    <input name="divshowquote" type="hidden" id="divshowquote" value="true" />
+    <div id="pagefoot" style="text-align: center; font-size: 9pt; width: 800px;
+        margin: 30px auto; margin-bottom:10px;">
+        中财网版权所有(C) HTTP://WWW.CFi.CN
+        </div>
+        <div id="divfoot2" style="text-align:center; font-size:9pt; width:800px; margin:0 auto; margin-bottom:30; color:Gray;">
+       中财网免费提供股票、基金、债券、外汇、理财等行情数据以及其他资料，仅供用户获取信息。
+        </div>
+        <input type="hidden" id="showcomplete" value="True" />
+    </form>
+    <div id="divjs">
+
+        <script type="text/javascript">   
+        function k(vd)
+        {
+          var ob=document.getElementById(vd);
+          if(ob.style.display=="block")
+          {
+             ob.style.display="none";
+             var ob2=document.getElementById(vd.substring(0,vd.length-4));
+             ob2.style.backgroundImage = "url(/Image/cfidata_jia.gif)";
+          }
+          else
+          {
+            ob.style.display="block";
+            var ob2=document.getElementById(vd.substring(0,vd.length-4));
+            ob2.style.backgroundImage = "url(/Image/cfidata_jian.gif)";           
+          }           
+        } 
+        </script>
+
+       
+       <script src="/Scripts/phonequote_menu.js" type="text/javascript"></script> 
+       <script charset='gb2312' src='/Scripts/autoComplete.js' type='text/javascript'></script>         
+    
+        <script charset="UTF-8" language="javascript" type="text/javascript" id="tablejs" src=""> 
+        
+        </script>
+         
+        
+        <div style="display:none;">
+           
+           <script>
+               //判断函数有没有找到
+               function fnExist(fnName) {
+                   try {
+                       return typeof (eval(fnName)) == "function";
+                   }
+                   catch (e) {
+                       return false;
+                   }
+               }
+
+               if (fnExist("act_textchange")) {
+                   document.getElementById("searchcode").onpropertychange = function () { act_textchange(); };
+                   document.getElementById("searchcode").oninput = function () { act_textchange(); };
+               }
+               if (fnExist("act_getText")) {
+                   document.getElementById("searchcode").onkeyup = function () { act_getText(this); };
+               }
+           </script>
+        </div>
+      
+    </div>
+    
+    <div id="index_content" style="display:none;">
+        <script src="/Scripts/quoteiframe.js" type="text/javascript"></script>
+   
+<script language="javascript" type="text/javascript" src="/indexpage.aspx"></script>
+</div>
+<script language="javascript" type="text/javascript"> 
+if(document.getElementById("indextd") != null) {document.getElementById("indextd").innerHTML =document.getElementById("index_content").innerHTML; } 
+
+//首页财务指标选项卡切换
+function autoChangeBackColor(num,curid,strtab,strdiv)
+{
+    for(var i=1;i<=num;i++)
+    {
+        if(i==curid)
+        {
+            document.getElementById(strtab+i).className='labela';
+            document.getElementById(strdiv+i).style.display='block';
+        }
+        else
+        {
+            document.getElementById(strtab+i).className='labelb';
+            document.getElementById(strdiv+i).style.display='none';
+        }
+    }
+}
+window.onload = function () { CallChart('gdtj', '600036', '招商银行'); }
+</script> 
+
+</body>
+</html>

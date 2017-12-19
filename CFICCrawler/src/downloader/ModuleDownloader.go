@@ -1,6 +1,7 @@
 package downloader
 
 import (
+	"dataminer"
 	"fmt"
 	"htmlparser"
 	"httpcontroller"
@@ -19,7 +20,7 @@ const (
 )
 
 type DownloadInfo struct {
-	Foler     string
+	Folder    string
 	Proxy     *httpcontroller.Proxy
 	Overwrite bool
 
@@ -61,7 +62,7 @@ func (d *DownloadInfo) downloadStocksHomePage(ids []string, overwrite bool) {
 		os.Exit(1)
 	}
 
-	mainTask := routingpool.NewCaller("Main-download-task", func(id int) {
+	mainTask := routingpool.NewCaller("Main Downloader", func(id int) {
 		for _, stockinfo := range doc.GetStocks(ids) {
 
 			// To request home page.
@@ -69,7 +70,7 @@ func (d *DownloadInfo) downloadStocksHomePage(ids []string, overwrite bool) {
 			homepageCaller := func(id int) {
 				logger.INFO(fmt.Sprintf("[Thread-%d] Downloading link:%v name:%v, number:%v", id, tempStockinfo.Link, tempStockinfo.Name, tempStockinfo.Number))
 
-				file := d.Foler + tempStockinfo.Number + "/" + tempStockinfo.Link
+				file := d.Folder + tempStockinfo.Number + "/" + tempStockinfo.Link
 				stock_request := httpcontroller.Request{
 					Url:       QUOTE_HOMEPAGE_URL + tempStockinfo.Link,
 					File:      file,
@@ -83,6 +84,7 @@ func (d *DownloadInfo) downloadStocksHomePage(ids []string, overwrite bool) {
 
 				logger.INFO(fmt.Sprintf("[Thread-%d] Downloaded homepage link:%v name:%v, number:%v", id, tempStockinfo.Link, tempStockinfo.Name, tempStockinfo.Number))
 
+				syncChan := make(chan bool)
 				// To request modules for each stock.
 				moduleCaller := func(id int) {
 					doc, err := htmlparser.ParseFromFile(file)
@@ -110,26 +112,40 @@ func (d *DownloadInfo) downloadStocksHomePage(ids []string, overwrite bool) {
 							values := strings.Split(url, "/")
 							var moduleName string
 							if len(values) == 4 {
-								moduleName = values[1] // example data "/tzzk/19770/601015.html"
+								moduleName = values[1] // eg. "/tzzk/19770/601015.html"
 							} else {
-								moduleName = values[2] // example data "http://gg.cfi.cn/cbgg/19770/601015.html"
+								moduleName = values[2] // eg. "http://gg.cfi.cn/cbgg/19770/601015.html"
 							}
 
-							file := d.Foler + tempStockinfo.Number + "/modules/" + moduleName + ".html"
+							file := d.Folder + tempStockinfo.Number + "/modules/" + moduleName + ".html"
 							request := httpcontroller.Request{
 								Proxy:     d.Proxy,
 								Url:       QUOTE_HOMEPAGE_URL + url,
 								File:      file,
 								OverWrite: overwrite}
-							request.Get()
+							_, err := request.Get()
+							if err != nil {
+								logger.ERROR(fmt.Sprintf("Request to url failure, %s", err))
+								continue
+							}
 						}
 					}
+
+					syncChan <- true
 				}
 
-				d.RoutingPool.PutTask(routingpool.NewCaller("Download-Module", moduleCaller))
+				// Start the Miner to collect/analyze data
+				miner := dataminer.Target{Code: tempStockinfo.Number,
+					Folder:      d.Folder,
+					SyncChan:    syncChan,
+					RoutingPool: d.RoutingPool,
+					Proxy:       d.Proxy}
+				miner.Start()
+
+				d.RoutingPool.PutTask(routingpool.NewCaller("Modules Downloader", moduleCaller))
 			}
 
-			d.RoutingPool.PutTask(routingpool.NewCaller("Download-Homepage", homepageCaller))
+			d.RoutingPool.PutTask(routingpool.NewCaller("Stock Homepage Downloader", homepageCaller))
 		}
 	})
 
