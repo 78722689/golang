@@ -14,15 +14,13 @@ var(
 	jjcc_name = "JJCC"
 	)
 type JJCC struct {
-	stockID string
-	stockNumber string
+
 }
 
 func (jjcc *JJCC) Download(stockNumber string, moduleURL string) {
 	logger.Debugf("JJCC Downloader to download url=%s, file=%s", stockNumber, moduleURL)
 
-	jjcc.stockID = strings.Split(moduleURL, "/")[2]
-	jjcc.stockNumber = stockNumber
+	stockID := strings.Split(moduleURL, "/")[2]
 
 	// 1. Get the start time and end time so that download the JJCC data during the start-end time.
 	if startTime, endTime, err:= ParseDuration(viper.GetString("module.jjcc.durations")); err != nil {
@@ -39,27 +37,24 @@ func (jjcc *JJCC) Download(stockNumber string, moduleURL string) {
 			return
 		}
 
-		// 3. Find out JJCC records date during the start-end time
+
+
+		// 3. Find out all JJCC records date during the start-end time
 		for _, recordDate := range jjcc.getAllRecordsDate(fileToWrite) {
-			d, _ := time.Parse("2006-01-02", recordDate)
-			if startTime.Before(d) && endTime.After(d) {
+			//d, _ := time.Parse("2006-01-02", recordDate)
+			if startTime.Before(recordDate) && endTime.After(recordDate) {
 				logger.Debugf("============================Found %s", recordDate)
 				// 4. Download the page for this record JJCC
-				jjcc.download(recordDate)
+				StartDownload(
+					viper.GetString("global.quote_homepage") + fmt.Sprintf(viper.GetString("module.jjcc.url_path"), stockID, recordDate.Format("2006-01-02")),
+						viper.GetString("global.download_folder") + stockNumber + "/modules/" + jjcc.ModuleName() +  "/" +recordDate.Format("2006-01-02") + ".html",
+					viper.GetBool("module.jjcc.overwrite"))
 			}
 		}
 	}
 }
 
-func (jjcc *JJCC) download(recordDate string) {
-	url := viper.GetString("global.quote_homepage") + fmt.Sprintf(viper.GetString("module.jjcc.url_path"), jjcc.stockID, recordDate)
-	file := viper.GetString("global.download_folder") + jjcc.stockNumber + "/modules/" + jjcc.ModuleName() +  "/" +recordDate + ".html"
-	overwrite :=  viper.GetBool("module.jjcc.overwrite")
-	StartDownload(url, file, overwrite)
-	//logger.Infof("xxxxxxxxxxxxxxxxxxx%s", url)
-}
-
-func (jjcc *JJCC) getAllRecordsDate(file string) []string {
+func (jjcc *JJCC) getAllRecordsDate(file string) []time.Time {
 	doc, err := htmlparser.ParseFromFile(file)
 	if err != nil {
 		logger.Errorf("Parse file failure, %s", err)

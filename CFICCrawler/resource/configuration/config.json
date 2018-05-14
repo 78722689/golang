@@ -10,7 +10,7 @@
     "module" : {
         "gdtj" : {"overwrite" : false}, 
         "jjcc" : {
-            "overwrite" : false,
+            "overwrite" : true,
             "durations" : "2017-08-08~2018-08-30",
             "url_path" : "/quote.aspx?stockid=%s&contenttype=jjcc&jzrq=%s"
             }

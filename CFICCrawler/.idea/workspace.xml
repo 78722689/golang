@@ -14,8 +14,8 @@
       <file leaf-file-name="main.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="139">
-              <caret line="65" column="0" lean-forward="false" selection-start-line="65" selection-start-column="0" selection-end-line="65" selection-end-column="0" />
+            <state relative-caret-position="125">
+              <caret line="66" column="76" lean-forward="false" selection-start-line="66" selection-start-column="76" selection-end-line="66" selection-end-column="76" />
               <folding>
                 <element signature="e#14#111#0" expanded="true" />
               </folding>
@@ -26,7 +26,7 @@
       <file leaf-file-name="Start.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/crawler/Start.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="230">
+            <state relative-caret-position="342">
               <caret line="22" column="26" lean-forward="false" selection-start-line="22" selection-start-column="26" selection-end-line="22" selection-end-column="26" />
               <folding>
                 <element signature="e#17#95#0" expanded="true" />
@@ -38,7 +38,7 @@
       <file leaf-file-name="Downloader.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/crawler/dataminer/Downloader.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="268">
+            <state relative-caret-position="1425">
               <caret line="84" column="42" lean-forward="false" selection-start-line="84" selection-start-column="42" selection-end-line="84" selection-end-column="42" />
               <folding>
                 <element signature="e#19#162#0" expanded="true" />
@@ -50,8 +50,8 @@
       <file leaf-file-name="definition.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/crawler/dataminer/downloader/definition.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="190">
-              <caret line="19" column="29" lean-forward="false" selection-start-line="19" selection-start-column="29" selection-end-line="19" selection-end-column="29" />
+            <state relative-caret-position="171">
+              <caret line="21" column="23" lean-forward="false" selection-start-line="21" selection-start-column="23" selection-end-line="21" selection-end-column="23" />
               <folding>
                 <element signature="e#20#74#0" expanded="true" />
               </folding>
@@ -59,11 +59,21 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="httpget.go" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/httpcontroller/httpget.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="189">
+              <caret line="74" column="38" lean-forward="false" selection-start-line="74" selection-start-column="38" selection-end-line="74" selection-end-column="41" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="jjcc_downloader.go" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/crawler/dataminer/downloader/jjcc_downloader.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="152">
-              <caret line="53" column="44" lean-forward="false" selection-start-line="53" selection-start-column="44" selection-end-line="53" selection-end-column="44" />
+            <state relative-caret-position="236">
+              <caret line="42" column="35" lean-forward="false" selection-start-line="42" selection-start-column="35" selection-end-line="42" selection-end-column="71" />
               <folding>
                 <element signature="e#20#107#0" expanded="true" />
               </folding>
@@ -74,31 +84,11 @@
       <file leaf-file-name="jjccparser.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/htmlparser/jjccparser.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="133">
-              <caret line="61" column="18" lean-forward="false" selection-start-line="61" selection-start-column="18" selection-end-line="61" selection-end-column="18" />
+            <state relative-caret-position="75">
+              <caret line="72" column="40" lean-forward="false" selection-start-line="72" selection-start-column="21" selection-end-line="72" selection-end-column="40" />
               <folding>
-                <element signature="e#20#77#0" expanded="true" />
+                <element signature="e#20#85#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="GDTJParser.go" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/htmlparser/GDTJParser.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="189">
-              <caret line="97" column="1" lean-forward="false" selection-start-line="43" selection-start-column="0" selection-end-line="97" selection-end-column="1" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="HTMLParser.go" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/htmlparser/HTMLParser.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="162">
-              <caret line="259" column="15" lean-forward="false" selection-start-line="259" selection-start-column="15" selection-end-line="259" selection-end-column="16" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -133,6 +123,7 @@
       <find>get</find>
       <find>init(</find>
       <find>bool</find>
+      <find>option</find>
     </findStrings>
   </component>
   <component name="GOROOT" path="C:\Go" />
@@ -429,7 +420,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32894737" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3078056" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37997055" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32894737" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -499,13 +490,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/CFICCrawler/src/htmlparser/HTDHandler.go" />
-    <entry file="file://$PROJECT_DIR$/CFICCrawler/resource/全国社保基金一零四组合/601700.csv" />
-    <entry file="file://$PROJECT_DIR$/CFICCrawler/src/modulehandler/gdtj.go" />
-    <entry file="file://$PROJECT_DIR$/CFICCrawler/src/modulehandler/htd.go" />
-    <entry file="file://$PROJECT_DIR$/CFICCrawler/src/modulehandler/fhpx.go" />
-    <entry file="file://$PROJECT_DIR$/CFICCrawler/src/httpcontroller/httpget.go" />
-    <entry file="file://$PROJECT_DIR$/CFICCrawler/src/htmlparser/FHPXHandler.go" />
     <entry file="file://C:/go/src/sync/waitgroup.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="355">
@@ -564,7 +548,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="37">
           <caret line="2" column="8" lean-forward="false" selection-start-line="2" selection-start-column="8" selection-end-line="2" selection-end-column="8" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -572,7 +555,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="57">
           <caret line="3" column="4" lean-forward="false" selection-start-line="3" selection-start-column="4" selection-end-line="3" selection-end-column="4" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -580,7 +562,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-494">
           <caret line="19" column="99" lean-forward="true" selection-start-line="19" selection-start-column="99" selection-end-line="19" selection-end-column="99" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -589,7 +570,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-152">
           <caret line="164" column="20" lean-forward="false" selection-start-line="164" selection-start-column="7" selection-end-line="164" selection-end-column="20" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -597,23 +577,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="76">
           <caret line="4" column="30" lean-forward="false" selection-start-line="4" selection-start-column="30" selection-end-line="4" selection-end-column="30" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/utility/configuration.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="15" lean-forward="false" selection-start-line="0" selection-start-column="15" selection-end-line="0" selection-end-column="15" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/utility/configuration.go" />
     <entry file="file://$PROJECT_DIR$/src/htmlparser/HTDParser.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="114">
           <caret line="6" column="10" lean-forward="false" selection-start-line="6" selection-start-column="10" selection-end-line="6" selection-end-column="10" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -621,17 +592,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="277">
           <caret line="45" column="70" lean-forward="true" selection-start-line="45" selection-start-column="70" selection-end-line="45" selection-end-column="70" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="139">
-          <caret line="65" column="0" lean-forward="false" selection-start-line="65" selection-start-column="0" selection-end-line="65" selection-end-column="0" />
-          <folding>
-            <element signature="e#14#111#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -639,7 +599,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="38">
           <caret line="2" column="8" lean-forward="false" selection-start-line="2" selection-start-column="8" selection-end-line="2" selection-end-column="8" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -655,9 +614,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="192">
           <caret line="83" column="15" lean-forward="false" selection-start-line="83" selection-start-column="15" selection-end-line="83" selection-end-column="15" />
-          <folding>
-            <element signature="e#538#1019#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -665,15 +621,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="177">
           <caret line="11" column="23" lean-forward="false" selection-start-line="11" selection-start-column="23" selection-end-line="11" selection-end-column="23" />
-          <folding>
-            <element signature="e#17#60#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/crawler/Start.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="230">
+        <state relative-caret-position="342">
           <caret line="22" column="26" lean-forward="false" selection-start-line="22" selection-start-column="26" selection-end-line="22" selection-end-column="26" />
           <folding>
             <element signature="e#17#95#0" expanded="true" />
@@ -685,17 +638,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="247">
           <caret line="22" column="6" lean-forward="true" selection-start-line="22" selection-start-column="6" selection-end-line="22" selection-end-column="6" />
-          <folding>
-            <element signature="e#20#56#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/httpcontroller/httpget.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="29">
-          <caret line="23" column="5" lean-forward="false" selection-start-line="23" selection-start-column="5" selection-end-line="23" selection-end-column="5" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -703,13 +645,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-488">
           <caret line="60" column="30" lean-forward="false" selection-start-line="60" selection-start-column="20" selection-end-line="60" selection-end-column="30" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/htmlparser/HTMLParser.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
+        <state relative-caret-position="4769">
           <caret line="259" column="15" lean-forward="false" selection-start-line="259" selection-start-column="15" selection-end-line="259" selection-end-column="16" />
           <folding />
         </state>
@@ -719,7 +660,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-3891">
           <caret line="290" column="16" lean-forward="true" selection-start-line="290" selection-start-column="16" selection-end-line="290" selection-end-column="16" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -733,25 +673,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/htmlparser/GDTJParser.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
+        <state relative-caret-position="1748">
           <caret line="97" column="1" lean-forward="false" selection-start-line="43" selection-start-column="0" selection-end-line="97" selection-end-column="1" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/htmlparser/jjccparser.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="61" column="18" lean-forward="false" selection-start-line="61" selection-start-column="18" selection-end-line="61" selection-end-column="18" />
-          <folding>
-            <element signature="e#20#77#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/crawler/dataminer/Downloader.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="268">
+        <state relative-caret-position="1425">
           <caret line="84" column="42" lean-forward="false" selection-start-line="84" selection-start-column="42" selection-end-line="84" selection-end-column="42" />
           <folding>
             <element signature="e#19#162#0" expanded="true" />
@@ -759,20 +689,104 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/resource/download/600036/modules/JJCC/2017-08-31.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="114">
+          <caret line="6" column="0" lean-forward="true" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resource/download/600036/modules/JJCC/2017-09-17.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="76">
+          <caret line="4" column="40" lean-forward="false" selection-start-line="4" selection-start-column="40" selection-end-line="4" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resource/download/600036/modules/JJCC/2017-09-11.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="95">
+          <caret line="5" column="14" lean-forward="true" selection-start-line="5" selection-start-column="14" selection-end-line="5" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="125">
+          <caret line="66" column="76" lean-forward="false" selection-start-line="66" selection-start-column="76" selection-end-line="66" selection-end-column="76" />
+          <folding>
+            <element signature="e#14#111#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/crawler/dataminer/downloader/definition.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="19" column="29" lean-forward="false" selection-start-line="19" selection-start-column="29" selection-end-line="19" selection-end-column="29" />
+        <state relative-caret-position="171">
+          <caret line="21" column="23" lean-forward="false" selection-start-line="21" selection-start-column="23" selection-end-line="21" selection-end-column="23" />
           <folding>
             <element signature="e#20#74#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/httpcontroller/httpget.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="189">
+          <caret line="74" column="38" lean-forward="false" selection-start-line="74" selection-start-column="38" selection-end-line="74" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/go/src/time/format.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-10367">
+          <caret line="479" column="38" lean-forward="false" selection-start-line="477" selection-start-column="35" selection-end-line="479" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resource/download/600036/modules/JJCC/2018-03-15.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="124">
+          <caret line="156" column="732" lean-forward="false" selection-start-line="156" selection-start-column="726" selection-end-line="156" selection-end-column="732" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resource/download/600036/modules/JJCC/2017-12-31.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-570">
+          <caret line="9" column="4" lean-forward="true" selection-start-line="9" selection-start-column="4" selection-end-line="9" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resource/download/600036/modules/JJCC/2018-04-20.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1311">
+          <caret line="9" column="4" lean-forward="true" selection-start-line="9" selection-start-column="4" selection-end-line="9" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/htmlparser/jjccparser.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="72" column="40" lean-forward="false" selection-start-line="72" selection-start-column="21" selection-end-line="72" selection-end-column="40" />
+          <folding>
+            <element signature="e#20#85#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/crawler/dataminer/downloader/jjcc_downloader.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="152">
-          <caret line="53" column="44" lean-forward="false" selection-start-line="53" selection-start-column="44" selection-end-line="53" selection-end-column="44" />
+        <state relative-caret-position="236">
+          <caret line="42" column="35" lean-forward="false" selection-start-line="42" selection-start-column="35" selection-end-line="42" selection-end-column="71" />
           <folding>
             <element signature="e#20#107#0" expanded="true" />
           </folding>

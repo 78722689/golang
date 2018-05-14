@@ -5,6 +5,7 @@ import (
 	"strings"
 	"fmt"
 	"utility"
+	"time"
 )
 
 func (tree *HTMLDoc) JJCC_Request(url string, file string) (*HTMLDoc, error) {
@@ -91,7 +92,7 @@ func (tree *HTMLDoc) JJCC_GetCurrentDate() string {
 	return result
 }
 
-func (tree *HTMLDoc) JJCC_ParseRecordsDate() (result []string) { //map[string]bool {
+func (tree *HTMLDoc) JJCC_ParseRecordsDate() (result []time.Time) { //map[string]bool {
 	//result := make(map[string]bool)
 
 	tree.Find(TagNode, "table").Each(func(i int, table *Selection) {
@@ -103,7 +104,12 @@ func (tree *HTMLDoc) JJCC_ParseRecordsDate() (result []string) { //map[string]bo
 
 			td.Find(TagNode, "option").Each(func(i int, option *Selection) {
 				//result[option.Nodes[0].GetAttrByName("value")] = false
-				result = append(result, option.Nodes[0].GetAttrByName("value"))
+				tmp := option.Nodes[0].GetAttrByName("value")
+				if recordDate, err := time.Parse("2006-01-02", tmp); err == nil {
+					result = append(result, recordDate)
+				} else {
+					logger.Warningf("Parse record date failure, %s", tmp)
+				}
 			})
 		})
 	})
