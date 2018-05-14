@@ -184,7 +184,7 @@ func (htd *HTD) getData(dateList []interface{}, mit Main_Index_Type) map[string]
 			result[data.Date] = data
 			cnt--
 
-			logger.DEBUG(fmt.Sprintf("%s %s %s %f %f %f %f %f %f %f %f %f %f %f %f ",
+			logger.Debugf("%s %s %s %f %f %f %f %f %f %f %f %f %f %f %f ",
 				data.Name,
 				data.Code,
 				data.Date,
@@ -200,7 +200,7 @@ func (htd *HTD) getData(dateList []interface{}, mit Main_Index_Type) map[string]
 				data.TotalValue,
 				data.TurnoverRate,
 				data.VOL,
-			))
+			)
 		}
 	}
 
@@ -214,7 +214,7 @@ func (htd *HTD) getSHMainIndexdata(dateList []interface{}, proxy *httpcontroller
 		link := fmt.Sprintf(HTD_DOWNLOAD_LINK, "0000001", now)
 		file := htd.Folder + "mainindex/000001/modules/htd/htd.csv"
 		if err := htd.Doc.HTD_Request(link, file, proxy); err != nil {
-			logger.ERROR(fmt.Sprintf("Fetch Shang hai main index data failure, %s", link))
+			logger.Errorf("Fetch Shang hai main index data failure, %s", link)
 			return nil
 		}
 		htd.SHMainIndexFile = file
@@ -229,7 +229,7 @@ func (htd *HTD) getSZMainIndexdata(dateList []interface{}, proxy *httpcontroller
 		link := fmt.Sprintf(HTD_DOWNLOAD_LINK, "1399001", now)
 		file := htd.Folder + "mainindex/399001/modules/htd/htd.csv"
 		if err := htd.Doc.HTD_Request(link, file, proxy); err != nil {
-			logger.ERROR(fmt.Sprintf("Fetch Shen zhen main index data failure, %s", link))
+			logger.Errorf("Fetch Shen zhen main index data failure, %s", link)
 			return nil
 		}
 		htd.SZMainIndexFile = file
@@ -244,7 +244,7 @@ func (htd *HTD) getGEMdata(dateList []interface{}, proxy *httpcontroller.Proxy) 
 		link := fmt.Sprintf(HTD_DOWNLOAD_LINK, "1399006", now)
 		file := htd.Folder + "mainindex/399006/modules/htd/htd.csv"
 		if err := htd.Doc.HTD_Request(link, file, proxy); err != nil {
-			logger.ERROR(fmt.Sprintf("Fetch Shen zhen main index data failure, %s", link))
+			logger.Errorf("Fetch Shen zhen main index data failure, %s", link)
 			return nil
 		}
 		htd.GEMfile = file
@@ -262,12 +262,12 @@ func getNoWeekendDateList(dateList []string) map[string]string {
 		if t.Weekday().String() == "Sunday" {
 			d, _ := time.ParseDuration("-48h")
 			temp = t.Add(d).Format("2006-01-02")
-			logger.WARN(fmt.Sprintf("Changed date Sunday (%s) to Friday (%s)", item, temp))
+			logger.Warningf("Changed date Sunday (%s) to Friday (%s)", item, temp)
 		}
 		if t.Weekday().String() == "Saturday" {
 			d, _ := time.ParseDuration("-24h")
 			temp = t.Add(d).Format("2006-01-02")
-			logger.WARN(fmt.Sprintf("Changed date Saturday (%s) to to Friday (%s)", item, temp))
+			logger.Warningf("Changed date Saturday (%s) to to Friday (%s)", item, temp)
 		}
 		result[item] = temp
 	}
@@ -281,7 +281,7 @@ func (htd *HTD) getNearestFHPXDataByDate(date string) *htmlparser.FHPX_DATA {
 	fhpxInfo := FHPX_INFO{Code: htd.Code, Folder: htd.Folder}
 	fhpxDatalist, err := fhpxInfo.GetFHPXData()
 	if err != nil {
-		logger.ERROR("Get FHPX data failure")
+		logger.Error("Get FHPX data failure")
 		return nil
 	}
 
@@ -294,9 +294,9 @@ func (htd *HTD) getNearestFHPXDataByDate(date string) *htmlparser.FHPX_DATA {
 				(htdDate.Month()-exDividendDate.Month()) <= 3) {
 			result = fhpx
 
-			logger.DEBUG(fmt.Sprintf("Found FHPX data, date-%s vs htd date %s",
+			logger.Debugf("Found FHPX data, date-%s vs htd date %s",
 				fhpx.ExDividendDate,
-				date))
+				date)
 		}
 	}
 
@@ -355,7 +355,7 @@ func (htd *HTD) getFundsFinalProfit(funds []*FundPerformanceData) {
 				d.TransformNum,
 			)
 
-			logger.DEBUG(line)
+			logger.Debug(line)
 			utility.WriteToFile(filename, line)
 		}
 
@@ -384,14 +384,14 @@ func (htd *HTD) getFundsFinalProfit(funds []*FundPerformanceData) {
 		)
 		utility.WriteToFile(filename, line)
 
-		logger.DEBUG(line)
-		logger.DEBUG(fmt.Sprintf("fund:%s, changeProfit:%d, lastCount:%f, startprice:%f, fhpxProfit:%d, finalProfit:%f",
+		logger.Debug(line)
+		logger.Debugf("fund:%s, changeProfit:%d, lastCount:%f, startprice:%f, fhpxProfit:%d, finalProfit:%f",
 			fund.Name,
 			changeProfit,
 			lastCount,
 			historyDataMap[noWeekendDay].StartPrice,
 			fhpxProfit,
-			finalProfit))
+			finalProfit)
 	}
 
 }
@@ -436,7 +436,7 @@ func (htd *HTD) GetFundsPerformance(focusSHIs map[string][]*htmlparser.ShareHole
 						changeCount := preCount - utility.String2Folat64(shi.Count)
 						if changeCount != 0.0 {
 							changeProfit = int(changeCount * 10000 * float64(data.StartPrice))
-							logger.DEBUG(fmt.Sprintf("date-%s preCount-%f, thisCount-%s, ChangeProfit-%f", shi.Date, preCount, shi.Count, changeProfit))
+							logger.Debugf("date-%s preCount-%f, thisCount-%s, ChangeProfit-%f", shi.Date, preCount, shi.Count, changeProfit)
 						}
 
 						fhpxData := htd.getNearestFHPXDataByDate(date)

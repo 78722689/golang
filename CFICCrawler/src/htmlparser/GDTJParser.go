@@ -24,7 +24,7 @@ const (
 
 func (tree *HTMLDoc) GDTJ_Request(url string, file string, proxy *httpcontroller.Proxy) (*HTMLDoc, error) {
 	request := httpcontroller.Request{
-		Proxy:     proxy,
+		//Proxy:     proxy,
 		Url:       url,
 		File:      file,
 		OverWrite: false,

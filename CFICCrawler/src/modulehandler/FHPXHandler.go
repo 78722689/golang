@@ -1,7 +1,6 @@
 package modulehandler
 
 import (
-	"fmt"
 	"htmlparser"
 )
 
@@ -21,18 +20,18 @@ func (fhpx *FHPX_INFO) GetFHPXData() ([]*htmlparser.FHPX_DATA, error) {
 
 	doc, err := htmlparser.ParseFromFile(path)
 	if err != nil {
-		logger.ERROR(fmt.Sprintf("Parse file faile, %s", err))
+		logger.Errorf("Parse file faile, %s", err)
 		return nil, err
 	}
 
 	data := doc.GetFHPXData()
 	for _, d := range data {
-		logger.DEBUG(fmt.Sprintf("ExDividendDate:%s, BTaxCashDividend:%f, TransformNum:%d, ATaxCashDividend:%f OfferNum:%d",
+		logger.Debugf("ExDividendDate:%s, BTaxCashDividend:%f, TransformNum:%d, ATaxCashDividend:%f OfferNum:%d",
 			d.ExDividendDate,
 			d.BTaxCashDividend,
 			d.TransformNum,
 			d.ATaxCashDividend,
-			d.OfferNum))
+			d.OfferNum)
 	}
 
 	return data, nil

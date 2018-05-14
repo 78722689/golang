@@ -17,7 +17,7 @@ var logger = GetLogger()
 func Contains(list interface{}, elem interface{}) bool {
 	value := reflect.ValueOf(list)
 	if value.Kind() != reflect.Slice {
-		logger.ERROR(fmt.Sprintf("Input type is not an array or slice type: %v, kind:%s", value, value.Kind()))
+		logger.Errorf("Input type is not an array or slice type: %v, kind:%s", value, value.Kind())
 
 		return false
 	}

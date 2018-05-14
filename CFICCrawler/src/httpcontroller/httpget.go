@@ -6,6 +6,7 @@ import (
     "net/url"
     "os"
     "golang.org/x/net/html"
+    "github.com/spf13/viper"
     "io"
     "path"
 
@@ -21,7 +22,7 @@ type Proxy struct {
 }
 
 type Request struct {
-    Proxy *Proxy // request by proxy
+    //Proxy *Proxy // request by proxy
 
     Url string  // Url to request
     File string // Optional field, file to write the request result
@@ -46,9 +47,10 @@ func (r *Request)Get() (*html.Node, error){
         var client *http.Client
 
         // If proxy gave, use proxy to do the request
-        if r.Proxy != nil {
-            url_proxy, _ := url_i.Parse(r.Proxy.Protocol + "://" + r.Proxy.Host + ":" + r.Proxy.Port)
-
+        if viper.GetStringMap("proxy")["host"] != nil && viper.GetStringMap("proxy")["host"] != "" {
+        //if r.Proxy != nil {
+            //url_proxy, _ := url_i.Parse(r.Proxy.Protocol + "://" + r.Proxy.Host + ":" + r.Proxy.Port)
+            url_proxy, _ := url_i.Parse(viper.GetStringMapString("proxy")["host"])
             transport := &http.Transport{Proxy: http.ProxyURL(url_proxy)}
             client = &http.Client{Transport: transport}
         } else {
@@ -61,14 +63,14 @@ func (r *Request)Get() (*html.Node, error){
                 if r.OverWrite {
                     os.Remove(r.File)
                 } else {
-                    logger.WARN(fmt.Sprintf("File %s is already exist, skip the request. If you want to overwrite the request file, please set OverWrite to true in request.",
-                                            r.File))
+                    logger.Warningf("File %s is already exist, skip the request. If you want to overwrite the request file, please set OverWrite to true in request.",
+                                            r.File)
                     return nil, nil
                 }
             }
             os.MkdirAll(path.Dir(r.File), 0777)
 
-            logger.INFO(fmt.Sprintf("Requesting %s", r.Url))
+            logger.Infof("Requesting %s", r.Url)
 
             resp, err := client.Get(r.Url)
             if err != nil {

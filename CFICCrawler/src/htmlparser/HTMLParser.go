@@ -1,7 +1,7 @@
 package htmlparser
 
 import (
-	"fmt"
+
 	"io/ioutil"
 	"regexp"
 	"strings"
@@ -122,13 +122,13 @@ func (tree *HTMLDoc) GetStocks(filterIDs []string) []StockInfo {
 
 					if len(filterIDs) == 0 {
 						stockList = append(stockList, si)
-						logger.DEBUG(fmt.Sprintf("Found stock. Link:%s Len-%d Number:%s Name:%s", si.Link, len(child.Data), si.Number, si.Name))
+						logger.Debugf("Found stock. Link:%s Len-%d Number:%s Name:%s", si.Link, len(child.Data), si.Number, si.Name)
 					} else if utility.Contains(filterIDs, stockID) {
 						stockList = append(stockList, si)
-						logger.DEBUG(fmt.Sprintf("Found stock. Link:%s Len-%d Number:%s Name:%s", si.Link, len(child.Data), si.Number, si.Name))
+						logger.Debugf("Found stock. Link:%s Len-%d Number:%s Name:%s", si.Link, len(child.Data), si.Number, si.Name)
 					}
 				} else {
-					logger.WARN(fmt.Sprintf("Not found stock ID in node, %v", child))
+					logger.Warningf("Did not find stock ID in node, %v", child)
 				}
 			}
 
@@ -146,15 +146,15 @@ func ParseFromFile(file string) (*HTMLDoc, error) {
 	tree := &HTMLDoc{}
 	contents, err := ioutil.ReadFile(file)
 	if err != nil {
-		logger.ERROR(fmt.Sprintf("Read file %v failed\n", file))
+		logger.Errorf("Read file %v failed\n", file)
 		return tree, err
 	}
 
-	logger.INFO(fmt.Sprintf("Begin to parse file, %s", file))
+	logger.Info("Begin to parse file, %s", file)
 
 	doc, err := html.Parse(strings.NewReader(string(contents)))
 	if err != nil {
-		logger.ERROR(fmt.Sprintf("Parse file %v failed\n", file))
+		logger.Errorf("Parse file %v failed\n", file)
 		return tree, err
 	}
 	tree.Root = doc

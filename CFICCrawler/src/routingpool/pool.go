@@ -1,7 +1,6 @@
 package routingpool
 
 import (
-	"fmt"
 	"sync"
 	"sync/atomic"
 	"utility"
@@ -59,7 +58,7 @@ func (pool *ThreadPool) startWorkThread(id int) {
 			pool.wg.Add(1)
 			task.sendResponse()
 
-			logger.DEBUG(fmt.Sprintf("[Thread id-%d, name-%s] Thread Started! Routing pool status: Active threads-%d, Free threads-%d", id, task.getTaskName(), pool.activeThread, pool.freeThread))
+			logger.Debugf("[Thread id-%d, name-%s] Thread Started! Routing pool status: Active threads-%d, Free threads-%d", id, task.getTaskName(), pool.activeThread, pool.freeThread)
 
 			task.run(id)
 
@@ -68,7 +67,7 @@ func (pool *ThreadPool) startWorkThread(id int) {
 
 			pool.wg.Done()
 
-			logger.DEBUG(fmt.Sprintf("[Thread id-%d, name-%s] Thread Finished! Routing pool status: Active threads-%d, Free threads-%d", id, task.getTaskName(), pool.activeThread, pool.freeThread))
+			logger.Debugf("[Thread id-%d, name-%s] Thread Finished! Routing pool status: Active threads-%d, Free threads-%d", id, task.getTaskName(), pool.activeThread, pool.freeThread)
 
 		case <-pool.shutdown:
 			//pool.wg.Done()

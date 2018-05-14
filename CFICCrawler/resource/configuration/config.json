@@ -1,0 +1,18 @@
+{
+    "global" : {
+        "download_folder" : "E:/Programing/golang/CFICCrawler/resource/download/", 
+        "quote_homepage" : "http://quote.cfi.cn", 
+        "stock_list_url_path" : "/stockList.aspx?t=11"},
+    "proxy" : {
+        "host" : "", 
+        "user": "", 
+        "password" : ""},
+    "module" : {
+        "gdtj" : {"overwrite" : false}, 
+        "jjcc" : {
+            "overwrite" : false,
+            "durations" : "2017-08-08~2018-08-30",
+            "url_path" : "/quote.aspx?stockid=%s&contenttype=jjcc&jzrq=%s"
+            }
+        }
+}
