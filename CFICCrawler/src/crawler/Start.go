@@ -2,11 +2,10 @@ package crawler
 
 import (
 	"crawler/dataminer"
-	"routingpool"
 	"crawler/dataminer/downloader"
 )
 
-func StartCrawl(pool *routingpool.ThreadPool, stocks []string) {
+func StartCrawl(stocks []string) {
 
 	/*
 		collector := Collect{
@@ -20,7 +19,6 @@ func StartCrawl(pool *routingpool.ThreadPool, stocks []string) {
 	//dataminer.StartAnalyse(codeChannel, pool)
 
 	target := dataminer.Target{
-		RoutingPool: pool,
 		Stocks:      stocks}
 
 	target.RegisterModuleDownloader(&downloader.JJCC{}).RegisterModuleDownloader(&downloader.GDTJ{})

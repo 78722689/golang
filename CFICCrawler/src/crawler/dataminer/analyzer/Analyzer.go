@@ -1,4 +1,4 @@
-package dataminer
+package analyzer
 
 import (
 	"htmlparser"
@@ -30,7 +30,7 @@ func (r *stAnalysisRunner) caller(id int) {
 					if sh.Name == fundname {
 						result[fundname] = append(result[fundname], sh)
 
-						logger.Debugf("Found %s in %s", fundname, key)
+						//logger.Debugf("Found %s in %s", fundname, key)
 						break
 					}
 				}
@@ -39,9 +39,4 @@ func (r *stAnalysisRunner) caller(id int) {
 	}
 
 	//htd.GetFundsPerformance(result, proxy)
-}
-
-func (c *Target) StartAnalyse(code string, wait chan bool) {
-	r := stAnalysisRunner{code: code, wait: wait, sourcefolder: viper.GetString("global.download_folder")}
-	c.RoutingPool.PutTask(routingpool.NewCaller("Analyzer", r.caller))
 }

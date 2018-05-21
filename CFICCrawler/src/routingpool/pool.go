@@ -6,7 +6,15 @@ import (
 	"utility"
 )
 
-var logger = utility.GetLogger()
+var (
+	logger = utility.GetLogger()
+)
+
+var pool *ThreadPool
+
+func init() {
+	pool = GetPool(10, 10)
+}
 
 type ThreadPool struct {
 	numberOfThread int
@@ -17,6 +25,11 @@ type ThreadPool struct {
 	taskCacheQueue chan Task
 	wg             sync.WaitGroup
 	shutdown       chan bool
+}
+
+func SetPoolSize(number int, capacity int) {
+	pool.numberOfThread = number
+	pool.queueCapacity = capacity
 }
 
 func GetPool(number int, capacity int) *ThreadPool {
@@ -35,6 +48,7 @@ func GetPool(number int, capacity int) *ThreadPool {
 }
 
 // Startup threads
+func Start() {pool.Start()}
 func (pool *ThreadPool) Start() {
 
 	for routine := 0; routine < pool.numberOfThread; routine++ {
@@ -94,12 +108,14 @@ func (pool *ThreadPool) startQueueThread() {
 	}
 }
 
+func PutTask(task Task) {pool.PutTask(task)}
 func (pool *ThreadPool) PutTask(task Task) {
 	pool.taskCacheQueue <- task
 
 	task.waitForResponse()
 }
 
+func Wait() {pool.Wait()}
 func (pool *ThreadPool) Wait() {
 	pool.wg.Wait()
 }

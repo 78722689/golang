@@ -13,11 +13,6 @@ import (
 
 var logger = utility.GetLogger()
 
-const (
-	STOCK_LIST_URL     string = "http://quote.cfi.cn/stockList.aspx?t=11"
-	QUOTE_HOMEPAGE_URL string = "http://quote.cfi.cn"
-)
-
 /*
 type DownloadInfo struct {
 	Folder      string
@@ -108,13 +103,13 @@ func (t *Target) Start() {
 				*/
 				//t.StartAnalyse(tempStockinfo.Number, syncChan)
 
-				t.RoutingPool.PutTask(routingpool.NewCaller("Modules Downloader", moduleCaller))
+				routingpool.PutTask(routingpool.NewCaller("Modules Downloader", moduleCaller))
 			}
 
-			t.RoutingPool.PutTask(routingpool.NewCaller("Homepage Downloader", homepageCaller))
+			routingpool.PutTask(routingpool.NewCaller("Homepage Downloader", homepageCaller))
 		}
 
 	})
 
-	t.RoutingPool.PutTask(mainTask)
+	routingpool.PutTask(mainTask)
 }

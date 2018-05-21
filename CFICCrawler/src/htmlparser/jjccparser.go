@@ -2,11 +2,21 @@ package htmlparser
 
 import (
 	"httpcontroller"
-	"strings"
-	"fmt"
-	"utility"
+	//"strings"
+	//"utility"
 	"time"
+	"os"
+	"fmt"
+	"strings"
+	"utility"
 )
+
+type JJCCData struct {
+	Name string
+	Code string
+	HoldCount float64
+	HoldValue float64
+}
 
 func (tree *HTMLDoc) JJCC_Request(url string, file string) (*HTMLDoc, error) {
 	request := httpcontroller.Request{
@@ -26,8 +36,8 @@ func (tree *HTMLDoc) JJCC_Request(url string, file string) (*HTMLDoc, error) {
 	}
 }
 
-func (tree *HTMLDoc) JJCC_GetJJCCData() []*ShareHolerInfo {
-	var shiList []*ShareHolerInfo
+func (tree *HTMLDoc) JJCC_GetJJCCData() []*JJCCData {
+	var dataList []*JJCCData
 
 	tree.Find(TagNode, "table").Each(func(i int, table *Selection) {
 		if len(table.GetNodeByAttr("id", "tabh")) == 0 {
@@ -39,20 +49,22 @@ func (tree *HTMLDoc) JJCC_GetJJCCData() []*ShareHolerInfo {
 				return
 			}
 			index := 0
-			shi := &ShareHolerInfo{}
+			d := &JJCCData{}
 			found := false
 			tr.Find(TagNode, "td").Each(func(i int, td *Selection) {
 				td.Find(TextNode, "").Each(func(_ int, tn *Selection) {
 					if tn.Nodes[0].GetParentNodeTagname() == "td" {
 						found = true
-						//fmt.Fprintf(os.Stdout, "i-%d, data-%s\n", i, tn.Nodes[0].Root.Data)
-						switch index {
-						case 0:
-							shi.Name = strings.TrimSpace(tn.Nodes[0].Root.Data)
+						fmt.Fprintf(os.Stdout, "i-%d, data-%s\n", i, tn.Nodes[0].Root.Data)
+						switch i {
 						case 1:
-							shi.Count = fmt.Sprintf("%.4f", utility.String2Folat64(strings.TrimSpace(tn.Nodes[0].Root.Data))/10000)
+							d.Name = strings.TrimSpace(tn.Nodes[0].Root.Data)
 						case 2:
-							shi.Ratio = utility.String2Folat32(strings.TrimSpace(tn.Nodes[0].Root.Data))
+							d.Code = strings.TrimSpace(tn.Nodes[0].Root.Data)
+						case 3:
+							d.HoldCount =  utility.String2Folat64(strings.TrimSpace(tn.Nodes[0].Root.Data))/10000
+						case 4:
+							d.HoldValue = utility.String2Folat64(strings.TrimSpace(tn.Nodes[0].Root.Data))/10000
 						}
 
 						index++
@@ -60,14 +72,15 @@ func (tree *HTMLDoc) JJCC_GetJJCCData() []*ShareHolerInfo {
 				})
 			})
 			if found {
+				logger.Debugf("JJCC name %s code %s holdcount %.4f holdvalue %.4f", d.Name, d.Code, d.HoldCount, d.HoldValue)
 				//shi.Date = date
-				shiList = append(shiList, shi)
+				dataList = append(dataList, d)
 			}
 		})
 
 	})
 
-	return shiList
+	return dataList
 }
 
 func (tree *HTMLDoc) JJCC_GetCurrentDate() string {

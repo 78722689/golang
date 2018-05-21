@@ -94,6 +94,7 @@ func IsFileExist(name string) bool {
 
 func String2Int64(value string) int64 {
 	if v,err := strconv.ParseInt(value, 0, 8); err != nil {
+		fmt.Fprintf(os.Stderr, "String2Int64() ERROR convert failure %s\n",  err)
 		return 0
 	} else {
 		return v
