@@ -61,15 +61,15 @@ func main() {
 
 	routingpool.SetPoolSize(viper.GetInt("routinepool.number"), viper.GetInt("routinepool.capacity"))
 	routingpool.Start()
-
+	defer routingpool.Wait() 	// Waiting for all threads finish and exit
 	//var proxy *httpcontroller.Proxy = nil
 	//proxy := &httpcontroller.Proxy{"HTTP", "203.17.66.134", "8000"}
 	//folder := "D:/Work/MyDemo/go/golang/CFICCrawler/resource/download/"
 
 	crawler.StartCrawl([]string{"600089", "600096", "600036", "123456"})
 
-	// Waiting for all threads finish and exit
-	routingpool.Wait()
+
+
 
 	elapsed := time.Since(start)
 	logger.Debug("Exit...........................%d", elapsed)

@@ -59,7 +59,7 @@ func (jjcc *JJCC) Download(stockNumber string, moduleURL string) {
 						file,
 					viper.GetBool("module.jjcc.overwrite"))
 
-				collector.StartCollectJJCC(file)
+				collector.CollectJJCC(file)
 			}
 		}
 	}

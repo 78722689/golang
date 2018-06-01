@@ -3,7 +3,7 @@
         "download_folder" : "E:/Programing/golang/CFICCrawler/resource/download/", 
         "quote_homepage" : "http://quote.cfi.cn", 
         "stock_list_url_path" : "/stockList.aspx?t=11"},
-     "routinepool" : {
+    "routinepool" : {
         "number" : 100,
         "capacity" : 100
         },

@@ -3,6 +3,7 @@ package crawler
 import (
 	"crawler/dataminer"
 	"crawler/dataminer/downloader"
+	"crawler/dataminer/analyzer"
 )
 
 func StartCrawl(stocks []string) {
@@ -16,11 +17,10 @@ func StartCrawl(stocks []string) {
 			Proxy:       t.Proxy}
 		collector.Start()
 	*/
-	//dataminer.StartAnalyse(codeChannel, pool)
+	analyzer.StartAnalyzer()
 
 	target := dataminer.Target{
 		Stocks:      stocks}
-
 	target.RegisterModuleDownloader(&downloader.JJCC{}).RegisterModuleDownloader(&downloader.GDTJ{})
 
 	target.Start()

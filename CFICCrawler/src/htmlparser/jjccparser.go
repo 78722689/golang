@@ -72,7 +72,7 @@ func (tree *HTMLDoc) JJCC_GetJJCCData() []*JJCCData {
 				})
 			})
 			if found {
-				logger.Debugf("JJCC name %s code %s holdcount %.4f holdvalue %.4f", d.Name, d.Code, d.HoldCount, d.HoldValue)
+				logger.Debugf("JJCC Report name %s, code %s, holdcount %.4f, holdvalue %.4f", d.Name, d.Code, d.HoldCount, d.HoldValue)
 				//shi.Date = date
 				dataList = append(dataList, d)
 			}

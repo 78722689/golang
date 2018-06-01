@@ -1,42 +1,39 @@
 package analyzer
 
 import (
-	"htmlparser"
-	"httpcontroller"
-	"modulehandler"
+	//"htmlparser"
 	"routingpool"
-	"github.com/spf13/viper"
+	"utility"
+	"htmlparser"
 )
 
-type stAnalysisRunner struct {
-	code         string
-	sourcefolder string
-	wait         chan bool
-	proxy        *httpcontroller.Proxy
+type Analyer struct {
+	data         chan interface{}
 }
 
-func (r *stAnalysisRunner) caller(id int) {
-	<-r.wait
+var logger = utility.GetLogger()
+var a *Analyer
 
-	gdtj := &modulehandler.GDTJ{Code: r.code, Folder: r.sourcefolder, Proxy: r.proxy}
-	targetFunds := []string{"香港中央结算有限公司"} //"上海汽车集团股份有限公司", "深圳市楚源投资发展有限公司"
-	result := make(map[string][]*htmlparser.ShareHolerInfo)
+func init()  {
+	a = new(Analyer)
+	a.data = make(chan interface{})
+}
 
-	// Find out the fund if it is in the reporter
-	for key, _ := range gdtj.GetDateList() {
-		if shList, err := gdtj.GetShareHolder(key); err == nil {
-			for _, fundname := range targetFunds {
-				for _, sh := range shList {
-					if sh.Name == fundname {
-						result[fundname] = append(result[fundname], sh)
+func StartAnalyzer()  {
+	routingpool.PutTask(routingpool.NewCaller("Module analyzer", a.caller))
+}
 
-						//logger.Debugf("Found %s in %s", fundname, key)
-						break
-					}
-				}
-			}
+func PutData(data interface{}) {
+	a.data <- data
+}
+
+func (r *Analyer) caller(id int) {
+	for {
+		data := <-r.data
+		tmp := data.([]*htmlparser.JJCCData)
+
+		for _, value := range tmp {
+			logger.Infof("Received data name %s, code %s, holdcount %.4f, holdvalue %.4f", value.Name, value.Code, value.HoldCount, value.HoldValue)
 		}
 	}
-
-	//htd.GetFundsPerformance(result, proxy)
 }
