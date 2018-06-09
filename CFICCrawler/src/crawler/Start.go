@@ -1,6 +1,9 @@
 package crawler
 
 import (
+	//"crawler/dataminer"
+	//"crawler/dataminer/downloader"
+	//"crawler/dataminer/analyzer"
 	"crawler/dataminer"
 	"crawler/dataminer/downloader"
 	"crawler/dataminer/analyzer"
@@ -24,4 +27,5 @@ func StartCrawl(stocks []string) {
 	target.RegisterModuleDownloader(&downloader.JJCC{}).RegisterModuleDownloader(&downloader.GDTJ{})
 
 	target.Start()
+
 }

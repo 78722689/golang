@@ -18,5 +18,8 @@
             "durations" : "2017-08-08~2018-08-30",
             "url_path" : "/quote.aspx?stockid=%s&contenttype=jjcc&jzrq=%s"
             }
+        },
+    "analysis" : {
+        "timer" : 30
         }
 }

@@ -13,17 +13,6 @@ import (
 
 var logger = utility.GetLogger()
 
-/*
-type DownloadInfo struct {
-	Folder      string
-	Proxy       *httpcontroller.Proxy
-	Overwrite   bool
-	Stocks      []string // Empty for downloading all stocks.
-	CodeChannel chan string
-
-	RoutingPool *routingpool.ThreadPool
-}
-*/
 func (t *Target) RegisterModuleDownloader(m downloader.Moduler) *Target{
 	t.Modules = append(t.Modules, m)
 
@@ -44,7 +33,7 @@ func (t *Target) Start() {
 		os.Exit(1)
 	}
 
-	mainTask := routingpool.NewCaller("Main Downloader", func(id int) {
+	mainTask := downloader.NewDownloadTask("Main Downloader", func(id int) {
 		for _, stockinfo := range doc.GetStocks(t.Stocks) {
 
 			// To request home page.
@@ -82,34 +71,11 @@ func (t *Target) Start() {
 							}
 						}
 					}
-
-					// Download history data.
-					//histData := modulehandler.HTD{Code: tempStockinfo.Number, Folder: t.Folder, Proxy: t.Proxy}
-					//if err := histData.Download(); err != nil {
-					//	logger.ERROR(fmt.Sprintf("Download history data failure, %s", err))
-					//}
-
-					//syncChan <- true
 				}
-
-				// Start the Miner to collect/analyze data
-				/*collector := Collect{
-					Code:        tempStockinfo.Number,
-					Folder:      t.Folder,
-					SyncChan:    syncChan,
-					RoutingPool: t.RoutingPool,
-					Proxy:       t.Proxy}
-				collector.Start()
-				*/
-				//t.StartAnalyse(tempStockinfo.Number, syncChan)
-
-				routingpool.PutTask(routingpool.NewCaller("Modules Downloader", moduleCaller))
+				routingpool.PutTask(downloader.NewDownloadTask("Modules Downloader", moduleCaller))
 			}
-
-			routingpool.PutTask(routingpool.NewCaller("Homepage Downloader", homepageCaller))
+			routingpool.PutTask(downloader.NewDownloadTask("Homepage Downloader", homepageCaller))
 		}
-
 	})
-
 	routingpool.PutTask(mainTask)
 }

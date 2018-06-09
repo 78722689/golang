@@ -63,7 +63,7 @@ func (r *Request)Get() (*html.Node, error){
                 if r.OverWrite {
                     os.Remove(r.File)
                 } else {
-                    logger.Warningf("File %s is already exist, skip the request. If you want to overwrite the request file, please set OverWrite to true in request.",
+                    logger.Warningf("File %s is already exist, skip the request. Set OverWrite to true to overwite the request result.",
                                             r.File)
                     return nil, nil
                 }

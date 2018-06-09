@@ -2,11 +2,7 @@ package htmlparser
 
 import (
 	"httpcontroller"
-	//"strings"
-	//"utility"
 	"time"
-	"os"
-	"fmt"
 	"strings"
 	"utility"
 )
@@ -55,7 +51,7 @@ func (tree *HTMLDoc) JJCC_GetJJCCData() []*JJCCData {
 				td.Find(TextNode, "").Each(func(_ int, tn *Selection) {
 					if tn.Nodes[0].GetParentNodeTagname() == "td" {
 						found = true
-						fmt.Fprintf(os.Stdout, "i-%d, data-%s\n", i, tn.Nodes[0].Root.Data)
+						//fmt.Fprintf(os.Stdout, "i-%d, data-%s\n", i, tn.Nodes[0].Root.Data)
 						switch i {
 						case 1:
 							d.Name = strings.TrimSpace(tn.Nodes[0].Root.Data)

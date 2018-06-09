@@ -70,18 +70,18 @@ func (pool *ThreadPool) startWorkThread(id int) {
 		select {
 		case task := <-pool.taskWorkQueue:
 			pool.wg.Add(1)
-			task.sendResponse()
+			task.SendResponse()
 
-			logger.Debugf("[Thread id-%d, name-%s] Thread Started! Routing pool status: Active threads-%d, Free threads-%d", id, task.getTaskName(), pool.activeThread, pool.freeThread)
+			logger.Debugf("[Thread id-%d, name-%s] Thread Started! Routing pool status: Active threads-%d, Free threads-%d", id, task.GetTaskName(), pool.activeThread, pool.freeThread)
 
-			task.run(id)
+			task.Run(id)
 
 			atomic.AddInt32(&pool.activeThread, -1)
 			atomic.AddInt32(&pool.freeThread, 1)
 
 			pool.wg.Done()
 
-			logger.Debugf("[Thread id-%d, name-%s] Thread Finished! Routing pool status: Active threads-%d, Free threads-%d", id, task.getTaskName(), pool.activeThread, pool.freeThread)
+			logger.Debugf("[Thread id-%d, name-%s] Thread Finished! Routing pool status: Active threads-%d, Free threads-%d", id, task.GetTaskName(), pool.activeThread, pool.freeThread)
 
 		case <-pool.shutdown:
 			//pool.wg.Done()
@@ -112,7 +112,7 @@ func PutTask(task Task) {pool.PutTask(task)}
 func (pool *ThreadPool) PutTask(task Task) {
 	pool.taskCacheQueue <- task
 
-	task.waitForResponse()
+	task.WaitForResponse()
 }
 
 func Wait() {pool.Wait()}
@@ -122,37 +122,37 @@ func (pool *ThreadPool) Wait() {
 
 // Run the task with what you want, and return the result.
 type Task interface {
-	run(id int)
-	waitForResponse()
-	sendResponse()
+	Run(id int)
+	WaitForResponse()
+	SendResponse()
 
-	getTaskName() string
+	GetTaskName() string
 }
 
-type Caller struct {
+type Base struct {
 	Name string
 	Call func(int)
-	Data interface{}
+	//Data interface{}
 
-	response chan bool
+	Response chan bool
 }
 
-func NewCaller(name string, call func(int)) *Caller {
-	return &Caller{Name: name, Call: call, response: make(chan bool)}
+func NewCaller(name string, call func(int)) *Base {
+	return &Base{Name: name, Call: call, Response: make(chan bool)}
 }
 
-func (c *Caller) run(id int) {
+func (c *Base) Run(id int) {
 	c.Call(id)
 }
 
-func (c *Caller) waitForResponse() {
-	<-c.response
+func (c *Base) WaitForResponse() {
+	<-c.Response
 }
 
-func (c *Caller) sendResponse() {
-	c.response <- true
+func (c *Base) SendResponse() {
+	c.Response <- true
 }
 
-func (c *Caller) getTaskName() string {
+func (c *Base) GetTaskName() string {
 	return c.Name
 }

@@ -13,7 +13,7 @@ func CollectJJCC(file string) error {
 		return err
 	}
 
-	analyzer.PutData(doc.JJCC_GetJJCCData())
+	analyzer.PutMessage(doc.JJCC_GetJJCCData())
 
 	return nil
 }

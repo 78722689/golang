@@ -7,6 +7,7 @@ import (
 	"fmt"
 )
 
+
 type Moduler interface {
 	Download(stockNumber string, moduleURL string)
 	ModuleName() string
