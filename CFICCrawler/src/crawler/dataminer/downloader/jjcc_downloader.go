@@ -59,7 +59,10 @@ func (jjcc *JJCC) Download(stockNumber string, moduleURL string) {
 						file,
 					viper.GetBool("module.jjcc.overwrite"))
 
-				collector.CollectJJCC(file)
+				// If Analyser is not enabled, only download the pages
+				if viper.GetBool("analyser.enable") {
+					collector.CollectJJCC(file, recordDate.Format("2006-01-02"))
+				}
 			}
 		}
 	}

@@ -4,12 +4,18 @@ import (
 	//"htmlparser"
 	"routingpool"
 	"utility"
+	"github.com/spf13/viper"
 )
 
 var logger = utility.GetLogger()
 
 func StartAnalyzer()  {
-	routingpool.PutTask(AnaTask)
+	if viper.GetBool("analyser.enable") {
+		routingpool.PutTask(AnaTask)
+	} else {
+		logger.Warning("Analyser is disabled.")
+	}
+
 }
 
 func PutData(data interface{}) {
