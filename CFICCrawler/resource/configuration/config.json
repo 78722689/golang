@@ -1,11 +1,14 @@
 {
     "global" : {
-        "download_folder" : "E:/Programing/golang/CFICCrawler/resource/download/", 
+        "download_folder" : "D:/golang/CFICCrawler/resource/download/", 
         "quote_homepage" : "http://quote.cfi.cn", 
-        "stock_list_url_path" : "/stockList.aspx?t=11"},
+        "stock_list_url_path" : "/stockList.aspx?t=11",
+        "output_folder" : "D:/golang/CFICCrawler/bin/output/"},
+    "logger" : {
+        "logfile"  : ":/golang/CFICCrawler/bin/output/log.txt"},
     "routinepool" : {
-        "number" : 100,
-        "capacity" : 100
+        "number" : 1024,
+        "capacity" : 800
         },
     "proxy" : {
         "host" : "", 
@@ -16,10 +19,19 @@
         "jjcc" : {
             "overwrite" : true,
             "durations" : "2017-08-08~2018-08-30",
-            "url_path" : "/quote.aspx?stockid=%s&contenttype=jjcc&jzrq=%s"
+            "url_path" : "/quote.aspx?stockid=%s&contenttype=jjcc&jzrq=%s",
+            "funds_file_path" : "D:/golang/CFICCrawler/resource/configuration/funds.list"
             }
         },
-    "analysis" : {
-        "timer" : 30
-        }
+    "redis" : {
+        "pushtask" : {
+            "count" : 3,
+            "timer" : 60
+        },
+        "changetask" : {"timer" : 60}
+    },
+    "analyser" : {
+        "enable" : true,
+        "timer" : 60
+    }
 }

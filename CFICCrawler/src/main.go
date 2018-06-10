@@ -53,7 +53,7 @@ func main() {
 	start := time.Now()
 	runtime.GOMAXPROCS(runtime.NumCPU())
 
-	utility.NewConfig("E:\\Programing\\golang\\CFICCrawler\\resource\\configuration\\")
+	utility.NewConfig("D:\\golang\\CFICCrawler\\resource\\configuration\\")
 
 	// Log setting
 	utility.Init_Logger()
@@ -61,16 +61,16 @@ func main() {
 
 	routingpool.SetPoolSize(viper.GetInt("routinepool.number"), viper.GetInt("routinepool.capacity"))
 	routingpool.Start()
-	defer routingpool.Wait() 	// Waiting for all threads finish and exit
+
 	//var proxy *httpcontroller.Proxy = nil
 	//proxy := &httpcontroller.Proxy{"HTTP", "203.17.66.134", "8000"}
 	//folder := "D:/Work/MyDemo/go/golang/CFICCrawler/resource/download/"
 
-	crawler.StartCrawl([]string{"600089", "600096", "600036", "123456"})
+	crawler.StartCrawl([]string{"600066", "600048", "600111"})
 
 
 
-
+	routingpool.Wait() 	// Waiting for all threads finish and exit
 	elapsed := time.Since(start)
 	logger.Debug("Exit...........................%d", elapsed)
 }
