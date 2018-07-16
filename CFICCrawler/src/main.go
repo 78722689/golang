@@ -66,7 +66,7 @@ func main() {
 	//proxy := &httpcontroller.Proxy{"HTTP", "203.17.66.134", "8000"}
 	//folder := "D:/Work/MyDemo/go/golang/CFICCrawler/resource/download/"
 
-	crawler.StartCrawl([]string{"600089", "600096", "600036", "123456"})
+	crawler.StartCrawl([]string{})
 
 
 

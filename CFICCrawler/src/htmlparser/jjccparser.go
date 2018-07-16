@@ -9,6 +9,7 @@ import (
 
 type JJCCData struct {
 	Name string
+	RecordDate string
 	Code string
 	HoldCount float64
 	HoldValue float64
@@ -32,7 +33,7 @@ func (tree *HTMLDoc) JJCC_Request(url string, file string) (*HTMLDoc, error) {
 	}
 }
 
-func (tree *HTMLDoc) JJCC_GetJJCCData() []*JJCCData {
+func (tree *HTMLDoc) JJCC_GetJJCCData(recordDate string) []*JJCCData {
 	var dataList []*JJCCData
 
 	tree.Find(TagNode, "table").Each(func(i int, table *Selection) {
@@ -69,7 +70,7 @@ func (tree *HTMLDoc) JJCC_GetJJCCData() []*JJCCData {
 			})
 			if found {
 				logger.Debugf("JJCC Report name %s, code %s, holdcount %.4f, holdvalue %.4f", d.Name, d.Code, d.HoldCount, d.HoldValue)
-				//shi.Date = date
+				d.RecordDate = recordDate
 				dataList = append(dataList, d)
 			}
 		})
