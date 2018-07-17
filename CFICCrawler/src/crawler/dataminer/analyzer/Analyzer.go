@@ -11,7 +11,10 @@ var logger = utility.GetLogger()
 
 func StartAnalyzer()  {
 	if viper.GetBool("analyser.enable") {
-		routingpool.PutTask(AnaTask)
+		routingpool.PutTask(RedisChange)
+		routingpool.PutTask(RedisPush)
+		routingpool.PutTask(RedisPush)
+		routingpool.PutTask(RedisPush)
 	} else {
 		logger.Warning("Analyser is disabled.")
 	}
@@ -19,5 +22,5 @@ func StartAnalyzer()  {
 }
 
 func PutData(data interface{}) {
-	PutMessage(data)
+	PushDataIntoRedis(data)
 }

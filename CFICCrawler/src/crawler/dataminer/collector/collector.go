@@ -13,7 +13,7 @@ func CollectJJCC(file string, recordDate string) error {
 		return err
 	}
 
-	analyzer.PutMessage(doc.JJCC_GetJJCCData(recordDate))
+	analyzer.PushDataIntoRedis(doc.JJCC_GetJJCCData(recordDate))
 
 	return nil
 }
