@@ -16,17 +16,18 @@ import (
 
 var (
 	RedisPush *RedisPushTask
-	RedisChange *RedisChangeTask
+	RedisDispatcher *RedisManager
 
 	RedisConnection redis.Conn
+	RedisLangEncoder mahonia.Encoder
 )
 
 func init() {
 	RedisConnection = initRedis()
 
 	RedisPush = NewRedisPushTask()
-	RedisChange = NewRedisChangeTask()
-
+	RedisDispatcher = NewRedisManagerTask()
+	RedisLangEncoder := mahonia.NewEncoder("gbk")
 
 }
 
@@ -39,10 +40,11 @@ func initRedis() redis.Conn{
 	return c
 }
 
-type RedisChangeTask struct {
+type RedisManager struct {
 	*routingpool.Base
 
 	pushDone chan bool
+	changeDone chan bool
 	redis redis.Conn
 }
 
@@ -51,46 +53,65 @@ type RedisPushTask struct {
 	*routingpool.Base
 	message chan interface{}
 
+	encoder mahonia.Encoder
 	redis redis.Conn
 	//timer int	// The waiting seconds for receiving data, analysis routine exits after the waiting.
 }
 
-func NewRedisChangeTask() *RedisChangeTask {
-	return &RedisChangeTask{pushDone:make(chan bool), Base: &routingpool.Base{Name: "Redis Change Task", Response: make(chan bool)}, redis:RedisConnection}
+// Implement Task interface
+type RedisChangeTask struct {
+	*routingpool.Base
+	funds []string
+
+	encoder mahonia.Encoder
+	redis redis.Conn
 }
 
-func (r *RedisChangeTask) Run(id int) {
+func NewRedisManagerTask() *RedisManager {
+	return &RedisManager{pushDone:make(chan bool), changeDone:make(chan bool), Base: &routingpool.Base{Name: "Redis Change Task", Response: make(chan bool)}, redis:RedisConnection}
+}
+
+func NewRedisChangeTask(redisConnection redis.Conn, funds []string) *RedisChangeTask {
+	return &RedisChangeTask{Base: &routingpool.Base{Name: "Redis Change Task", Response: make(chan bool)}, redis:redisConnection, funds:funds, encoder:RedisLangEncoder}
+}
+
+func NewRedisPushTask() *RedisPushTask {
+	return &RedisPushTask{message : make(chan interface{}, 1024), Base:&routingpool.Base{Name: "Redis Push Task", Response: make(chan bool)}, redis:RedisConnection, encoder:RedisLangEncoder}
+}
+
+func (r *RedisManager) Run(id int) {
 	r.caller(id)
 }
 
-func (r *RedisChangeTask) caller(id int) {
-	count := 0
+func (r *RedisManager) caller(id int) {
+	cntPush := 0
+	cntChange := 0
+	cntChangeRouting := 0
 	exit := false
 
 	for !exit {
 		select {
 		case <-r.pushDone:
-			count = count + 1
-			if count == viper.GetInt("redis.pushtask.count") {
+			cntPush = cntPush + 1
+			if cntPush == viper.GetInt("redis.pushtask.count") {
+				funds, _ := getFunds()
+				cntChangeRouting = len(funds)
+				if cntChangeRouting%10 !=0 {
+					cntChangeRouting = cntChangeRouting /10 +1
+				} else {
+					cntChangeRouting = cntChangeRouting/10
+				}
+
+				// Push the tasks to routing pool based on how many funds required.
+				for index := 0; index < cntChangeRouting; index++ {
+					routingpool.PutTask(NewRedisChangeTask(r.redis, funds[index*10 : 10+index*10]))
+				}
+			}
+		case <-r.changeDone:
+			cntChange = cntChange + 1
+			if cntChange == cntChangeRouting {
 				exit = true
 			}
-		}
-	}
-
-	var data map[string]string
-	encoder := mahonia.NewEncoder("gbk")
-	funds, _ := getFunds()
-	for _,f := range funds{
-		logger.Debugf("Trying to get records from Redis for %s.", f)
-		key := encoder.ConvertString(f)
-		values, err := redis.Values(r.redis.Do("LRANGE", key, -2, -1))
-		if err != nil{
-			logger.Errorf("redis lrange failed:", err)
-		}
-
-		for _, v := range values{
-			json.Unmarshal(v.([]byte), &data)
-			logger.Infof("Found record - code:%s, recorddata:%s, holdcount::%s, holdvalue:%s", data["code"], data["recorddate"], data["holdcount"], data["holdvalue"])
 		}
 	}
 
@@ -99,27 +120,46 @@ func (r *RedisChangeTask) caller(id int) {
 	}
 }
 
-func NewRedisPushTask() *RedisPushTask {
-	return &RedisPushTask{message : make(chan interface{}, 1024), Base:&routingpool.Base{Name: "Redis Push Task", Response: make(chan bool)}, redis:RedisConnection}
+func (c *RedisChangeTask) caller(id int) {
+	for _, fund := range c.funds {
+		var data map[string]string
+		logger.Debugf("Routing-%d, Trying to get records from Redis for %s.", id, fund)
+		key := c.encoder.ConvertString(fund)
+		values, err := redis.Values(c.redis.Do("LRANGE", key, -2, -1))
+		if err != nil{
+			logger.Errorf("redis lrange failed:", err)
+		}
+
+		for _, v := range values{
+			json.Unmarshal(v.([]byte), &data)
+			logger.Infof("Routing-%d, Found record - code:%s, recorddata:%s, holdcount::%s, holdvalue:%s", id, data["code"], data["recorddate"], data["holdcount"], data["holdvalue"])
+		}
+	}
+
+	ChangeTaskDone()
 }
+
 
 func PushDataIntoRedis(msg interface{}) {
 	RedisPush.message <- msg
 }
 
 func PushTaskDone() {
-	RedisChange.pushDone <- true
+	RedisDispatcher.pushDone <- true
 }
 
-func (a *RedisPushTask) caller(id int) {
+func ChangeTaskDone() {
+	RedisDispatcher.changeDone <- true
+}
+func (p *RedisPushTask) caller(id int) {
 	timeout := time.NewTimer(time.Second * time.Duration(viper.GetInt("redis.pushtask.timer")))
 	exit := false
 	funds, _ := getFunds()
-	encoder := mahonia.NewEncoder("gbk")
+	//encoder := mahonia.NewEncoder("gbk")
 
 	for !exit {
 		select {
-			case data := <-a.message:
+			case data := <-p.message:
 				logger.Infof("Analysis-task %d, received data", id)
 				tmp := data.([]*htmlparser.JJCCData)
 
@@ -135,9 +175,9 @@ func (a *RedisPushTask) caller(id int) {
 														"holdvalue" : fmt.Sprintf("%.4f", value.HoldValue),
 													}
 
-							key := encoder.ConvertString(fund)
+							key := p.encoder.ConvertString(fund)
 							json_value, _ := json.Marshal(raw)
-							_, err := a.redis.Do("LPUSH", key, json_value)
+							_, err := p.redis.Do("LPUSH", key, json_value)
 							if err != nil {
 								logger.Errorf("redis set failed:", err)
 							}
@@ -157,8 +197,8 @@ func (a *RedisPushTask) caller(id int) {
 	logger.Infof("Analysis-task %d, exit.....................", id)
 }
 
-func (a *RedisPushTask) Run(id int) {
-	a.caller(id)
+func (p *RedisPushTask) Run(id int) {
+	p.caller(id)
 }
 
 func getFunds() ([]string, error) {

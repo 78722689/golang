@@ -1,20 +1,27 @@
 package main
 
-import (
-    "github.com/garyburd/redigo/redis"
-    "fmt"
-	"github.com/axgle/mahonia"
-	"encoding/json"
-)
+import "fmt"
 
 func redis_practice() {
-       c, err := redis.Dial("tcp", "127.0.0.1:6379")
+      /* c, err := redis.Dial("tcp", "127.0.0.1:6379")
 		if err != nil {
 			fmt.Println("Connect to redis error", err)
 			return
 		}
 		defer c.Close()
-	/*
+      */
+
+      fmt.Println(401/10)
+      length :=400/10
+      if 400%10 !=0 {
+      	length = 401/10+1
+	  }
+	  x:=[]string{"a","b", "c","d","e","f"}
+      for index :=0; index<=length;index++ {
+      	fmt.Println(x[index:index])
+	  }
+
+	/*4
 		imap := mastring]string{"username": "666", "phonenumber": "888"}
 		value, _ := json.Marshal(imap)
 
@@ -39,6 +46,7 @@ func redis_practice() {
         }
     }
 */
+/*
     encoder := mahonia.NewEncoder("gbk")
     key := encoder.ConvertString("上证大宗商品股票交易型开放式指数证券投资基金")
     //value := encoder.ConvertString("蚊子-z")
@@ -54,7 +62,7 @@ func redis_practice() {
 		//fmt.Println(m["recorddate"])
 	}
 
-
+*/
 }
 
 func main() {

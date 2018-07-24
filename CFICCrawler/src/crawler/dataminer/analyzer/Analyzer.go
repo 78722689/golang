@@ -11,7 +11,7 @@ var logger = utility.GetLogger()
 
 func StartAnalyzer()  {
 	if viper.GetBool("analyser.enable") {
-		routingpool.PutTask(RedisChange)
+		routingpool.PutTask(RedisDispatcher)
 		routingpool.PutTask(RedisPush)
 		routingpool.PutTask(RedisPush)
 		routingpool.PutTask(RedisPush)
