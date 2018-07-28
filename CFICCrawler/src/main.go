@@ -72,5 +72,5 @@ func main() {
 
 	routingpool.Wait() 	// Waiting for all threads finish and exit
 	elapsed := time.Since(start)
-	logger.Debug("Exit...........................%d", elapsed)
+	logger.Debugf("Exit...........................%d", elapsed)
 }

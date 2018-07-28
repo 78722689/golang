@@ -1,25 +1,22 @@
 package main
 
-import "fmt"
+import (
+	"github.com/garyburd/redigo/redis"
+	"fmt"
+	"github.com/axgle/mahonia"
+)
 
 func redis_practice() {
-      /* c, err := redis.Dial("tcp", "127.0.0.1:6379")
+       c, err := redis.Dial("tcp", "127.0.0.1:6379")
 		if err != nil {
 			fmt.Println("Connect to redis error", err)
 			return
 		}
 		defer c.Close()
-      */
-
-      fmt.Println(401/10)
-      length :=400/10
-      if 400%10 !=0 {
-      	length = 401/10+1
-	  }
-	  x:=[]string{"a","b", "c","d","e","f"}
-      for index :=0; index<=length;index++ {
-      	fmt.Println(x[index:index])
-	  }
+	encoder := mahonia.NewEncoder("gbk")
+	key := encoder.ConvertString("上证大宗商品股票交易型开放式指数证券投资基金")
+		_, err = c.Do("DEL", key)
+		fmt.Println(err)
 
 	/*4
 		imap := mastring]string{"username": "666", "phonenumber": "888"}
@@ -30,8 +27,9 @@ func redis_practice() {
 			fmt.Println("redis set failed:", err)
 		}
 	*/
+
 /*
-    mylist, err := redis.Strings(c.Do("LRANGE", "招商中证银行指数分级证券投资基金", 0, 9))
+    mylist, err := redis.Strings(c.Do("LRANGE", key, 0, 9))
     if err != nil {
         fmt.Println("redis get failed:", err)
     } else {

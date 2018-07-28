@@ -150,11 +150,11 @@ func ParseFromFile(file string) (*HTMLDoc, error) {
 		return tree, err
 	}
 
-	logger.Info("Begin to parse file, %s", file)
+	logger.Infof("Begin to parse file, %s", file)
 
 	doc, err := html.Parse(strings.NewReader(string(contents)))
 	if err != nil {
-		logger.Errorf("Parse file %v failed\n", file)
+		logger.Errorf("Parse file %v failed", file)
 		return tree, err
 	}
 	tree.Root = doc
