@@ -9,7 +9,7 @@ import (
 
 
 type Moduler interface {
-	Download(stockNumber string, moduleURL string)
+	Download(stockNumber string, stockName string, moduleURL string)
 	ModuleName() string
 }
 

@@ -8,7 +8,6 @@ import (
 	"os"
 	"bufio"
 	"github.com/axgle/mahonia"
-	"strings"
 	"fmt"
 	"encoding/json"
 	"github.com/garyburd/redigo/redis"
@@ -16,7 +15,7 @@ import (
 )
 
 var (
-	RedisPush *RedisPushTask
+	RedisPusher *RedisPusherTask
 	RedisDispatcher *RedisManager
 
 	RedisConnection redis.Conn
@@ -27,11 +26,11 @@ func init() {
 	RedisConnection = initRedis()
 	redisLangEncoder = mahonia.NewEncoder("gbk")
 
-	RedisPush = NewRedisPushTask()
+	RedisPusher = NewRedisPushTask()
 	RedisDispatcher = NewRedisManagerTask()
 }
 
-func initRedis() redis.Conn{
+func initRedis() redis.Conn {
 	c, err := redis.Dial("tcp", "127.0.0.1:6379")
 	if err != nil {
 		logger.Errorf("Connect to redis error", err)
@@ -45,13 +44,15 @@ type RedisManager struct {
 
 	pushDone chan bool
 	changeDone chan bool
+	stockname chan []string
 	redis redis.Conn
 }
 
 // Implement Task interface
-type RedisPushTask struct {
+type RedisPusherTask struct {
 	*routingpool.Base
 	message chan interface{}
+
 
 	encoder mahonia.Encoder
 	redis redis.Conn
@@ -65,35 +66,53 @@ type RedisChangeTask struct {
 
 	encoder mahonia.Encoder
 	redis redis.Conn
+
+
 }
 
 func NewRedisManagerTask() *RedisManager {
-	return &RedisManager{pushDone:make(chan bool), changeDone:make(chan bool), Base: &routingpool.Base{Name: "Redis Change Task", Response: make(chan bool)}, redis:RedisConnection}
+	return &RedisManager{pushDone:make(chan bool),
+						  changeDone:make(chan bool),
+						  stockname:make(chan []string),
+						  redis:RedisConnection,
+						  Base: &routingpool.Base{Name: "Redis Change Task", Response: make(chan bool)}}
 }
 
 func NewRedisChangeTask(redisConnection redis.Conn, funds []string) *RedisChangeTask {
 	return &RedisChangeTask{Base: &routingpool.Base{Name: "Redis Change Task", Response: make(chan bool)}, redis:redisConnection, funds:funds, encoder:redisLangEncoder}
 }
 
-func NewRedisPushTask() *RedisPushTask {
-	return &RedisPushTask{message : make(chan interface{}, 1024), Base:&routingpool.Base{Name: "Redis Push Task", Response: make(chan bool)}, redis:RedisConnection, encoder:redisLangEncoder}
+func NewRedisPushTask() *RedisPusherTask {
+	return &RedisPusherTask{message : make(chan interface{}, 1024), Base:&routingpool.Base{Name: "Redis Push Task", Response: make(chan bool)}, redis:RedisConnection, encoder:redisLangEncoder}
 }
+
+func PushStocks(name []string) {
+	RedisDispatcher.stockname <- name
+}
+
 
 func (r *RedisManager) Run(id int) {
 	r.caller(id)
 }
 
 func (r *RedisManager) caller(id int) {
-	cntPush := 0
-	cntChange := 0
+	//for pusher := 0; pusher < viper.GetInt("redis.pushtask.count"); pusher++ {
+		routingpool.PutTask(RedisPusher)
+	//}
+
+	//cntPush := 0
+	//cntChange := 0
 	cntChangeRouting := 0
 	exit := false
 
 	for !exit {
 		select {
 		case <-r.pushDone:
-			cntPush = cntPush + 1
-			if cntPush == viper.GetInt("redis.pushtask.count") {
+			//cntPush = cntPush + 1
+			//if cntPush == viper.GetInt("redis.pushtask.count") {
+			exit = true
+				break
+
 				funds, _ := getFunds()
 				cntChangeRouting = len(funds)
 				if cntChangeRouting%10 !=0 {
@@ -112,13 +131,13 @@ func (r *RedisManager) caller(id int) {
 
 					routingpool.PutTask(NewRedisChangeTask(r.redis, funds[index*10 : fixedIndex]))
 				}
-			}
-		case <-r.changeDone:
+			//}
+		/*case <-r.changeDone:
 			cntChange = cntChange + 1
 			if cntChange == cntChangeRouting {
 				logger.Debug("Received change done")
 				exit = true
-			}
+			}*/
 		}
 	}
 
@@ -164,7 +183,7 @@ func (c *RedisChangeTask) caller(id int) {
 				changedRecords[temp["recorddate"]] = make(map[string]string)
 
 				changedRecords[temp["recorddate"]]["code"] = temp["code"]
-				changedRecords[temp["recorddate"]]["recorddate"] = temp["code"]
+				changedRecords[temp["recorddate"]]["recorddate"] = temp["recorddate"]
 				changedRecords[temp["recorddate"]]["holdcount"] = temp["holdcount"]
 				changedRecords[temp["recorddate"]]["holdvalue"] = temp["holdvalue"]
 
@@ -181,13 +200,17 @@ func (c *RedisChangeTask) caller(id int) {
 		logger.Debugf("Routing-%d, Delete fund %s records from Redis successfully", id, fund)
 
 		// Insert the re-calculated records to Redis again
-		for _, v := range changedRecords{
+		for _, v := range changedRecords {
 			json_value, _ := json.Marshal(v)
 			_, err := c.redis.Do("LPUSH", key, json_value)
 			if err != nil {
 				logger.Errorf("Routing-%d, Insert the re-calculated records failed for fund %s, %s", id, key,  err)
 				continue
 			}
+
+			filename := fmt.Sprintf("d:/out/%s.csv", fund)
+			line := fmt.Sprintf("%s,%s,%s", v["recorddate"], v["holdcount"], v["holdvalue"])
+			utility.WriteToFile(filename, line)
 		}
 	}
 
@@ -196,7 +219,7 @@ func (c *RedisChangeTask) caller(id int) {
 
 
 func PushDataIntoRedis(msg interface{}) {
-	RedisPush.message <- msg
+	RedisPusher.message <- msg
 }
 
 func PushTaskDone() {
@@ -206,41 +229,47 @@ func PushTaskDone() {
 func ChangeTaskDone() {
 	RedisDispatcher.changeDone <- true
 }
-func (p *RedisPushTask) caller(id int) {
+func (p *RedisPusherTask) caller(id int) {
 	timeout := time.NewTimer(time.Second * time.Duration(viper.GetInt("redis.pushtask.timer")))
 	exit := false
-	funds, _ := getFunds()
-	//encoder := mahonia.NewEncoder("gbk")
+	//funds, _ := getFunds()
 
 	for !exit {
 		select {
 			case data := <-p.message:
-				logger.Infof("Analysis-task %d, received data", id)
+				logger.Infof("RedisPusherTask %d, received data", id)
 				tmp := data.([]*htmlparser.JJCCData)
 
 				for _, value := range tmp {
-					logger.Debugf("Analysis-task %d, row data name %s, code %s, holdcount %.4f, holdvalue %.4f", id, value.Name, value.Code, value.HoldCount, value.HoldValue)
-					for _,fund := range funds {
-						if strings.Contains(value.Name, fund) {
-							logger.Debugf("Analysis-task %d, found record data for %s", id, fund)
+					logger.Debugf("RedisPusherTask %d, row data name %s, code %s, holdcount %.4f, holdvalue %.4f", id, value.Name, value.Code, value.HoldCount, value.HoldValue)
+					//for _,fund := range funds {
+						//if strings.Contains(value.Name, fund) {
+							logger.Debugf("RedisPusherTask %d, found JJCC record data for %s", id, value.Stock_name)
 
-							raw := map[string]string{	"code" : value.Code,
+							raw := map[string]string{	"jj_code" : value.Code,
 														"recorddate" : value.RecordDate,
 														"holdcount" : fmt.Sprintf("%.4f", value.HoldCount),
 														"holdvalue" : fmt.Sprintf("%.4f", value.HoldValue),
 													}
 
-							key := p.encoder.ConvertString(fund)
+							key := p.encoder.ConvertString(value.Stock_name + "_" + value.Stock_number)
 							json_value, _ := json.Marshal(raw)
 							_, err := p.redis.Do("LPUSH", key, json_value)
 							if err != nil {
-								logger.Errorf("redis set failed:", err)
+								logger.Errorf("Push JJCC data to Redis failure:", err)
 							}
-						}
-					}
+						//}
+					//}
 				}
 
 				timeout.Reset(time.Second * time.Duration(viper.GetInt("analyser.timer")))
+			case stock := <- RedisDispatcher.stockname:
+				// Encoding the value because the value containes Chinese so that check it in Redis directly.
+				encoded_value := p.encoder.ConvertString(stock[1])
+				_, err := p.redis.Do("LPUSH", stock[0], encoded_value)
+				if err != nil {
+					logger.Errorf("Push stock name to Redis failure:", err)
+				}
 
 			case <- timeout.C: // The waiting seconds for receiving data, analysis routine exits after the waiting.
 				PushTaskDone()
@@ -249,10 +278,10 @@ func (p *RedisPushTask) caller(id int) {
 		}
 	}
 
-	logger.Infof("Analysis-task %d, exit.....................", id)
+	logger.Infof("RedisPusherTask %d, exit.....................", id)
 }
 
-func (p *RedisPushTask) Run(id int) {
+func (p *RedisPusherTask) Run(id int) {
 	p.caller(id)
 }
 

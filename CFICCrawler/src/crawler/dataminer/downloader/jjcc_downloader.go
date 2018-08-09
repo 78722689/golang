@@ -19,7 +19,7 @@ type JJCC struct {
 
 }
 
-func (jjcc *JJCC) Download(stockNumber string, moduleURL string) {
+func (jjcc *JJCC) Download(stockNumber string, stockName string, moduleURL string) {
 	stockID := strings.Split(moduleURL, "/")[2]
 
 	logger.Debugf("JJCC-Downloader start to download for stockNumber=%s, stockID=%s, moduleUrl=%s", stockNumber, stockID, moduleURL)
@@ -61,7 +61,7 @@ func (jjcc *JJCC) Download(stockNumber string, moduleURL string) {
 
 				// If Analyser is not enabled, only download the pages
 				if viper.GetBool("analyser.enable") {
-					collector.CollectJJCC(file, recordDate.Format("2006-01-02"))
+					collector.CollectJJCC(stockNumber, stockName, file, recordDate.Format("2006-01-02"))
 				}
 			}
 		}

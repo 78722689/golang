@@ -13,6 +13,9 @@ type JJCCData struct {
 	Code string
 	HoldCount float64
 	HoldValue float64
+
+	Stock_name string
+	Stock_number string
 }
 
 func (tree *HTMLDoc) JJCC_Request(url string, file string) (*HTMLDoc, error) {
@@ -33,7 +36,7 @@ func (tree *HTMLDoc) JJCC_Request(url string, file string) (*HTMLDoc, error) {
 	}
 }
 
-func (tree *HTMLDoc) JJCC_GetJJCCData(recordDate string) []*JJCCData {
+func (tree *HTMLDoc) JJCC_GetJJCCData(stockNumber, stockName, recordDate string) []*JJCCData {
 	var dataList []*JJCCData
 
 	tree.Find(TagNode, "table").Each(func(i int, table *Selection) {
@@ -71,6 +74,8 @@ func (tree *HTMLDoc) JJCC_GetJJCCData(recordDate string) []*JJCCData {
 			if found {
 				logger.Debugf("JJCC Report name %s, code %s, holdcount %.4f, holdvalue %.4f", d.Name, d.Code, d.HoldCount, d.HoldValue)
 				d.RecordDate = recordDate
+				d.Stock_name = stockName
+				d.Stock_number = stockNumber
 				dataList = append(dataList, d)
 			}
 		})

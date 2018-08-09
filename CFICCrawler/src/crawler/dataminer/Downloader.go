@@ -4,14 +4,15 @@ import (
 	"htmlparser"
 	"httpcontroller"
 	"os"
-	"routingpool"
 	"strings"
 	"utility"
 	"crawler/dataminer/downloader"
 	"github.com/spf13/viper"
+	"crawler/dataminer/analyzer"
 )
 
 var logger = utility.GetLogger()
+
 
 func (t *Target) RegisterModuleDownloader(m downloader.Moduler) *Target{
 	t.Modules = append(t.Modules, m)
@@ -20,6 +21,7 @@ func (t *Target) RegisterModuleDownloader(m downloader.Moduler) *Target{
 }
 
 func (t *Target) Start() {
+
 	// Request stock list page to get all the stocks
 	request := httpcontroller.Request{
 		Url:    viper.GetString("global.quote_homepage") + viper.GetString("global.stock_list_url_path"),
@@ -33,12 +35,16 @@ func (t *Target) Start() {
 		os.Exit(1)
 	}
 
-	mainTask := downloader.NewDownloadTask("Main Downloader", func(id int) {
+	//mainTask := downloader.NewDownloadTask("Main Downloader", func(id int) {
+	func(id int) {
 		for _, stockinfo := range doc.GetStocks(t.Stocks) {
+			// Push stock name to table
+			analyzer.PushStocks([]string{"STOCKS_NAME_SHH", stockinfo.Name + "_" + stockinfo.Number})
 
 			// To request home page.
 			tempStockinfo := stockinfo // Copy the value, so that below closure run correctly
-			homepageCaller := func(id int) {
+			//homepageCaller := func(id int) {
+			func(id int) {
 				logger.Infof("[Thread-%d] Downloading link:%v name:%v, number:%v", id, tempStockinfo.Link, tempStockinfo.Name, tempStockinfo.Number)
 
 				file := viper.GetString("global.download_folder") + tempStockinfo.Number + "/" + tempStockinfo.Link
@@ -55,7 +61,8 @@ func (t *Target) Start() {
 				logger.Infof("[Thread-%d] Downloaded homepage link:%v name:%v, number:%v", id, tempStockinfo.Link, tempStockinfo.Name, tempStockinfo.Number)
 
 				// To request modules for each stock.
-				moduleCaller := func(id int) {
+				//moduleCaller := func(id int) {
+				func(id int) {
 					doc, err := htmlparser.ParseFromFile(file)
 					if err != nil {
 						logger.Errorf("Parse file failure, %s", err)
@@ -65,17 +72,18 @@ func (t *Target) Start() {
 					stock_modules_url := doc.GetModuleURL(tempStockinfo.Link)
 					for _, url := range stock_modules_url {
 						for _, module := range t.Modules {
-							if strings.Contains(strings.ToUpper(url), "/" + module.ModuleName() + "/") {
-								module.Download(tempStockinfo.Number, url)
+							if strings.Contains(strings.ToUpper(url), "/"+module.ModuleName()+"/") {
+								module.Download(tempStockinfo.Number, tempStockinfo.Name, url)
 								break
 							}
 						}
 					}
-				}
-				routingpool.PutTask(downloader.NewDownloadTask("Modules Downloader", moduleCaller))
-			}
-			routingpool.PutTask(downloader.NewDownloadTask("Homepage Downloader", homepageCaller))
+				}(777)
+				//routingpool.PutTask(downloader.NewDownloadTask("Modules Downloader", moduleCaller))
+			}(888)
+			//routingpool.PutTask(downloader.NewDownloadTask("Homepage Downloader", homepageCaller))
 		}
-	})
-	routingpool.PutTask(mainTask)
+	}(999)
+		//})
+	//routingpool.PutTask(mainTask)
 }

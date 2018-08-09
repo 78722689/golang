@@ -53,7 +53,7 @@ func main() {
 	start := time.Now()
 	runtime.GOMAXPROCS(runtime.NumCPU())
 
-	utility.NewConfig("D:\\golang\\CFICCrawler\\resource\\configuration\\")
+	utility.NewConfig("D:\\programing\\golang\\CFICCrawler\\resource\\configuration\\")
 
 	// Log setting
 	utility.Init_Logger()
@@ -66,7 +66,7 @@ func main() {
 	//proxy := &httpcontroller.Proxy{"HTTP", "203.17.66.134", "8000"}
 	//folder := "D:/Work/MyDemo/go/golang/CFICCrawler/resource/download/"
 
-	crawler.StartCrawl([]string{"600066", "600048", "600111"})
+	crawler.StartCrawl([]string{})
 
 
 

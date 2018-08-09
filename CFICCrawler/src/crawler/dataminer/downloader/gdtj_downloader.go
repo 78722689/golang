@@ -10,7 +10,7 @@ var gdtj_name  = "GDTJ"
 type GDTJ struct {
 }
 
-func (gdtj *GDTJ) Download(stockNumber string, moduleURL string) {
+func (gdtj *GDTJ) Download(stockNumber, stockName, moduleURL string) {
 	logger.Debugf("GDTJ Downloader to download  url=%s, file=%s", stockNumber, moduleURL)
 	/*request := httpcontroller.Request{
 		Url:        viper.GetString("global.quote_homepage") + moduleURL,
