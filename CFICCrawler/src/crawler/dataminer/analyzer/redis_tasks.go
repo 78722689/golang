@@ -12,22 +12,34 @@ import (
 	"encoding/json"
 	"github.com/garyburd/redigo/redis"
 	"utility"
+	"flag"
 )
 
 var (
 	RedisPusher *RedisPusherTask
 	RedisDispatcher *RedisManager
 
+	redisServer = flag.String("127.0.0.1", ":6379", "")
+	redisPool *redis.Pool
 	RedisConnection redis.Conn
 	redisLangEncoder mahonia.Encoder
 )
 
 func init() {
+	redisPool = newPool(*redisServer)
 	RedisConnection = initRedis()
 	redisLangEncoder = mahonia.NewEncoder("gbk")
 
 	RedisPusher = NewRedisPushTask()
 	RedisDispatcher = NewRedisManagerTask()
+}
+
+func newPool(addr string) *redis.Pool {
+	return &redis.Pool{
+		MaxIdle: 3,
+		IdleTimeout: 240 * time.Second,
+		Dial: func () (redis.Conn, error) { return redis.Dial("tcp", addr) },
+	}
 }
 
 func initRedis() redis.Conn {
@@ -44,16 +56,18 @@ type RedisManager struct {
 
 	pushDone chan bool
 	changeDone chan bool
-	stockname chan []string
+	stockname chan []string  // format example: [SHH, stockname]
+	domains chan map[string][]string // format example: [601111]{d1, d2, d3, d4, d5}
 	redis redis.Conn
+	pool *redis.Pool
 }
 
 // Implement Task interface
 type RedisPusherTask struct {
 	*routingpool.Base
-	message chan interface{}
+	jjcc chan interface{}
 
-
+	pool *redis.Pool
 	encoder mahonia.Encoder
 	redis redis.Conn
 	//timer int	// The waiting seconds for receiving data, analysis routine exits after the waiting.
@@ -74,7 +88,9 @@ func NewRedisManagerTask() *RedisManager {
 	return &RedisManager{pushDone:make(chan bool),
 						  changeDone:make(chan bool),
 						  stockname:make(chan []string),
+						  domains:make(chan map[string][]string),
 						  redis:RedisConnection,
+						  pool : redisPool,
 						  Base: &routingpool.Base{Name: "Redis Change Task", Response: make(chan bool)}}
 }
 
@@ -83,34 +99,40 @@ func NewRedisChangeTask(redisConnection redis.Conn, funds []string) *RedisChange
 }
 
 func NewRedisPushTask() *RedisPusherTask {
-	return &RedisPusherTask{message : make(chan interface{}, 1024), Base:&routingpool.Base{Name: "Redis Push Task", Response: make(chan bool)}, redis:RedisConnection, encoder:redisLangEncoder}
+	return &RedisPusherTask{jjcc : make(chan interface{}, 1024),
+							 Base:&routingpool.Base{Name: "Redis Push Task", Response: make(chan bool)},
+							 redis:RedisConnection,
+							 encoder:redisLangEncoder,
+							 pool:redisPool}
 }
 
 func PushStocks(name []string) {
 	RedisDispatcher.stockname <- name
 }
 
+func PushDomains(domains map[string][]string)  {
+	RedisDispatcher.domains <- domains
+}
 
 func (r *RedisManager) Run(id int) {
 	r.caller(id)
 }
 
 func (r *RedisManager) caller(id int) {
-	//for pusher := 0; pusher < viper.GetInt("redis.pushtask.count"); pusher++ {
+	for pusher := 0; pusher < viper.GetInt("redis.pushtask.count"); pusher++ {
 		routingpool.PutTask(RedisPusher)
-	//}
+	}
 
-	//cntPush := 0
-	//cntChange := 0
+	cntPush := 0
 	cntChangeRouting := 0
 	exit := false
 
 	for !exit {
 		select {
 		case <-r.pushDone:
-			//cntPush = cntPush + 1
-			//if cntPush == viper.GetInt("redis.pushtask.count") {
-			exit = true
+			cntPush = cntPush + 1
+			if cntPush == viper.GetInt("redis.pushtask.count") {
+				exit = true
 				break
 
 				funds, _ := getFunds()
@@ -131,19 +153,13 @@ func (r *RedisManager) caller(id int) {
 
 					routingpool.PutTask(NewRedisChangeTask(r.redis, funds[index*10 : fixedIndex]))
 				}
-			//}
-		/*case <-r.changeDone:
-			cntChange = cntChange + 1
-			if cntChange == cntChangeRouting {
-				logger.Debug("Received change done")
-				exit = true
-			}*/
+			}
 		}
 	}
 
-	if r.redis != nil {
-		logger.Debug("Redis closed.")
-		r.redis.Close()
+	if redisPool != nil {
+		logger.Debug("Redis-Pool closed.")
+		redisPool.Close()
 	}
 }
 
@@ -219,7 +235,7 @@ func (c *RedisChangeTask) caller(id int) {
 
 
 func PushDataIntoRedis(msg interface{}) {
-	RedisPusher.message <- msg
+	RedisPusher.jjcc <- msg
 }
 
 func PushTaskDone() {
@@ -229,47 +245,100 @@ func PushTaskDone() {
 func ChangeTaskDone() {
 	RedisDispatcher.changeDone <- true
 }
+
+func (p *RedisPusherTask) Run(id int) {
+	p.caller(id)
+}
+
 func (p *RedisPusherTask) caller(id int) {
 	timeout := time.NewTimer(time.Second * time.Duration(viper.GetInt("redis.pushtask.timer")))
 	exit := false
-	//funds, _ := getFunds()
 
 	for !exit {
 		select {
-			case data := <-p.message:
-				logger.Infof("RedisPusherTask %d, received data", id)
-				tmp := data.([]*htmlparser.JJCCData)
-
-				for _, value := range tmp {
-					logger.Debugf("RedisPusherTask %d, row data name %s, code %s, holdcount %.4f, holdvalue %.4f", id, value.Name, value.Code, value.HoldCount, value.HoldValue)
-					//for _,fund := range funds {
-						//if strings.Contains(value.Name, fund) {
-							logger.Debugf("RedisPusherTask %d, found JJCC record data for %s", id, value.Stock_name)
-
-							raw := map[string]string{	"jj_code" : value.Code,
-														"recorddate" : value.RecordDate,
-														"holdcount" : fmt.Sprintf("%.4f", value.HoldCount),
-														"holdvalue" : fmt.Sprintf("%.4f", value.HoldValue),
-													}
-
-							key := p.encoder.ConvertString(value.Stock_name + "_" + value.Stock_number)
-							json_value, _ := json.Marshal(raw)
-							_, err := p.redis.Do("LPUSH", key, json_value)
-							if err != nil {
-								logger.Errorf("Push JJCC data to Redis failure:", err)
-							}
-						//}
-					//}
+			case data := <-p.jjcc:
+				records := data.([]*htmlparser.JJCCData)
+				if records == nil {
+					logger.Warning("Received empty message when processing JJCC data.")
+					continue
 				}
+
+				temp2 := map[string]map[string]string{}
+				for _, value := range records {
+					logger.Debugf("RedisPusherTask %d, constructing raw data to json format for %s on %s:raw value is name %s, code %s, holdcount %.4f, holdvalue %.4f",
+											id,
+											value.Stock_name,
+											value.RecordDate,
+											value.Name,
+											value.Code,
+											value.HoldCount,
+											value.HoldValue)
+
+					// Add fund name and func code mapping to table 'FUND_INFO_TABLE' which is a set and keep the data uniqueness
+					fund_info := p.encoder.ConvertString(records[0].Code + "_" + records[0].Name)
+					_, err := p.pool.Get().Do("SADD", "FUND_INFO_TABLE", fund_info)
+					if err != nil {
+						logger.Errorf("Push fund info to Redis failure:", err)
+					}
+
+					temp1 := map[string]string{"count": fmt.Sprintf("%.4f", value.HoldCount), "value": fmt.Sprintf("%.4f", value.HoldValue)}
+					temp2[value.Code] = temp1
+				}
+
+				rowData := map[string]map[string]map[string]string{records[0].RecordDate:temp2}
+
+				/* JJCC data presentation in Redis
+				{
+				"2017-09-30":{"003594":{"count":"23.6700","value":"0.0138"},
+							 "003641":{"count":"23.6700","value":"0.0138"},
+							 "003922":{"count":"23.6700","value":"0.0138"},
+							 "003924":{"count":"23.6700","value":"0.0138"},
+							 "004336":{"count":"23.6700","value":"0.0138"},
+							 "004338":{"count":"23.6700","value":"0.0138"},
+							 "004434":{"count":"1210.0069","value":"0.7042"},
+							 "050001":{"count":"3800.0000","value":"2.2116"},
+							 "050023":{"count":"116.7300","value":"0.0679"},
+							 "050201":{"count":"1450.0000","value":"0.8439"},
+							 "160512":{"count":"1350.0012","value":"0.7857"}}}
+				{
+				"2017-12-31":{"160512":{"count":"1000.0012","value":"0.5210"}}}
+				{
+				"2018-03-31":{"004194":{"count":"27.0900","value":"0.0115"},
+							  "160512":{"count":"800.0012","value":"0.3384"}}}
+				*/
+				key := p.encoder.ConvertString(records[0].Stock_name + "_" + records[0].Stock_number)
+				json_value, _ := json.Marshal(rowData)
+				_, err := p.pool.Get().Do("LPUSH", key, json_value)
+				if err != nil {
+					logger.Errorf("Push JJCC data to Redis failure:", err)
+				}
+
 
 				timeout.Reset(time.Second * time.Duration(viper.GetInt("analyser.timer")))
 			case stock := <- RedisDispatcher.stockname:
-				// Encoding the value because the value containes Chinese so that check it in Redis directly.
+				/* Stocks name presentation in Redis
+				SHH:{name1_code, name2_code, name3_code, name4_code......}
+				SHZ:(name1_code, name2_code, name3_code, name4_code......)
+				CYB:{name1_code, name2_code, name3_code, name4_code......}
+				 */
+
+				// Encoding the value because the value contains Chinese so that check it in Redis directly.
 				encoded_value := p.encoder.ConvertString(stock[1])
-				_, err := p.redis.Do("LPUSH", stock[0], encoded_value)
+				_, err := p.pool.Get().Do("LPUSH", stock[0], encoded_value)
 				if err != nil {
 					logger.Errorf("Push stock name to Redis failure:", err)
 				}
+
+			case domains := <- RedisDispatcher.domains:
+				for k, v := range domains  {
+					json_value, _ := json.Marshal(v)
+
+					_, err := p.pool.Get().Do("SET", "DOMAIN_" + k, json_value)
+					if err != nil {
+						logger.Errorf("Push Domain to Redis failure:", err)
+					}
+				}
+
 
 			case <- timeout.C: // The waiting seconds for receiving data, analysis routine exits after the waiting.
 				PushTaskDone()
@@ -281,9 +350,7 @@ func (p *RedisPusherTask) caller(id int) {
 	logger.Infof("RedisPusherTask %d, exit.....................", id)
 }
 
-func (p *RedisPusherTask) Run(id int) {
-	p.caller(id)
-}
+
 
 func getFunds() ([]string, error) {
 	filename := viper.GetString("module.jjcc.funds_file_path")

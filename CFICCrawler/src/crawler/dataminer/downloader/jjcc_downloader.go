@@ -20,9 +20,9 @@ type JJCC struct {
 }
 
 func (jjcc *JJCC) Download(stockNumber string, stockName string, moduleURL string) {
-	stockID := strings.Split(moduleURL, "/")[2]
+	pageID := strings.Split(moduleURL, "/")[2]
 
-	logger.Debugf("JJCC-Downloader start to download for stockNumber=%s, stockID=%s, moduleUrl=%s", stockNumber, stockID, moduleURL)
+	logger.Debugf("JJCC-Downloader start to download for stockNumber=%s, pageID=%s, moduleUrl=%s", stockNumber, pageID, moduleURL)
 
 	// 1. Get the start time and end time so that download the JJCC data during the start-end time.
 	if startTime, endTime, err:= ParseDuration(viper.GetString("module.jjcc.durations")); err != nil {
@@ -40,24 +40,25 @@ func (jjcc *JJCC) Download(stockNumber string, stockName string, moduleURL strin
 
 		// 3. Find out all JJCC records date during the start-end time
 		for index, recordDate := range jjcc.getAllRecordsDate(fileToWrite) {
-			// Sometimes the newest JJCC record can not be opened on Web Browser due to bug in QUOTE
-			// And the newest record has been download before, so here do not need to download it again.
-			// So rename the page is enough.
-			if index == 0 {
-				newName := viper.GetString("global.download_folder") + stockNumber + "/modules/" + jjcc.ModuleName() +  "/" + recordDate.Format("2006-01-02") + ".html"
-				os.Rename(fileToWrite, newName)
-				continue
-			}
-
 			if startTime.Before(recordDate) && endTime.After(recordDate) {
-				logger.Debugf("Matched JJCC record on date %s for stockNumber %s(%s) ", recordDate.Format("2006-01-02"), stockNumber, stockID)
+				logger.Debugf("Matched JJCC record on date %s for stockNumber %s(%s) ", recordDate.Format("2006-01-02"), stockNumber, pageID)
 
-				file := viper.GetString("global.download_folder") + stockNumber + "/modules/" + jjcc.ModuleName() +  "/" + recordDate.Format("2006-01-02") + ".html"
-				// 4. Download the page for this JJCC record
-				StartDownload(
-					viper.GetString("global.quote_homepage") + fmt.Sprintf(viper.GetString("module.jjcc.url_path"), stockID, recordDate.Format("2006-01-02")),
+				file := viper.GetString("global.download_folder") + stockNumber + "/modules/" + jjcc.ModuleName() + "/" + recordDate.Format("2006-01-02") + ".html"
+
+				// Sometimes the newest JJCC record can not be opened on Web Browser due to bug in QUOTE
+				// And the newest record has been download before, so here do not need to download it again.
+				// So rename the page is enough.
+				if index == 0 {
+					//newName := viper.GetString("global.download_folder") + stockNumber + "/modules/" + jjcc.ModuleName() +  "/" + recordDate.Format("2006-01-02") + ".html"
+					os.Rename(fileToWrite, file)
+				} else {
+					//file := viper.GetString("global.download_folder") + stockNumber + "/modules/" + jjcc.ModuleName() + "/" + recordDate.Format("2006-01-02") + ".html"
+					// 4. Download the page for this JJCC record
+					StartDownload(
+						viper.GetString("global.quote_homepage")+fmt.Sprintf(viper.GetString("module.jjcc.url_path"), pageID, recordDate.Format("2006-01-02")),
 						file,
-					viper.GetBool("module.jjcc.overwrite"))
+						viper.GetBool("module.jjcc.overwrite"))
+				}
 
 				// If Analyser is not enabled, only download the pages
 				if viper.GetBool("analyser.enable") {

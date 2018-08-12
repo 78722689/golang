@@ -24,7 +24,7 @@ func StartCrawl(stocks []string) {
 
 	target := dataminer.Target{
 		Stocks:      stocks}
-	target.RegisterModuleDownloader(&downloader.JJCC{}).RegisterModuleDownloader(&downloader.GDTJ{})
+	target.RegisterModuleDownloader(&downloader.JJCC{}).RegisterModuleDownloader(&downloader.GDTJ{}).RegisterModuleDownloader(&downloader.DOMAIN{})
 
 	target.Start()
 
