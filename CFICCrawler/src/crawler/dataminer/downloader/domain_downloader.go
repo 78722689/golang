@@ -3,7 +3,7 @@ package downloader
 import (
 	"github.com/spf13/viper"
 	"htmlparser"
-	"crawler/dataminer/analyzer"
+	"crawler/dataminer/database"
 )
 
 var(
@@ -19,13 +19,15 @@ func (d *DOMAIN) Download(stockNumber string, stockName string, moduleURL string
 	//pageID := strings.Split(moduleURL, "/")[2]
 
 	fileToWrite := viper.GetString("global.download_folder") + stockNumber + "/modules/" + d.ModuleName() +  "/" +d.ModuleName() + ".html"
-	if err := StartDownload(viper.GetString("global.quote_homepage")+moduleURL, fileToWrite, viper.GetBool("module.jjcc.overwrite")); err != nil {
+	if err := StartDownload(viper.GetString("module.domain.url") + "/" +stockNumber, fileToWrite, true/*viper.GetBool("module.jjcc.overwrite")*/); err != nil {
 		logger.Errorf("Download Domain module failure for %s_%s.", stockName, stockNumber)
 		return
 	}
 	logger.Debugf("Begin to parse domains for %s(%s) url:%s", stockName, stockNumber, moduleURL)
+
 	domains := d.getDomains(fileToWrite)
-	analyzer.PushDomains(map[string][]string{stockNumber:domains})
+	database.PushDomains(map[string][]string{stockNumber:domains})
+
 	logger.Debugf("Found domains %v", domains)
 }
 

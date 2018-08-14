@@ -1,0 +1,5 @@
+package analyser
+
+func StartAnalyse() {
+
+}

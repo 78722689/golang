@@ -85,12 +85,20 @@ func main() {
 	flag.Parse()
 	pool = newPool(*redisServer)
 
-	s,_ := pool.Get().Do("get", "DOMAIN_600007")
+	s,_ := pool.Get().Do("get", "STOCK_DOMAINS_MAPPING_600007")
 	//for _,value := range mylist {
 		var imapGet []string
 		json.Unmarshal(s.([]byte), &imapGet)
 
 		fmt.Println(fmt.Sprintf("%v", imapGet))
+
+	ss,_ := redis.Strings(pool.Get().Do("smembers", "DOMAINS"))
+	for _, v := range ss {
+		//encoder := mahonia.NewDecoder("gbk")
+		//value := encoder.ConvertString(v)
+		fmt.Println(fmt.Sprintf("%s", v))
+	}
+
 	//}
 	//mymap := make(map[string]map[string]map[string]string)
 /*

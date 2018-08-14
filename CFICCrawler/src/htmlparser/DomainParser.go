@@ -5,9 +5,21 @@ import (
 )
 
 func (tree *HTMLDoc) GetDomains() []string {
-
 	var result []string
 
+	tree.Find(TagNode, "dl").Each(func(i int, dl *Selection) {
+		componyDetailsNode := dl.GetNodeByAttr("class","company_details")
+		if len(componyDetailsNode) == 0 {
+			return
+		}
+
+		dl.Find(TagNode, "dd").Each(func(i int, dd *Selection) {
+			if i == 1 {
+				result = strings.Split(dd.Nodes[0].Root.Attr[0].Val, "，")
+			}
+		})
+	})
+/*
 	tree.Find(TagNode, "table").Each(func(i int, table *Selection) {
 		if len(table.GetNodeByAttr("id", "tabh")) == 0 {
 			return
@@ -30,6 +42,6 @@ func (tree *HTMLDoc) GetDomains() []string {
 		})
 
 	})
-
+*/
 	return result
 }

@@ -6,7 +6,7 @@ import (
 	//"crawler/dataminer/analyzer"
 	"crawler/dataminer"
 	"crawler/dataminer/downloader"
-	"crawler/dataminer/analyzer"
+	"crawler/dataminer/database"
 )
 
 func StartCrawl(stocks []string) {
@@ -20,7 +20,7 @@ func StartCrawl(stocks []string) {
 			Proxy:       t.Proxy}
 		collector.Start()
 	*/
-	analyzer.StartAnalyzer()
+	database.StartAnalyzer()
 
 	target := dataminer.Target{
 		Stocks:      stocks}

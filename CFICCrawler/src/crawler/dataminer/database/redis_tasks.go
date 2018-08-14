@@ -1,4 +1,4 @@
-package analyzer
+package database
 
 import (
 	"routingpool"
@@ -20,14 +20,14 @@ var (
 	RedisDispatcher *RedisManager
 
 	redisServer = flag.String("127.0.0.1", ":6379", "")
-	redisPool *redis.Pool
-	RedisConnection redis.Conn
+	RedisPool *redis.Pool
+	//RedisConnection redis.Conn
 	redisLangEncoder mahonia.Encoder
 )
 
 func init() {
-	redisPool = newPool(*redisServer)
-	RedisConnection = initRedis()
+	RedisPool = newPool(*redisServer)
+	//RedisConnection = initRedis()
 	redisLangEncoder = mahonia.NewEncoder("gbk")
 
 	RedisPusher = NewRedisPushTask()
@@ -42,15 +42,6 @@ func newPool(addr string) *redis.Pool {
 	}
 }
 
-func initRedis() redis.Conn {
-	c, err := redis.Dial("tcp", "127.0.0.1:6379")
-	if err != nil {
-		logger.Errorf("Connect to redis error", err)
-	}
-
-	return c
-}
-
 type RedisManager struct {
 	*routingpool.Base
 
@@ -58,7 +49,6 @@ type RedisManager struct {
 	changeDone chan bool
 	stockname chan []string  // format example: [SHH, stockname]
 	domains chan map[string][]string // format example: [601111]{d1, d2, d3, d4, d5}
-	redis redis.Conn
 	pool *redis.Pool
 }
 
@@ -89,8 +79,8 @@ func NewRedisManagerTask() *RedisManager {
 						  changeDone:make(chan bool),
 						  stockname:make(chan []string),
 						  domains:make(chan map[string][]string),
-						  redis:RedisConnection,
-						  pool : redisPool,
+						  //redis:RedisConnection,
+						  pool : RedisPool,
 						  Base: &routingpool.Base{Name: "Redis Change Task", Response: make(chan bool)}}
 }
 
@@ -101,9 +91,9 @@ func NewRedisChangeTask(redisConnection redis.Conn, funds []string) *RedisChange
 func NewRedisPushTask() *RedisPusherTask {
 	return &RedisPusherTask{jjcc : make(chan interface{}, 1024),
 							 Base:&routingpool.Base{Name: "Redis Push Task", Response: make(chan bool)},
-							 redis:RedisConnection,
+							 //redis:RedisConnection,
 							 encoder:redisLangEncoder,
-							 pool:redisPool}
+							 pool:RedisPool}
 }
 
 func PushStocks(name []string) {
@@ -124,7 +114,7 @@ func (r *RedisManager) caller(id int) {
 	}
 
 	cntPush := 0
-	cntChangeRouting := 0
+	//cntChangeRouting := 0
 	exit := false
 
 	for !exit {
@@ -134,7 +124,7 @@ func (r *RedisManager) caller(id int) {
 			if cntPush == viper.GetInt("redis.pushtask.count") {
 				exit = true
 				break
-
+/*
 				funds, _ := getFunds()
 				cntChangeRouting = len(funds)
 				if cntChangeRouting%10 !=0 {
@@ -151,15 +141,16 @@ func (r *RedisManager) caller(id int) {
 						fixedIndex = index*10 + (len(funds)-index*10)
 					}
 
-					routingpool.PutTask(NewRedisChangeTask(r.redis, funds[index*10 : fixedIndex]))
-				}
+					//routingpool.PutTask(NewRedisChangeTask(r.redis, funds[index*10 : fixedIndex]))
+
+				}*/
 			}
 		}
 	}
 
-	if redisPool != nil {
+	if RedisPool != nil {
 		logger.Debug("Redis-Pool closed.")
-		redisPool.Close()
+		RedisPool.Close()
 	}
 }
 
@@ -329,13 +320,26 @@ func (p *RedisPusherTask) caller(id int) {
 					logger.Errorf("Push stock name to Redis failure:", err)
 				}
 
-			case domains := <- RedisDispatcher.domains:
-				for k, v := range domains  {
-					json_value, _ := json.Marshal(v)
+			case domainsMapping := <- RedisDispatcher.domains:
+				for stock, domains := range domainsMapping  {
+					json_value, _ := json.Marshal(domains)
 
-					_, err := p.pool.Get().Do("SET", "DOMAIN_" + k, json_value)
+					// Insert Stock & Domains mapping to Redis
+					_, err := p.pool.Get().Do("SET", "STOCK_DOMAINS_MAPPING_" + stock, json_value)
 					if err != nil {
-						logger.Errorf("Push Domain to Redis failure:", err)
+						logger.Errorf("Push Stock & Domain  to Redis failure:", err)
+					}
+
+					// Insert Domains and keep the domains is unique
+					for _, domain := range domains {
+						// If encode here, it needs decode it when read from Redis
+						//encodedValue := p.encoder.ConvertString(domain)
+						//jsonValue,_ := json.Marshal(encodedValue)
+
+						_, err := p.pool.Get().Do("SADD", "DOMAINS", domain)
+						if err != nil {
+							logger.Errorf("Push Domains to Redis failure:", err)
+						}
 					}
 				}
 

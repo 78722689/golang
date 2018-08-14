@@ -8,7 +8,7 @@ import (
 	"utility"
 	"crawler/dataminer/downloader"
 	"github.com/spf13/viper"
-	"crawler/dataminer/analyzer"
+	"crawler/dataminer/database"
 )
 
 var logger = utility.GetLogger()
@@ -39,7 +39,7 @@ func (t *Target) Start() {
 	func(id int) {
 		for _, stockinfo := range doc.GetStocks(t.Stocks) {
 			// Push stock name to table
-			analyzer.PushStocks([]string{"STOCKS_NAME_SHH", stockinfo.Name + "_" + stockinfo.Number})
+			database.PushStocks([]string{"STOCKS_NAME_SHH", stockinfo.Name + "_" + stockinfo.Number})
 
 			// To request home page.
 			tempStockinfo := stockinfo // Copy the value, so that below closure run correctly

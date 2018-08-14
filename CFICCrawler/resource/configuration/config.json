@@ -21,6 +21,9 @@
             "durations" : "2017-08-08~2018-08-30",
             "url_path" : "/quote.aspx?stockid=%s&contenttype=jjcc&jzrq=%s",
             "funds_file_path" : "D:/programing/golang/CFICCrawler/resource/configuration/funds.list"
+            },
+        "domain" : {
+            "url" : "http://stockpage.10jqka.com.cn"
             }
         },
     "redis" : {
@@ -32,6 +35,10 @@
     },
     "analyser" : {
         "enable" : true,
-        "timer" : 60
+        "timer" : 60,
+        "domain" : {
+            "target" :"锂电池,"
+        }
     }
+    
 }
