@@ -19,7 +19,7 @@ func (d *DOMAIN) Download(stockNumber string, stockName string, moduleURL string
 	//pageID := strings.Split(moduleURL, "/")[2]
 
 	fileToWrite := viper.GetString("global.download_folder") + stockNumber + "/modules/" + d.ModuleName() +  "/" +d.ModuleName() + ".html"
-	if err := StartDownload(viper.GetString("module.domain.url") + "/" +stockNumber, fileToWrite, true/*viper.GetBool("module.jjcc.overwrite")*/); err != nil {
+	if err := StartDownload(viper.GetString("module.domain.url") + "/" +stockNumber, fileToWrite, viper.GetBool("module.domain.overwrite")); err != nil {
 		logger.Errorf("Download Domain module failure for %s_%s.", stockName, stockNumber)
 		return
 	}

@@ -84,20 +84,29 @@ func main() {
     //redis_practice()
 	flag.Parse()
 	pool = newPool(*redisServer)
+	jjccRows,_ :=  redis.Values(pool.Get().Do("lrange", "JJCC_600048", 0, -1))
+	var jjccMap map[string]map[string]map[string]string
 
-	s,_ := pool.Get().Do("get", "STOCK_DOMAINS_MAPPING_600007")
-	//for _,value := range mylist {
-		var imapGet []string
-		json.Unmarshal(s.([]byte), &imapGet)
+	for _, row := range jjccRows {
+		json.Unmarshal(row.([]byte), &jjccMap)
+		fmt.Println(jjccMap[])
+	}
+	//for/ _,value := range mylist {
+		//var imapGet []string
+		//json.Unmarshal(s.([]byte), &imapGet)
 
-		fmt.Println(fmt.Sprintf("%v", imapGet))
-
-	ss,_ := redis.Strings(pool.Get().Do("smembers", "DOMAINS"))
+		//fmt.Println(fmt.Sprintf("%v", imapGet))
+	/*encoder := mahonia.NewEncoder("gbk")
+	key := encoder.ConvertString("SET_DOMAIN_STOCKS_MAPPING_太阳能")
+	ss,_ := redis.Strings(pool.Get().Do("smembers", key))
 	for _, v := range ss {
 		//encoder := mahonia.NewDecoder("gbk")
 		//value := encoder.ConvertString(v)
 		fmt.Println(fmt.Sprintf("%s", v))
 	}
+	*/
+	t,_ := time.Parse("2006-01-02", "2018-08-28")
+	fmt.Println(t.Format("2006-01")+"-01")
 
 	//}
 	//mymap := make(map[string]map[string]map[string]string)

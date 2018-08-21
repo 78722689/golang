@@ -26,12 +26,14 @@ var (
 )
 
 func init() {
+	logger.Debug("redis b start")
 	RedisPool = newPool(*redisServer)
 	//RedisConnection = initRedis()
 	redisLangEncoder = mahonia.NewEncoder("gbk")
 
 	RedisPusher = NewRedisPushTask()
 	RedisDispatcher = NewRedisManagerTask()
+	logger.Debug("redis b end")
 }
 
 func newPool(addr string) *redis.Pool {
@@ -297,7 +299,7 @@ func (p *RedisPusherTask) caller(id int) {
 				"2018-03-31":{"004194":{"count":"27.0900","value":"0.0115"},
 							  "160512":{"count":"800.0012","value":"0.3384"}}}
 				*/
-				key := p.encoder.ConvertString(records[0].Stock_name + "_" + records[0].Stock_number)
+				key := p.encoder.ConvertString("JJCC_" + records[0].Stock_number)
 				json_value, _ := json.Marshal(rowData)
 				_, err := p.pool.Get().Do("LPUSH", key, json_value)
 				if err != nil {
@@ -314,31 +316,31 @@ func (p *RedisPusherTask) caller(id int) {
 				 */
 
 				// Encoding the value because the value contains Chinese so that check it in Redis directly.
-				encoded_value := p.encoder.ConvertString(stock[1])
-				_, err := p.pool.Get().Do("LPUSH", stock[0], encoded_value)
+				encodedValue := p.encoder.ConvertString(stock[1])
+				_, err := p.pool.Get().Do("LPUSH", stock[0], encodedValue)
 				if err != nil {
 					logger.Errorf("Push stock name to Redis failure:", err)
 				}
 
 			case domainsMapping := <- RedisDispatcher.domains:
 				for stock, domains := range domainsMapping  {
-					json_value, _ := json.Marshal(domains)
+					//json_value, _ := json.Marshal(domains)
 
 					// Insert Stock & Domains mapping to Redis
-					_, err := p.pool.Get().Do("SET", "STOCK_DOMAINS_MAPPING_" + stock, json_value)
-					if err != nil {
-						logger.Errorf("Push Stock & Domain  to Redis failure:", err)
-					}
+					//_, err := p.pool.Get().Do("SET", "STOCK_DOMAINS_MAPPING_" + stock, json_value)
+					//if err != nil {
+					//	logger.Errorf("Push Stock & Domain  to Redis failure:", err)
+					//}
 
 					// Insert Domains and keep the domains is unique
 					for _, domain := range domains {
 						// If encode here, it needs decode it when read from Redis
-						//encodedValue := p.encoder.ConvertString(domain)
+						encodedkey := p.encoder.ConvertString(domain)
 						//jsonValue,_ := json.Marshal(encodedValue)
 
-						_, err := p.pool.Get().Do("SADD", "DOMAINS", domain)
+						_, err := p.pool.Get().Do("SADD", "SET_DOMAIN_STOCKS_MAPPING_" + encodedkey, stock)
 						if err != nil {
-							logger.Errorf("Push Domains to Redis failure:", err)
+							logger.Errorf("Push Domain & stocks mapping to Redis failure:", err)
 						}
 					}
 				}

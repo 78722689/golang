@@ -7,6 +7,7 @@ import (
 	"crawler/dataminer"
 	"crawler/dataminer/downloader"
 	"crawler/dataminer/database"
+	"analyser"
 )
 
 func StartCrawl(stocks []string) {
@@ -20,12 +21,15 @@ func StartCrawl(stocks []string) {
 			Proxy:       t.Proxy}
 		collector.Start()
 	*/
-	database.StartAnalyzer()
+	if false {
+		database.StartAnalyzer()
 
-	target := dataminer.Target{
-		Stocks:      stocks}
-	target.RegisterModuleDownloader(&downloader.JJCC{}).RegisterModuleDownloader(&downloader.GDTJ{}).RegisterModuleDownloader(&downloader.DOMAIN{})
+		target := dataminer.Target{
+			Stocks: stocks}
+		target.RegisterModuleDownloader(&downloader.JJCC{}).RegisterModuleDownloader(&downloader.GDTJ{}).RegisterModuleDownloader(&downloader.DOMAIN{})
 
-	target.Start()
+		target.Start()
+	}
 
+	analyser.StartAnalyse()
 }

@@ -23,7 +23,8 @@
             "funds_file_path" : "D:/programing/golang/CFICCrawler/resource/configuration/funds.list"
             },
         "domain" : {
-            "url" : "http://stockpage.10jqka.com.cn"
+            "url" : "http://stockpage.10jqka.com.cn",
+            "overwrite" : false
             }
         },
     "redis" : {
