@@ -17,48 +17,48 @@ func init() {
 }
 
 type ThreadPool struct {
-	numberOfThread int
-	queueCapacity  int
-	activeThread   int32
-	freeThread     int32
-	taskWorkQueue  chan Task
-	taskCacheQueue chan Task
+	NumberOfThread int
+	QueueCapacity  int
+	ActiveThread   int32
+	FreeThread     int32
+	TaskWorkQueue  chan Task
+	TaskCacheQueue chan Task
 	wg             sync.WaitGroup
-	shutdown       chan bool
+	Shutdown       chan bool
 }
 
 func SetPoolSize(number int, capacity int) {
-	pool.numberOfThread = number
-	pool.queueCapacity = capacity
+	pool.NumberOfThread = number
+	pool.QueueCapacity = capacity
 }
 
 func GetPool(number int, capacity int) *ThreadPool {
-	pool := ThreadPool{
-		numberOfThread: number,
-		queueCapacity:  capacity,
-		activeThread:   0,
-		freeThread:     int32(number),
-		taskWorkQueue:  make(chan Task),
-		//taskCacheQueue: make(chan Task, capacity),
-		shutdown:       make(chan bool),
+	pool := &ThreadPool{
+		NumberOfThread: number,
+		QueueCapacity:  capacity,
+		ActiveThread:   0,
+		FreeThread:     int32(number),
+		TaskWorkQueue:  make(chan Task),
+		//TaskCacheQueue: make(chan Task, capacity),
+		Shutdown:       make(chan bool),
 		wg:             sync.WaitGroup{},
 	}
 
-	return &pool
+	return pool
 }
 
 // Startup threads
 func Start() {pool.Start()}
 func (pool *ThreadPool) Start() {
-	if pool.taskCacheQueue == nil {
+	if pool.TaskCacheQueue == nil {
 		//logger.Debug("Start Thread pool....")
-		pool.taskCacheQueue = make(chan Task, pool.queueCapacity)
+		pool.TaskCacheQueue = make(chan Task, pool.QueueCapacity)
 	}
 
 	pool.wg.Add(1)
 	go pool.startQueueThread()
 
-	for routine := 0; routine < pool.numberOfThread; routine++ {
+	for routine := 0; routine < pool.NumberOfThread; routine++ {
 		pool.wg.Add(1)
 		go pool.startWorkThread(routine)
 	}
@@ -74,22 +74,22 @@ func (pool *ThreadPool) startWorkThread(id int) {
 	//logger.Debug("worker thread %d get ready", id)
 	for {
 		select {
-		case task := <-pool.taskWorkQueue:
+		case task := <-pool.TaskWorkQueue:
 			pool.wg.Add(1)
 			//task.SendResponse()
 
-			logger.Debugf("[Thread id-%d, name-%s] Thread Started! Routing pool status: Active threads-%d, Free threads-%d", id, task.GetTaskName(), pool.activeThread, pool.freeThread)
+			logger.Debugf("[Thread id-%d, name-%s] Thread Started! Routing pool status: Active threads-%d, Free threads-%d", id, task.GetTaskName(), pool.ActiveThread, pool.FreeThread)
 
 			task.Run(id)
 
-			atomic.AddInt32(&pool.activeThread, -1)
-			atomic.AddInt32(&pool.freeThread, 1)
+			atomic.AddInt32(&pool.ActiveThread, -1)
+			atomic.AddInt32(&pool.FreeThread, 1)
 
 			pool.wg.Done()
 
-			logger.Debugf("[Thread id-%d, name-%s] Thread Finished! Routing pool status: Active threads-%d, Free threads-%d", id, task.GetTaskName(), pool.activeThread, pool.freeThread)
+			logger.Debugf("[Thread id-%d, name-%s] Thread Finished! Routing pool status: Active threads-%d, Free threads-%d", id, task.GetTaskName(), pool.ActiveThread, pool.FreeThread)
 
-		case <-pool.shutdown:
+		case <-pool.Shutdown:
 			//pool.wg.Done()
 			return
 		}
@@ -102,13 +102,13 @@ func (pool *ThreadPool) startQueueThread() {
 	//logger.Debug("Queue thread get ready.")
 	for {
 		select {
-		case task := <-pool.taskCacheQueue:
+		case task := <-pool.TaskCacheQueue:
 			//logger.Debugf("Cache queue tik out task %s", task.GetTaskName())
-			pool.taskWorkQueue <- task
+			pool.TaskWorkQueue <- task
 
-			atomic.AddInt32(&pool.activeThread, 1)
-			atomic.AddInt32(&pool.freeThread, -1)
-		case <-pool.shutdown:
+			atomic.AddInt32(&pool.ActiveThread, 1)
+			atomic.AddInt32(&pool.FreeThread, -1)
+		case <-pool.Shutdown:
 
 			//pool.wg.Done()
 		}
@@ -117,13 +117,13 @@ func (pool *ThreadPool) startQueueThread() {
 
 func PutTask(task Task) {pool.PutTask(task)}
 func (pool *ThreadPool) PutTask(task Task) bool {
-	//logger.Debugf("Received task %s. Currently task queue size is %d, capacity is %d", task.GetTaskName(), len(pool.taskCacheQueue), pool.queueCapacity)
-	if len(pool.taskCacheQueue) >= pool.queueCapacity {
+	//logger.Debugf("Received task %s. Currently task queue size is %d, capacity is %d", task.GetTaskName(), len(pool.TaskCacheQueue), pool.QueueCapacity)
+	if len(pool.TaskCacheQueue) >= pool.QueueCapacity {
 		logger.Errorf("Task queue is full, task %s is aborted.", task.GetTaskName())
 		return false
 	}
 
-	pool.taskCacheQueue <- task
+	pool.TaskCacheQueue <- task
 	//task.WaitForResponse()
 
 	return true
