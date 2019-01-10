@@ -1,25 +1,30 @@
-package htmlparser
+package parser
 
 import (
+	"fmt"
 	"httpcontroller"
-	"time"
 	"strings"
 	"utility"
 )
 
-type JJCCData struct {
-	Name string
-	RecordDate string
-	Code string
-	HoldCount float64
-	HoldValue float64
-
-	Stock_name string
-	Stock_number string
+type ShareHolerInfo struct {
+	Name  string
+	Count string // count is too large, so convert to float64 and save to string type.
+	Ratio float32
+	Date  string
 }
 
-func (tree *HTMLDoc) JJCC_Request(url string, file string) (*HTMLDoc, error) {
+// Top 10  shareholders
+type ShareHolderType uint32
+
+const (
+	Major ShareHolderType = iota
+	Free
+)
+
+func (tree *HTMLDoc) GDTJ_Request(url string, file string, proxy *httpcontroller.Proxy) (*HTMLDoc, error) {
 	request := httpcontroller.Request{
+		//Proxy:     proxy,
 		Url:       url,
 		File:      file,
 		OverWrite: false,
@@ -36,35 +41,45 @@ func (tree *HTMLDoc) JJCC_Request(url string, file string) (*HTMLDoc, error) {
 	}
 }
 
-func (tree *HTMLDoc) JJCC_GetJJCCData(stockNumber, stockName, recordDate string) []*JJCCData {
-	var dataList []*JJCCData
+func (tree *HTMLDoc) GDTJ_GetShareholder(shType ShareHolderType) []*ShareHolerInfo {
+	var shiList []*ShareHolerInfo
+
+	// Default to read table 6 for common shareholders.
+	tableID := 6
+	if shType == Major {
+		tableID = 5
+	}
+
+	// Get the date of this doc(page)
+	date := tree.GetCurrentDate()
 
 	tree.Find(TagNode, "table").Each(func(i int, table *Selection) {
 		if len(table.GetNodeByAttr("id", "tabh")) == 0 {
 			return
 		}
+		if i != tableID {
+			return
+		} // The major shareholder is in the 5th table.
 
 		table.Find(TagNode, "tr").Each(func(i int, tr *Selection) {
 			if i <= 1 {
 				return
 			}
 			index := 0
-			d := &JJCCData{}
+			shi := &ShareHolerInfo{}
 			found := false
 			tr.Find(TagNode, "td").Each(func(i int, td *Selection) {
 				td.Find(TextNode, "").Each(func(_ int, tn *Selection) {
 					if tn.Nodes[0].GetParentNodeTagname() == "td" {
 						found = true
 						//fmt.Fprintf(os.Stdout, "i-%d, data-%s\n", i, tn.Nodes[0].Root.Data)
-						switch i {
+						switch index {
+						case 0:
+							shi.Name = strings.TrimSpace(tn.Nodes[0].Root.Data)
 						case 1:
-							d.Name = strings.TrimSpace(tn.Nodes[0].Root.Data)
+							shi.Count = fmt.Sprintf("%.4f", utility.String2Folat64(strings.TrimSpace(tn.Nodes[0].Root.Data))/10000)
 						case 2:
-							d.Code = strings.TrimSpace(tn.Nodes[0].Root.Data)
-						case 3:
-							d.HoldCount =  utility.String2Folat64(strings.TrimSpace(tn.Nodes[0].Root.Data))/10000
-						case 4:
-							d.HoldValue = utility.String2Folat64(strings.TrimSpace(tn.Nodes[0].Root.Data))/10000
+							shi.Ratio = utility.String2Folat32(strings.TrimSpace(tn.Nodes[0].Root.Data))
 						}
 
 						index++
@@ -72,20 +87,17 @@ func (tree *HTMLDoc) JJCC_GetJJCCData(stockNumber, stockName, recordDate string)
 				})
 			})
 			if found {
-				logger.Debugf("JJCC Report name %s, code %s, holdcount %.4f, holdvalue %.4f", d.Name, d.Code, d.HoldCount, d.HoldValue)
-				d.RecordDate = recordDate
-				d.Stock_name = stockName
-				d.Stock_number = stockNumber
-				dataList = append(dataList, d)
+				shi.Date = date
+				shiList = append(shiList, shi)
 			}
 		})
 
 	})
 
-	return dataList
+	return shiList
 }
 
-func (tree *HTMLDoc) JJCC_GetCurrentDate() string {
+func (tree *HTMLDoc) GetCurrentDate() string {
 	var result string
 
 	tree.Find(TagNode, "table").Each(func(i int, table *Selection) {
@@ -107,8 +119,8 @@ func (tree *HTMLDoc) JJCC_GetCurrentDate() string {
 	return result
 }
 
-func (tree *HTMLDoc) JJCC_ParseRecordsDate() (result []time.Time) { //map[string]bool {
-	//result := make(map[string]bool)
+func (tree *HTMLDoc) GetDateList() map[string]bool {
+	result := make(map[string]bool)
 
 	tree.Find(TagNode, "table").Each(func(i int, table *Selection) {
 		if len(table.GetNodeByAttr("id", "tabh")) == 0 {
@@ -118,16 +130,10 @@ func (tree *HTMLDoc) JJCC_ParseRecordsDate() (result []time.Time) { //map[string
 		table.Find(TagNode, "td").Each(func(i int, td *Selection) {
 
 			td.Find(TagNode, "option").Each(func(i int, option *Selection) {
-				//result[option.Nodes[0].GetAttrByName("value")] = false
-				tmp := option.Nodes[0].GetAttrByName("value")
-				if recordDate, err := time.Parse("2006-01-02", tmp); err == nil {
-					result = append(result, recordDate)
-				} else {
-					logger.Warningf("Parse record date failure, %s", tmp)
-				}
+				result[option.Nodes[0].GetAttrByName("value")] = false
 			})
 		})
 	})
 
-	return
+	return result
 }

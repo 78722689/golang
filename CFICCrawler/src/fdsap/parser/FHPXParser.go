@@ -1,4 +1,4 @@
-package htmlparser
+package parser
 
 import (
 	"utility"

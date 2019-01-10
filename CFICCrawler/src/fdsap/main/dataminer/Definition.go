@@ -1,7 +1,7 @@
 package dataminer
 
 import (
-	"crawler/dataminer/downloader"
+	"fdsap/crawler/dataminer/downloader"
 )
 
 type Target struct {

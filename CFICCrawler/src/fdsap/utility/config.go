@@ -2,9 +2,10 @@ package utility
 
 import (
 	"github.com/spf13/viper"
+    //"github.com/op/go-logging"
 	"fmt"
+    //"fdsap/http"
 )
-
 func NewConfig(configFilePath string) {
 	viper.SetConfigName("config")
 	viper.AddConfigPath(configFilePath)
